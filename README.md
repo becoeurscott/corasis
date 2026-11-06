@@ -1,56 +1,80 @@
-# Welcome to your Expo app 👋
+# Together — an app for long-distance couples
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Expo (SDK 58) · React Native · TypeScript · Expo Router · Zustand
 
-## Get started
+Daily photo/video moments that build a shared "flame", private questions and games revealed only when both have answered, quick affection and voice notes, a private album, a countdown to the next visit, optional location/battery sharing, widgets and a wallpaper editor. Four themes (Pink, Purple, Red, Blue), light and dark.
 
-1. Install dependencies
+> The project lives in `~/Projects/together`; `Desktop/corassis/together` is a symlink. It was moved out of the iCloud-synced Desktop because iCloud evicted `node_modules` files and stalled every build.
 
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Run it
 
 ```bash
-npm run reset-project
+cd ~/Projects/together
+npm install
+npx expo start --web      # browser preview at http://localhost:8081
+npx expo start            # scan with Expo Go (camera, mic, location, battery, biometrics work)
+npx expo run:ios          # development build: adds video playback, widgets scaffold, push
 ```
 
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
+Checks:
 
-### Other setup steps
+```bash
+npx tsc --noEmit
+npx jest
+npx eslint src
+```
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+## Demo access
 
-## Learn more
+Fresh install → splash → **Choose your theme** → intro → profile → relationship → **Explore a demo**. The demo creates a local account paired with **Alex, a simulated partner**. Simulated replies, moments and answers are generated on this device after a short delay and are labeled "simulated" everywhere. Nothing you send reaches a real person.
 
-To learn more about developing your project with Expo, look at the following resources:
+To exercise real pairing on one device: create account A (the verification code is shown on-screen since no email service is configured), create an invitation, sign out, create account B, enter the code. Both accounts live in local storage. `Profile → Your data → Reset the demo` wipes the device.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Environment variables (names only)
 
-## Join the community
+| Variable | Purpose |
+|---|---|
+| `EXPO_PUBLIC_API_URL` | Backend base URL. Unset = local demo mode (this build). |
+| `EXPO_PUBLIC_API_ANON_KEY` | Public key for the backend. |
+| `EXPO_PUBLIC_MAPS_KEY` | Native map tiles (optional). |
+| `EXPO_PUBLIC_BILLING_KEY` | RevenueCat public key (optional). |
 
-Join our community of developers creating universal apps.
+No secrets are stored in the repo or the client bundle.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Where things are
+
+```
+src/app/              routes (Expo Router)
+  index.tsx           splash + start routing
+  onboarding/         theme → intro → profile → relationship → auth → partner → couple → privacy → welcome
+  auth/               sign-up, sign-in, verify, reset
+  (tabs)/             Home, Map, Together, Memories, Profile
+  flame/              overview, capture, history, [day]
+  activity/           deck detail, session (answer/waiting/reveal), history, favorites, daily
+  messages/           conversation + composer, message detail
+  memories/           detail, new, calendar
+  meetings/           countdown + calendar, edit, event detail
+  widgets/            widget previews, partner-message composer, wallpaper editor
+  settings/           profile, couple, partner, theme, language, timezone, notifications, sharing, lock, help, privacy, data, premium
+  invite/[code]       deep-link landing (together://invite/CODE)
+  lock.tsx, viewer.tsx
+src/services/backend/ domain types, LocalBackend (all business rules), remote boundary
+src/lib/              time/couple-day, streak, events, geo, media, notifications, routing, i18n
+src/store/            persisted preferences, hooks binding screens to the backend
+src/theme/            tokens for 4 themes × light/dark, ThemeProvider
+src/data/questions.ts 100+ original prompts across 8 categories + decks
+src/__tests__/        business-rule and authorization tests
+docs/BACKEND.md       server contract (tables, RLS, protected endpoints)
+docs/NATIVE.md        what works in browser / Expo Go / dev build; widget scaffold
+docs/CHECKLIST.md     feature → screen → status map
+```
+
+## Honest limitations
+
+- **No server is configured.** Accounts, pairing, sync and "realtime" are local to one device. `docs/BACKEND.md` specifies what the server must enforce; the client already calls one contract so the swap is contained in `src/services/backend/`.
+- Push notifications, widgets, biometrics, camera and battery need the mobile app (see `docs/NATIVE.md`). The browser preview labels each of these.
+- Video playback on native needs `expo-video` wired into `VideoPlayer.tsx` (web uses `<video>`).
+- The map is a schematic projection, not tiles. `MapCanvas` is the swap point for `react-native-maps`.
+- French localization is structured (`src/lib/i18n.ts`) but only navigation and key labels are translated.
+- Apple/Google sign-in and billing are not configured; the Plus screen is a labeled demo flag.
+- The app-lock PIN is kept in preferences in this preview; production should move it to `expo-secure-store`.

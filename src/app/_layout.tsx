@@ -1,18 +1,55 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
+import { DarkTheme, DefaultTheme, Stack, ThemeProvider as NavThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useColorScheme } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import React, { useEffect } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
+import { AppLockGate } from '@/components/AppLockGate';
+import { DeepLinkHandler } from '@/components/DeepLinkHandler';
+import { Confirm, ToastHost } from '@/components/ui';
+import { useHydrated } from '@/store/hooks';
+import { usePrefs } from '@/store/prefs';
+import { ThemeProvider, useTheme } from '@/theme/ThemeProvider';
 
-SplashScreen.preventAutoHideAsync();
+SplashScreen.preventAutoHideAsync().catch(() => {});
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+function Shell() {
+  const { colors, isDark } = useTheme();
+  const navTheme = {
+    ...(isDark ? DarkTheme : DefaultTheme),
+    colors: { ...(isDark ? DarkTheme : DefaultTheme).colors, background: colors.background, card: colors.surface, text: colors.text, primary: colors.primary, border: colors.border },
+  };
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AnimatedSplashOverlay />
-      <AppTabs />
-    </ThemeProvider>
+    <NavThemeProvider value={navTheme}>
+      <StatusBar style={isDark ? 'light' : 'dark'} />
+      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.background }, animation: 'slide_from_right' }}>
+        <Stack.Screen name="index" />
+        <Stack.Screen name="(tabs)" options={{ animation: 'fade' }} />
+        <Stack.Screen name="viewer" options={{ presentation: 'fullScreenModal', animation: 'fade' }} />
+        <Stack.Screen name="lock" options={{ presentation: 'fullScreenModal', animation: 'fade', gestureEnabled: false }} />
+      </Stack>
+      <DeepLinkHandler />
+      <AppLockGate />
+      <ToastHost />
+      <Confirm />
+    </NavThemeProvider>
+  );
+}
+
+export default function RootLayout() {
+  const prefsHydrated = usePrefs((s) => s.hydrated);
+  const dataHydrated = useHydrated();
+  useEffect(() => {
+    if (prefsHydrated && dataHydrated) SplashScreen.hideAsync().catch(() => {});
+  }, [prefsHydrated, dataHydrated]);
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <Shell />
+        </ThemeProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }

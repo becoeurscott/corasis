@@ -1,98 +1,73 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { Animated, Easing, StyleSheet, View } from 'react-native';
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import { AppMark } from '@/components/AppMark';
+import { Gradient, Txt } from '@/components/ui';
+import { resolveStartRoute } from '@/lib/routing';
+import { backend, useData } from '@/services/backend';
+import { useHydrated } from '@/store/hooks';
+import { usePrefs } from '@/store/prefs';
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
+/** Splash: original mark, subtle animation, then route by saved state. */
+export default function SplashRoute() {
+  const prefsHydrated = usePrefs((s) => s.hydrated);
+  const dataHydrated = useHydrated();
+  const reduceMotion = usePrefs((s) => s.reduceMotion);
+  const [scale] = useState(() => new Animated.Value(0.8));
+  const [opacity] = useState(() => new Animated.Value(0));
+
+  useEffect(() => {
+    if (reduceMotion) {
+      scale.setValue(1);
+      opacity.setValue(1);
+      return;
+    }
+    Animated.parallel([
+      Animated.timing(opacity, { toValue: 1, duration: 500, useNativeDriver: true }),
+      Animated.spring(scale, { toValue: 1, friction: 6, useNativeDriver: true }),
+    ]).start();
+    const pulse = Animated.loop(
+      Animated.sequence([
+        Animated.timing(scale, { toValue: 1.05, duration: 900, easing: Easing.inOut(Easing.quad), useNativeDriver: true }),
+        Animated.timing(scale, { toValue: 1, duration: 900, easing: Easing.inOut(Easing.quad), useNativeDriver: true }),
+      ]),
     );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
+    const t = setTimeout(() => pulse.start(), 600);
+    return () => {
+      clearTimeout(t);
+      pulse.stop();
+    };
+  }, [opacity, scale, reduceMotion]);
+
+  useEffect(() => {
+    if (!prefsHydrated || !dataHydrated) return;
+    const t = setTimeout(() => {
+      const { session, onboarding, pendingInviteCode } = useData.getState();
+      const route = resolveStartRoute({ theme: usePrefs.getState().theme, onboarding, session, couple: backend.couple(), pendingInviteCode });
+      router.replace(route as never);
+    }, reduceMotion ? 200 : 1100);
+    return () => clearTimeout(t);
+  }, [prefsHydrated, dataHydrated, reduceMotion]);
+
   return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
-
-export default function HomeScreen() {
-  return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
-
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
-
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
-
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+    <Gradient style={styles.root}>
+      <Animated.View style={{ opacity, transform: [{ scale }], alignItems: 'center', gap: 16 }}>
+        <AppMark size={112} />
+        <Txt variant="display" style={{ color: '#fff' }}>
+          Together
+        </Txt>
+      </Animated.View>
+      <View style={styles.footer}>
+        <Txt variant="caption" style={{ color: 'rgba(255,255,255,0.8)' }}>
+          A little space for the two of you
+        </Txt>
+      </View>
+    </Gradient>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
-  },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
-  },
-  title: {
-    textAlign: 'center',
-  },
-  code: {
-    textTransform: 'uppercase',
-  },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
-  },
+  root: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+  footer: { position: 'absolute', bottom: 48 },
 });
