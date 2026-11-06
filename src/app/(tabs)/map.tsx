@@ -5,6 +5,7 @@ import { Platform, View } from 'react-native';
 import { MapCanvas } from '@/components/map/MapCanvas';
 import { Banner, Button, Card, EmptyState, ListItem, Screen, SectionTitle, Txt } from '@/components/ui';
 import { formatDistance, haversineKm } from '@/lib/geo';
+import { useLayout } from '@/lib/layout';
 import { refreshMyBattery, refreshMyLocation } from '@/lib/live';
 import { describeDifference, formatLocalTime, isStale, relativeTime, zoneDifferenceHours } from '@/lib/time';
 import { backend } from '@/services/backend';
@@ -24,6 +25,7 @@ export default function MapTab() {
   const unit = usePrefs((s) => s.distanceUnit);
   const setUnit = usePrefs((s) => s.setDistanceUnit);
   const [busy, setBusy] = useState(false);
+  const { heroHeight } = useLayout();
   const [locState, setLocState] = useState<'idle' | 'denied' | 'unavailable' | 'error'>('idle');
 
   if (!me) return null;
@@ -62,7 +64,7 @@ export default function MapTab() {
     <Screen edges={['top']}>
       <View style={{ gap: spacing.lg }}>
         <Txt variant="title">Map</Txt>
-        <MapCanvas a={{ profile: me, lat: myLive?.lat ?? null, lon: myLive?.lon ?? null, city: myLive?.city ?? null }} b={partner ? { profile: partner, lat: theirLive?.lat ?? null, lon: theirLive?.lon ?? null, city: theirLive?.city ?? null } : { profile: me, lat: null, lon: null, city: null }} />
+        <MapCanvas height={heroHeight} a={{ profile: me, lat: myLive?.lat ?? null, lon: myLive?.lon ?? null, city: myLive?.city ?? null }} b={partner ? { profile: partner, lat: theirLive?.lat ?? null, lon: theirLive?.lon ?? null, city: theirLive?.city ?? null } : { profile: me, lat: null, lon: null, city: null }} />
 
         <Card style={{ gap: spacing.xs }}>
           {distanceKm != null ? (

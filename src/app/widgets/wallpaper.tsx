@@ -6,6 +6,7 @@ import { Platform, StyleSheet, View } from 'react-native';
 import { captureRef } from 'react-native-view-shot';
 
 import { Banner, Button, Card, Chip, Gradient, Header, Input, ListItem, Screen, toast, Txt } from '@/components/ui';
+import { useLayout } from '@/lib/layout';
 import { diffDays, formatDate, todayKey } from '@/lib/time';
 import { pickFromLibrary } from '@/lib/media';
 import { useCouple, useMe, useMemories, usePartner } from '@/store/hooks';
@@ -30,6 +31,9 @@ export default function WallpaperEditor() {
   const [preview, setPreview] = useState<'home' | 'lock'>('lock');
   const [busy, setBusy] = useState(false);
   const ref = useRef<React.ElementRef<typeof View>>(null);
+  const { width, height } = useLayout();
+  const phoneW = Math.round(Math.min(240, width - spacing.lg * 4, (height * 0.45) / (500 / 240)));
+  const phoneH = Math.round(phoneW * (500 / 240));
 
   const start = couple?.relationshipStart ?? null;
   const days = start ? diffDays(start, todayKey(couple?.coupleTimezone ?? 'UTC')) : null;
@@ -72,7 +76,7 @@ export default function WallpaperEditor() {
           <Chip label="Home screen" selected={preview === 'home'} onPress={() => setPreview('home')} small />
         </View>
         <View style={{ alignItems: 'center' }}>
-          <View ref={ref} collapsable={false} style={[styles.phone, { backgroundColor: colors.gradientEnd }]}>
+          <View ref={ref} collapsable={false} style={[styles.phone, { width: phoneW, height: phoneH, backgroundColor: colors.gradientEnd }]}>
             {style === 'photo' && photo ? <Image source={{ uri: photo }} style={StyleSheet.absoluteFill} contentFit="cover" accessibilityIgnoresInvertColors /> : null}
             {style === 'gradient' ? <Gradient style={StyleSheet.absoluteFill} /> : null}
             {style === 'minimal' ? <View style={[StyleSheet.absoluteFill, { backgroundColor: colors.background }]} /> : null}
@@ -130,7 +134,7 @@ export default function WallpaperEditor() {
 }
 
 const styles = StyleSheet.create({
-  phone: { width: 240, height: 500, borderRadius: radius.xl, overflow: 'hidden', justifyContent: 'flex-end' },
+  phone: { borderRadius: radius.xl, overflow: 'hidden', justifyContent: 'flex-end' },
   clock: { position: 'absolute', top: 44, left: 0, right: 0, alignItems: 'center' },
   apps: { position: 'absolute', top: 36, left: 20, right: 20, flexDirection: 'row', flexWrap: 'wrap', gap: 14 },
   app: { width: 38, height: 38, borderRadius: 10 },

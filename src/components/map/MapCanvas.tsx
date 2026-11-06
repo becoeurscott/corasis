@@ -54,7 +54,7 @@ export function MapCanvas({ a, b, height = 300 }: { a: Point; b: Point; height?:
       ))}
       {line && size.w > 0 ? <View style={{ position: 'absolute', left: line[0].x, top: line[0].y, width: len, height: 2, backgroundColor: colors.primary, opacity: 0.6, transform: [{ translateY: -1 }, { rotate: `${angle}deg` }], transformOrigin: 'left center' } as never} /> : null}
       {size.w > 0 && projected.map((p) => (
-        <View key={p.profile.id} style={{ position: 'absolute', left: p.x - 24, top: p.y - 24, alignItems: 'center', width: 48 }}>
+        <View key={p.profile.id} style={{ position: 'absolute', left: p.x - 80, top: p.y - 24, alignItems: 'center', width: 160 }}>
           <View style={[styles.pin, { borderColor: colors.primary, backgroundColor: colors.surface }]}>
             <Avatar name={p.profile.firstName} uri={p.profile.avatarUri} size={36} simulated={p.profile.isSimulated} />
           </View>
@@ -74,7 +74,7 @@ export function MapCanvas({ a, b, height = 300 }: { a: Point; b: Point; height?:
       ) : null}
       <View style={[styles.note, { backgroundColor: colors.surface }]}>
         <Txt variant="caption" tone="muted">
-          Schematic map · native map tiles in the mobile build
+          Schematic map · real map tiles need a development build
         </Txt>
       </View>
     </View>
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   hline: { position: 'absolute', left: 0, right: 0, height: 1, opacity: 0.6 },
   vline: { position: 'absolute', top: 0, bottom: 0, width: 1, opacity: 0.6 },
   pin: { width: 44, height: 44, borderRadius: 22, borderWidth: 3, alignItems: 'center', justifyContent: 'center' },
-  labelBox: { marginTop: 4, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 999, maxWidth: 120 },
+  labelBox: { marginTop: 4, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 999, maxWidth: 160 },
   center: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' },
   note: { position: 'absolute', bottom: 8, left: 8, paddingHorizontal: 8, paddingVertical: 3, borderRadius: 999 },
 });
