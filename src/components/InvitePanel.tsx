@@ -1,6 +1,6 @@
 import * as Clipboard from 'expo-clipboard';
 import * as Linking from 'expo-linking';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Keyboard, Share, StyleSheet, View } from 'react-native';
 
 import { Banner, Button, Card, Input, toast, Txt } from '@/components/ui';
@@ -21,6 +21,21 @@ export function InvitePanel({ onPaired, compact = false }: { onPaired?: () => vo
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [preview, setPreview] = useState<Awaited<ReturnType<typeof backend.previewInvitation>> | null>(null);
+
+  // When our code is out, check every few seconds whether the partner has used it.
+  const waiting = invite?.status === 'pending';
+  useEffect(() => {
+    if (!waiting) return;
+    let alive = true;
+    const tick = async () => {
+      try {
+        const c = await backend.syncCouple();
+        if (alive && c) { toast('You are connected!', 'success'); onPaired?.(); }
+      } catch { /* try again next tick */ }
+    };
+    const id = setInterval(tick, 5000);
+    return () => { alive = false; clearInterval(id); };
+  }, [waiting, onPaired]);
 
   const create = async () => {
     setBusy(true);

@@ -7,6 +7,8 @@ import AuthenticationServices
 /// Same project and rules as the React Native app (src/services/backend/remote.ts).
 /// Configure with the `InsForgeURL` and `InsForgeAnonKey` Info.plist keys (public anon key only).
 struct RemoteUser: Decodable { var id: String; var email: String; var emailVerified: Bool? }
+struct RemoteCouple: Decodable { struct Partner: Decodable { var id: String; var first_name: String; var timezone: String; var avatar_url: String? }; var couple_id: String; var timezone: String; var partner: Partner }
+struct RemoteInvite: Decodable { var code: String; var expires_at: String }
 struct RemoteProfile: Codable { var id: String; var first_name: String; var pronouns: String?; var timezone: String; var avatar_url: String?; var avatar_key: String? }
 
 actor InsForge {
@@ -70,6 +72,20 @@ actor InsForge {
         guard let user = s.user else { throw AppError(message: "Email or password is incorrect.") }
         return user
     }
+    // MARK: Partner connection (server functions in migrations/*partner-invitations.sql)
+    private func rpc(_ name: String, _ args: [String: Any] = [:]) async throws -> Data {
+        try await ensureSession()
+        return try await request("POST", "/api/database/rpc/\(name)", json: args, auth: true)
+    }
+    func createInvitation() async throws -> RemoteInvite { try JSONDecoder().decode(RemoteInvite.self, from: try await rpc("create_invitation")) }
+    func acceptInvitation(code: String) async throws -> RemoteCouple { try JSONDecoder().decode(RemoteCouple.self, from: try await rpc("accept_invitation", ["p_code": code])) }
+    func myCouple() async throws -> RemoteCouple? {
+        let data = try await rpc("my_couple")
+        if let text = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines), text.isEmpty || text == "null" { return nil }
+        return try JSONDecoder().decode(RemoteCouple.self, from: data)
+    }
+    func unlinkCouple() async throws { _ = try await rpc("unlink_couple") }
+
     // MARK: Email code (passwordless) — a new email becomes a verified account on first code
     func sendCode(email: String) async throws { _ = try await request("POST", "/api/auth/email/send-otp", json: ["email": email]) }
     func verifyCode(email: String, code: String, name: String) async throws -> RemoteUser {

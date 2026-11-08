@@ -11,7 +11,7 @@ struct ProfileView: View {
         SectionHeading(title: "Couple")
         Card { RowLink(title: store.partner.map { "\(store.me?.name ?? "You") & \($0.name)" } ?? "Your relationship", icon: "heart", detail: store.couple?.start.map { "\(Day.distance($0, store.today)) days together" } ?? "Add your relationship details") { CoupleSettings() }; Divider(); RowLink(title: "Partner connection", icon: "link", detail: "Invitations and unlinking") { PartnerSettings() }; Divider(); RowLink(title: "Next meeting & calendar", icon: "calendar") { CalendarView() }; Divider(); RowLink(title: "Widgets & wallpaper", icon: "iphone") { WidgetsView() } }
         SectionHeading(title: "Appearance")
-        Card { RowLink(title: "Theme & appearance", icon: "paintpalette", detail: Product.shared.palettes[store.db.prefs.theme]?.label ?? "Pink") { ThemeSettings() }; Divider(); RowLink(title: "Language", icon: "globe", detail: store.db.prefs.language == "fr" ? "Français" : "English") { LanguageSettings() } }
+        Card { RowLink(title: "Theme & appearance", icon: "paintpalette", detail: Product.shared.palettes[store.db.prefs.theme]?.label ?? "Pink") { ThemeSettings() }; Divider(); RowLink(title: "Language", icon: "globe", detail: store.db.prefs.language == "auto" ? "Automatic" : store.db.prefs.language == "fr" ? "Français" : "English") { LanguageSettings() } }
         SectionHeading(title: "Preferences")
         Card { RowLink(title: "Your connection preferences", icon: "heart", detail: "What feels right for you · private") { ConnectionSettingsView() }; Divider(); RowLink(title: "Time zone & couple day", icon: "clock") { TimezoneSettings() }; Divider(); RowLink(title: "Notifications", icon: "bell") { NotificationSettings() }; Divider(); RowLink(title: "Location & battery sharing", icon: "location") { SharingSettings() }; Divider(); RowLink(title: "App lock", icon: "lock", detail: store.db.prefs.lock ? "On" : "Off") { LockSettings() }; Divider(); RowLink(title: "Together Plus", icon: "sparkles", detail: store.db.prefs.premium ? "Active · demo" : "Off") { PlusSettings() } }
         SectionHeading(title: "Support & privacy")
@@ -47,15 +47,25 @@ struct PartnerSettings: View {
     @EnvironmentObject var store: Store
     @State private var code = ""
     @State private var unlink = false
+    @State private var busy = false
+    func run(_ action: @escaping () async throws -> Void) { busy = true; Task { await store.performAsync(action); busy = false } }
     var invitation: Invite? { store.db.invites.last { $0.owner == store.db.currentUser && $0.status == "pending" && $0.expires > Date() } }
     var body: some View { Page {
-        InfoBanner(text: "Invitations work between local accounts on this device. Connecting two phones needs a backend. SwiftUI and React Native currently keep separate local data.")
+        if !store.usesRemoteCouple { InfoBanner(text: "Local preview: invitations only work between accounts on this device.") }
         if let partner = store.partner { Card { HStack { Avatar(person: partner); VStack(alignment: .leading) { Text(partner.name).font(.title2.bold()); Text(partner.simulated ? "Simulated demo partner" : "Connected local account").font(.caption).foregroundStyle(.secondary) } }; Button("Unlink partner", role: .destructive) { unlink = true } } }
-        else { Card { Text("Invite your partner").font(.title2.bold()); if let invitation { Text(invitation.code).font(.system(.largeTitle, design: .monospaced).bold()).textSelection(.enabled); Text("Expires \(invitation.expires.formatted())").font(.caption).foregroundStyle(.secondary); ShareLink(item: URL(string: "together-swift://invite/\(invitation.code)")!); Button("Revoke invitation", role: .destructive) { if let i = store.db.invites.firstIndex(where: { $0.id == invitation.id }) { store.db.invites[i].status = "revoked" } } } else { PrimaryButton(title: "Create invitation") { store.perform { _ = try store.createInvite() } } } }
-            Card { Text("Have an invitation?").font(.headline); TextField("Partner code", text: $code).textInputAutocapitalization(.characters).autocorrectionDisabled().textFieldStyle(.soft); PrimaryButton(title: "Connect partner") { store.perform { try store.acceptInvite(code) } } }
+        else { Card { Text("Invite your partner").font(.title2.bold()); if let invitation { Text(invitation.code).font(.system(.largeTitle, design: .monospaced).bold()).textSelection(.enabled); Text("Expires \(invitation.expires.formatted())").font(.caption).foregroundStyle(.secondary); ShareLink(item: URL(string: "together-swift://invite/\(invitation.code)")!); Button("Revoke invitation", role: .destructive) { if let i = store.db.invites.firstIndex(where: { $0.id == invitation.id }) { store.db.invites[i].status = "revoked" } } } else { PrimaryButton(title: busy ? "Please wait…" : "Create invitation") { if store.usesRemoteCouple { run { try await store.createInviteRemote() } } else { store.perform { _ = try store.createInvite() } } }.disabled(busy) } }
+            Card { Text("Have an invitation?").font(.headline); TextField("Partner code", text: $code).textInputAutocapitalization(.characters).autocorrectionDisabled().textFieldStyle(.soft); PrimaryButton(title: busy ? "Please wait…" : "Connect partner") { if store.usesRemoteCouple { run { try await store.acceptInviteRemote(code) } } else { store.perform { try store.acceptInvite(code) } } }.disabled(busy || code.trimmingCharacters(in: .whitespaces).isEmpty) }
             Button("Explore a separate demo with Alex") { store.demo(name: store.me?.name ?? "Sam") }.frame(maxWidth: .infinity)
         }
-    }.navigationTitle("Partner connection").navigationBarTitleDisplayMode(.inline).onAppear { code = store.pendingInvite }.confirmationDialog("Unlink your partner? Shared content will no longer appear in either account. Export your data first if you want a copy.", isPresented: $unlink, titleVisibility: .visible) { Button("Unlink partner", role: .destructive) { store.unlink() } } }
+    }.navigationTitle("Partner connection").navigationBarTitleDisplayMode(.inline).onAppear { code = store.pendingInvite }
+        // While our code is out, check every few seconds whether the partner has used it.
+        .task(id: invitation?.code) {
+            guard invitation != nil, store.usesRemoteCouple else { return }
+            while !Task.isCancelled, store.couple == nil {
+                if await store.syncCouple() { break }
+                try? await Task.sleep(for: .seconds(5))
+            }
+        }.confirmationDialog("Unlink your partner? Shared content will no longer appear in either account. Export your data first if you want a copy.", isPresented: $unlink, titleVisibility: .visible) { Button("Unlink partner", role: .destructive) { store.unlink() } } }
 }
 struct ThemeSettings: View {
     @EnvironmentObject var store: Store
@@ -66,7 +76,7 @@ struct ThemeSettings: View {
 }
 struct LanguageSettings: View {
     @EnvironmentObject var store: Store
-    var body: some View { Form { Picker("Language", selection: $store.db.prefs.language) { Text("English").tag("en"); Text("Français").tag("fr") }.pickerStyle(.inline); Section { Text("French currently covers the main navigation labels, matching the existing React Native preview. Most content remains in English.").font(.footnote).foregroundStyle(.secondary) } }.navigationTitle("Language") }
+    var body: some View { Form { Picker("Language", selection: $store.db.prefs.language) { Text("Automatic · follows your phone (\(AppLanguage.device == "fr" ? "Français" : "English"))").tag("auto"); Text("English").tag("en"); Text("Français").tag("fr") }.pickerStyle(.inline); Section { Text("French currently covers the main navigation labels, matching the existing React Native preview. Most content remains in English.").font(.footnote).foregroundStyle(.secondary) } }.navigationTitle("Language") }
 }
 struct TimezonePicker: View {
     var title: String

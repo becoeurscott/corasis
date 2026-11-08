@@ -6,6 +6,8 @@ import type { ThemeName } from '@/theme/tokens';
 
 export type AppearancePref = 'light' | 'dark' | 'system';
 export type Language = 'en' | 'fr';
+/** 'auto' follows the phone's language (see resolveLanguage in lib/i18n). */
+export type LanguagePref = Language | 'auto';
 export type DistanceUnit = 'km' | 'mi';
 
 export interface NotificationPrefs {
@@ -24,7 +26,7 @@ export interface NotificationPrefs {
 interface PrefsState {
   theme: ThemeName | null;
   appearance: AppearancePref;
-  language: Language;
+  language: LanguagePref;
   distanceUnit: DistanceUnit;
   reduceMotion: boolean;
   notifications: NotificationPrefs;
@@ -33,7 +35,7 @@ interface PrefsState {
   hydrated: boolean;
   setTheme: (t: ThemeName) => void;
   setAppearance: (a: AppearancePref) => void;
-  setLanguage: (l: Language) => void;
+  setLanguage: (l: LanguagePref) => void;
   setDistanceUnit: (u: DistanceUnit) => void;
   setNotifications: (patch: Partial<NotificationPrefs>) => void;
   setAppLock: (enabled: boolean, pin?: string | null) => void;
@@ -56,7 +58,7 @@ const defaultNotifications: NotificationPrefs = {
 const initial = {
   theme: null as ThemeName | null,
   appearance: 'system' as AppearancePref,
-  language: 'en' as Language,
+  language: 'auto' as LanguagePref,
   distanceUnit: 'km' as DistanceUnit,
   reduceMotion: false,
   notifications: defaultNotifications,
@@ -84,6 +86,13 @@ export const usePrefs = create<PrefsState>()(
       partialize: (s) => {
         const { hydrated: _h, ...rest } = s;
         return rest;
+      },
+      // v1: older installs saved the old default 'en'; switch them to follow the phone.
+      version: 1,
+      migrate: (state, version) => {
+        const s = state as { language?: string };
+        if (version < 1 && s.language === 'en') s.language = 'auto';
+        return s as never;
       },
       onRehydrateStorage: () => () => {
         usePrefs.setState({ hydrated: true });

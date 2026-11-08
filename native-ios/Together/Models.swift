@@ -62,7 +62,7 @@ struct Memory: Codable, Identifiable { var id = UUID().uuidString; var coupleID:
 struct Event: Codable, Identifiable { var id = UUID().uuidString; var coupleID: String; var title: String; var day: String; var kind = "meeting"; var destination = ""; var notes = ""; var annual = false; var time = "12:00"; var allDay = true; var reminderDays = 1 }
 struct Sharing: Codable { var location = false; var battery = false; var latitude: Double?; var longitude: Double?; var updated: Date?; var country: String?; var countryCode: String?; var batteryPercent: Int? }
 struct Preferences: Codable {
-    var theme = "pink"; var appearance = "system"; var language = "en"; var unit = "km"; var notifications = true; var dailyReminder = true; var momentAlerts = true; var messageAlerts = true; var activityAlerts = true; var meetingAlerts = true; var sound = true; var haptics = true; var quietStart = "22:00"; var quietEnd = "08:00"; var reminderTime = "20:00"; var lock = false; var premium = false
+    var theme = "pink"; var appearance = "system"; var language = "auto"; var unit = "km"; var notifications = true; var dailyReminder = true; var momentAlerts = true; var messageAlerts = true; var activityAlerts = true; var meetingAlerts = true; var sound = true; var haptics = true; var quietStart = "22:00"; var quietEnd = "08:00"; var reminderTime = "20:00"; var lock = false; var premium = false
 }
 struct Database: Codable {
     var connectionDraft: ConnectionPreferences?
@@ -90,4 +90,10 @@ enum Day {
 }
 extension Color {
     init(hex: String) { let value = UInt64(hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted), radix: 16) ?? 0; self.init(red: Double((value >> 16) & 255) / 255, green: Double((value >> 8) & 255) / 255, blue: Double(value & 255) / 255) }
+}
+
+/// "auto" follows the phone's language (French if the phone is in French, otherwise English).
+enum AppLanguage {
+    static var device: String { Locale.preferredLanguages.first.map { Locale(identifier: $0).language.languageCode?.identifier ?? "en" } == "fr" ? "fr" : "en" }
+    static func resolve(_ pref: String) -> String { pref == "auto" ? device : pref }
 }

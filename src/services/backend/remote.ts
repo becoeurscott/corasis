@@ -49,6 +49,8 @@ function fail(error: { message?: string; statusCode?: number } | null, fallback:
   throw new BackendError('remote', error?.message || fallback);
 }
 
+export type RemoteCouple = { couple_id: string; timezone: string; created_at: string; partner: { id: string; first_name: string; timezone: string; avatar_url: string | null } };
+
 export type RemoteUser = { id: string; email: string; emailVerified: boolean };
 
 function toUser(u: { id: string; email: string; emailVerified?: boolean }): RemoteUser {
@@ -127,6 +129,31 @@ export const remote = {
     if (error || !data) fail(error, 'That code does not match.');
     await storeRefreshToken((data as { refreshToken?: string }).refreshToken);
     return toUser((data as { user: RemoteUser }).user);
+  },
+
+  // ---------- partner connection (server functions in migrations/*partner-invitations.sql) ----------
+  async createInvitation(): Promise<{ code: string; expires_at: string }> {
+    await ensureSession();
+    const { data, error } = await client().database.rpc('create_invitation');
+    if (error || !data) fail(error, 'Could not create an invitation.');
+    return data as { code: string; expires_at: string };
+  },
+  async acceptInvitation(code: string): Promise<RemoteCouple> {
+    await ensureSession();
+    const { data, error } = await client().database.rpc('accept_invitation', { p_code: code });
+    if (error || !data) fail(error, 'Could not connect with that code.');
+    return data as RemoteCouple;
+  },
+  async myCouple(): Promise<RemoteCouple | null> {
+    await ensureSession();
+    const { data, error } = await client().database.rpc('my_couple');
+    if (error) fail(error, 'Could not check your partner connection.');
+    return (data as RemoteCouple | null) ?? null;
+  },
+  async unlinkCouple(): Promise<void> {
+    await ensureSession();
+    const { error } = await client().database.rpc('unlink_couple');
+    if (error) fail(error, 'Could not unlink.');
   },
 
   /** Providers switched on in the InsForge dashboard (e.g. ['google']). */

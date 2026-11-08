@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Banner, Card, Chip, Header, ListItem, Screen, Txt } from '@/components/ui';
+import { deviceLanguage } from '@/lib/i18n';
 import { DistanceUnit, usePrefs } from '@/store/prefs';
 import { spacing } from '@/theme/tokens';
 import { View } from 'react-native';
@@ -15,6 +16,7 @@ export default function LanguageSettings() {
       <Header title="Language & units" />
       <View style={{ gap: spacing.lg }}>
         <Card>
+          <ListItem title="Automatic" subtitle={`Follows your phone · ${deviceLanguage() === 'fr' ? 'Français' : 'English'}`} chevron={false} onPress={() => setLanguage('auto')} right={<Txt tone="primary">{language === 'auto' ? '✓' : ''}</Txt>} />
           <ListItem title="English" chevron={false} onPress={() => setLanguage('en')} right={<Txt tone="primary">{language === 'en' ? '✓' : ''}</Txt>} />
           <ListItem title="Français" chevron={false} onPress={() => setLanguage('fr')} right={<Txt tone="primary">{language === 'fr' ? '✓' : ''}</Txt>} />
         </Card>

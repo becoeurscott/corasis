@@ -42,12 +42,12 @@ export function EmailCodeCard() {
     }
   };
 
-  const verify = async () => {
-    if (loading || !sentTo) return;
+  const verify = async (value = code) => {
+    if (loading || !sentTo || value.length < 6) return;
     setError(null);
     setLoading(true);
     try {
-      await backend.verifyEmailCode(sentTo, code);
+      await backend.verifyEmailCode(sentTo, value);
       backend.saveOnboarding({ step: 4 });
       const { onboarding, session, pendingInviteCode } = useData.getState();
       router.replace(resolveStartRoute({ theme: usePrefs.getState().theme, onboarding, session, couple: backend.couple(), pendingInviteCode }) as never);
@@ -69,9 +69,9 @@ export function EmailCodeCard() {
             </View>
             {demoCode ? <Banner kind="demo" title="Local preview" body={codeCopy.demo.replace('{code}', demoCode)} /> : null}
             <Input rounded left={<FieldIcon name="keypad-outline" />} accessibilityLabel="Verification code" placeholder={codeCopy.placeholder} value={code}
-              onChangeText={(v) => { setCode(v.replace(/\D/g, '').slice(0, 6)); setError(null); }}
-              keyboardType="number-pad" textContentType="oneTimeCode" autoComplete="one-time-code" maxLength={6} error={error} onSubmitEditing={verify} returnKeyType="go" autoFocus />
-            <Button title={codeCopy.action} onPress={verify} loading={loading} disabled={code.length < 6} size="lg" />
+              onChangeText={(v) => { const digits = v.replace(/\D/g, '').slice(0, 6); setCode(digits); setError(null); if (digits.length === 6) verify(digits); }}
+              keyboardType="number-pad" textContentType="oneTimeCode" autoComplete="one-time-code" error={error} onSubmitEditing={() => verify()} returnKeyType="go" autoFocus />
+            <Button title={codeCopy.action} onPress={() => verify()} loading={loading} disabled={code.length < 6} size="lg" />
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <Button title={codeCopy.change} variant="ghost" onPress={() => { setSentTo(null); setCode(''); setError(null); }} />
               <Button title={codeCopy.resend} variant="ghost" onPress={() => send(true)} />

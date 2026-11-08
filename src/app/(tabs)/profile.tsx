@@ -56,7 +56,7 @@ export default function ProfileTab() {
           <Divider />
           <ListItem icon="contrast" title="Light / dark" value={appearance === 'system' ? 'System' : appearance[0].toUpperCase() + appearance.slice(1)} onPress={() => router.push('/settings/theme')} />
           <Divider />
-          <ListItem icon="language" title="Language" value={language === 'fr' ? 'Français' : 'English'} onPress={() => router.push('/settings/language')} />
+          <ListItem icon="language" title="Language" value={language === 'auto' ? 'Automatic' : language === 'fr' ? 'Français' : 'English'} onPress={() => router.push('/settings/language')} />
         </Card>
 
         <SectionTitle title="Preferences" />

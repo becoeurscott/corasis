@@ -81,7 +81,7 @@ export default function MessagesScreen() {
       </View>
       {!couple ? <View style={{ paddingHorizontal: spacing.lg }}><Banner kind="info" body="Messages need a connected partner." actionTitle="Invite" onAction={() => router.push('/settings/partner')} /></View> : null}
       {data.length ? (
-        <FlatList
+        <FlatList keyboardDismissMode="on-drag"
           ref={listRef}
           inverted
           data={data}

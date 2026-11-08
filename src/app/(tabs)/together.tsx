@@ -87,7 +87,7 @@ export default function TogetherTab() {
         {waiting.length ? <Banner kind="info" body={`${partner?.firstName} answered ${waiting.length} ${waiting.length === 1 ? 'question' : 'questions'} and is waiting for you.`} actionTitle="Open" onAction={() => router.push(`/activity/session/${waiting[0].id}`)} /> : null}
 
         <SectionTitle title="Play" action="History" onAction={() => router.push('/activity/history')} />
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: spacing.md }}>
+        <ScrollView keyboardDismissMode="on-drag" keyboardShouldPersistTaps="handled" horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: spacing.md }}>
           {featured.map((d) => (
             <Card key={d.id} onPress={() => router.push(`/activity/${d.id}`)} accessibilityLabel={d.title} style={styles.featured}>
               <Txt style={{ fontSize: 30 }}>{d.emoji}</Txt>
@@ -103,7 +103,7 @@ export default function TogetherTab() {
 
         <SectionTitle title="Conversation decks" action="Favorites" onAction={() => router.push('/activity/favorites')} />
         <Input value={q} onChangeText={setQ} placeholder="Search decks" autoCorrect={false} />
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: spacing.sm }}>
+        <ScrollView keyboardDismissMode="on-drag" keyboardShouldPersistTaps="handled" horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: spacing.sm }}>
           <Chip label="All" selected={!cat} onPress={() => setCat(null)} small />
           {categories.map((c) => (
             <Chip key={c} label={`${categoryMeta[c].emoji} ${categoryMeta[c].label}`} selected={cat === c} onPress={() => setCat(cat === c ? null : c)} small />

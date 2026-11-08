@@ -3,7 +3,9 @@
  * starting point so the app is structured for French localization.
  * Usage: const t = useT(); t('home.sendMoment')
  */
-import { usePrefs } from '@/store/prefs';
+import { getLocales } from 'expo-localization';
+
+import { usePrefs, type Language, type LanguagePref } from '@/store/prefs';
 
 const en = {
   'tabs.home': 'Home',
@@ -48,7 +50,25 @@ const fr: Record<keyof typeof en, string> = {
 export type TKey = keyof typeof en;
 const dictionaries = { en, fr };
 
+/** The phone's language if we support it, otherwise English. */
+export function deviceLanguage(): Language {
+  try {
+    const code = getLocales()[0]?.languageCode?.toLowerCase();
+    return code === 'fr' ? 'fr' : 'en';
+  } catch {
+    return 'en';
+  }
+}
+
+export function resolveLanguage(pref: LanguagePref): Language {
+  return pref === 'auto' ? deviceLanguage() : pref;
+}
+
+export function useLanguage(): Language {
+  return resolveLanguage(usePrefs((s) => s.language));
+}
+
 export function useT() {
-  const lang = usePrefs((s) => s.language);
+  const lang = useLanguage();
   return (key: TKey) => dictionaries[lang][key] ?? en[key];
 }

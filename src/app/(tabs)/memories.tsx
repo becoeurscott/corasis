@@ -86,7 +86,7 @@ export default function MemoriesTab() {
         ) : null}
 
         <Input value={q} onChangeText={setQ} placeholder="Search captions and letters" autoCorrect={false} />
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: spacing.sm }}>
+        <ScrollView keyboardDismissMode="on-drag" keyboardShouldPersistTaps="handled" horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: spacing.sm }}>
           {filters.map((f) => (
             <Chip key={f.v} label={f.l} selected={filter === f.v} onPress={() => { setFilter(f.v); setLimit(PAGE); }} small />
           ))}

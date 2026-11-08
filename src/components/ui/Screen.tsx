@@ -27,6 +27,7 @@ export function Screen({ children, scroll = true, scrollRef, padded = true, styl
     <ScrollView
       ref={scrollRef}
       keyboardShouldPersistTaps="handled"
+      keyboardDismissMode={Platform.OS === 'ios' ? 'interactive' : 'on-drag'}
       contentInsetAdjustmentBehavior="automatic"
       style={styles.flex}
       contentContainerStyle={[padded && styles.padded, styles.content, contentStyle]}>

@@ -543,7 +543,7 @@ export default function LifeRoom() {
       <View pointerEvents="none" style={StyleSheet.absoluteFill}>
         <Gradient colors={scenes[game.stage]} style={{ flex: 1 }} />
       </View>
-      <ScrollView
+      <ScrollView keyboardDismissMode="on-drag" keyboardShouldPersistTaps="handled"
         scrollEnabled={!dragging}
         contentContainerStyle={{
           paddingTop: insets.top + spacing.sm,

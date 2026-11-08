@@ -162,6 +162,7 @@ struct AuthView: View {
                         .frame(maxWidth: 480).padding(20).frame(maxWidth: .infinity, minHeight: geometry.size.height)
                 }.background(p.soft).foregroundStyle(p.text)
             }
+            .scrollDismissesKeyboard(.interactively)
             .animation(.easeOut(duration: 0.2), value: sentTo)
             .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Close") { dismiss() } } }
             .onAppear { mode = initialMode }
@@ -186,7 +187,7 @@ struct AuthView: View {
         }
         if let demoCode { InfoBanner(text: c.demo.replacingOccurrences(of: "{code}", with: demoCode)) }
         PillField(icon: "number", placeholder: c.placeholder, text: $code, content: .oneTimeCode).keyboardType(.numberPad).submitLabel(.go).onSubmit { verify() }
-            .onChange(of: code) { _, v in let digits = String(v.filter(\.isNumber).prefix(6)); if digits != v { code = digits }; notice = "" }
+            .onChange(of: code) { _, v in let digits = String(v.filter(\.isNumber).prefix(6)); if digits != v { code = digits; return }; notice = ""; if digits.count == 6 { verify() } }
         if !notice.isEmpty { Text(notice).font(.caption).foregroundStyle(p.color("danger")) }
         PrimaryButton(title: busy ? "Please wait…" : c.action) { verify() }.disabled(busy || code.count < 6)
         HStack {

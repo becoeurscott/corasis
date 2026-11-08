@@ -34,6 +34,7 @@ struct RootView: View {
             if store.locked { LockView() }
         }
         .onAppear { if debugBabyGame && (store.me == nil || store.couple == nil) { store.demo() } }
+        .scrollDismissesKeyboard(.interactively)
         .tint(palette.primary)
         .environment(\.appPalette, palette)
         .sheet(isPresented: Binding(get: { !store.pendingInvite.isEmpty && store.me != nil && store.verified }, set: { if !$0 { store.pendingInvite = "" } })) {
@@ -85,7 +86,7 @@ struct RowLink<Destination: View>: View {
 struct MainTabs: View {
     @EnvironmentObject var store: Store
     @State private var selectedTab = 0
-    var fr: Bool { store.db.prefs.language == "fr" }
+    var fr: Bool { AppLanguage.resolve(store.db.prefs.language) == "fr" }
     var body: some View {
         TabView(selection: $selectedTab) {
             NavigationStack { HomeView() }.tabItem { Label(fr ? "Accueil" : "Home", systemImage: "house.fill") } .tag(0)

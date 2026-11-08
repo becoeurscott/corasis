@@ -57,7 +57,7 @@ export function TimezonePicker({ label, value, onChange, hint }: Props) {
       ) : null}
       <Sheet visible={open} onClose={() => setOpen(false)} title="Time zone">
         <Input value={q} onChangeText={setQ} placeholder="Search e.g. Paris, Montreal" autoCapitalize="none" autoCorrect={false} />
-        <FlatList
+        <FlatList keyboardDismissMode="on-drag"
           data={zones}
           keyExtractor={(z) => z}
           style={{ maxHeight: 380 }}

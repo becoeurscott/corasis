@@ -17,7 +17,7 @@ import { inviteCode, token, uid } from '@/lib/ids';
 import { computeStreak } from '@/lib/streak';
 import { addDays, todayKey } from '@/lib/time';
 import { actionDef, applyAction, applyDecision, castVote, currentVote, evaluate, fastForward, gameNow, life, newLifeGame, openVote, redactLifeGame, stageDef } from '@/lib/lifeGame';
-import { remote, remoteConfig, type RemoteUser } from './remote';
+import { remote, remoteConfig, type RemoteCouple, type RemoteUser } from './remote';
 import {
   ActivitySession,
   AffectionKind,
@@ -240,7 +240,46 @@ async function finishRemoteSignIn(user: RemoteUser, useDraft = false): Promise<A
       } else {
         syncInBackground(user.id);
       }
+      try { const rc = await remote.myCouple(); if (rc) adoptRemoteCouple(rc); } catch (e) { console.warn('[couple sync]', (e as Error).message); }
       return get().session!;
+}
+
+/** Remote accounts (not demo) keep invitations and couples on InsForge. */
+function isRemoteSession(): boolean {
+  const s = get().session;
+  return remoteConfig.configured && !!s && !s.demo;
+}
+
+/** Mirror the server's couple + partner profile into local state. */
+function adoptRemoteCouple(rc: RemoteCouple): Couple {
+  const s = requireSession();
+  const existing = get().couples[rc.couple_id];
+  const d = get().onboarding;
+  const couple: Couple = existing ?? {
+    id: rc.couple_id,
+    memberIds: [s.userId, rc.partner.id],
+    relationshipStage: d.relationshipStage,
+    relationshipStart: d.relationshipStart,
+    distanceMode: d.distanceMode,
+    goals: d.goals,
+    coupleTimezone: rc.timezone || 'UTC',
+    createdAt: rc.created_at,
+  };
+  set((st) => ({
+    couples: { ...st.couples, [couple.id]: couple },
+    profiles: {
+      ...st.profiles,
+      [rc.partner.id]: { ...(st.profiles[rc.partner.id] ?? {}), id: rc.partner.id, firstName: rc.partner.first_name, timezone: rc.partner.timezone, avatarUri: rc.partner.avatar_url, pronouns: st.profiles[rc.partner.id]?.pronouns ?? null, email: st.profiles[rc.partner.id]?.email ?? '' } as Profile,
+    },
+    invitations: st.invitations.map((i) => (i.inviterId === s.userId && i.status === 'pending' ? { ...i, status: 'accepted', acceptedBy: rc.partner.id } : i)),
+    sharing: {
+      ...st.sharing,
+      [s.userId]: st.sharing[s.userId] ?? { userId: s.userId, location: false, battery: false, updatedAt: now() },
+      [rc.partner.id]: st.sharing[rc.partner.id] ?? { userId: rc.partner.id, location: false, battery: false, updatedAt: now() },
+    },
+    pendingInviteCode: null,
+  }));
+  return couple;
 }
 
 function adoptRemoteUser(user: { id: string; email: string }, verified: boolean, useDraft = false) {
@@ -503,6 +542,12 @@ export const backend = {
   async createInvitation(): Promise<Invitation> {
     const s = requireSession();
     if (coupleOf(s.userId)) throw new BackendError('already_paired', 'You are already connected with a partner.');
+    if (isRemoteSession()) {
+      const r = await remote.createInvitation();
+      const inv: Invitation = { id: r.code, code: r.code, token: r.code, inviterId: s.userId, inviterName: get().profiles[s.userId]?.firstName ?? 'Your partner', status: 'pending', createdAt: now(), expiresAt: r.expires_at, acceptedBy: null };
+      set((st) => ({ invitations: [...st.invitations.map((i) => (i.inviterId === s.userId && i.status === 'pending' ? { ...i, status: 'revoked' as const } : i)), inv] }));
+      return inv;
+    }
     sweepInvitations();
     const me = get().profiles[s.userId];
     // Revoke previous pending invitations by this user.
@@ -540,6 +585,12 @@ export const backend = {
 
   /** Look up an invitation to show the inviter before confirming. */
   async previewInvitation(code: string): Promise<{ invitation: Invitation | null; reason: 'ok' | 'invalid' | 'expired' | 'revoked' | 'used' | 'self' }> {
+    if (isRemoteSession()) {
+      // The server checks the code when it is accepted; codes from other phones can't be read before that.
+      const c = code.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+      if (c.length !== 8) return { invitation: null, reason: 'invalid' };
+      return { invitation: { id: c, code: c, token: c, inviterId: '', inviterName: 'your partner', status: 'pending', createdAt: now(), expiresAt: now(), acceptedBy: null }, reason: 'ok' };
+    }
     sweepInvitations();
     const c = code.trim().toUpperCase();
     const inv = get().invitations.find((i) => i.code === c || i.token === code.trim());
@@ -555,6 +606,7 @@ export const backend = {
   async acceptInvitation(code: string): Promise<Couple> {
     const s = requireSession();
     if (coupleOf(s.userId)) throw new BackendError('already_paired', 'You are already connected with a partner.');
+    if (isRemoteSession()) return adoptRemoteCouple(await remote.acceptInvitation(code));
     const { invitation, reason } = await backend.previewInvitation(code);
     if (!invitation || reason !== 'ok') {
       const msg: Record<string, string> = {
@@ -591,9 +643,17 @@ export const backend = {
     return couple;
   },
 
+  /** Pull the partner connection from the server (e.g. after the partner entered our code). */
+  async syncCouple(): Promise<Couple | null> {
+    if (!isRemoteSession()) return coupleOf(requireSession().userId);
+    const rc = await remote.myCouple();
+    return rc ? adoptRemoteCouple(rc) : null;
+  },
+
   async unlink(): Promise<void> {
     const s = requireSession();
     const c = requireCouple(s.userId);
+    if (isRemoteSession()) await remote.unlinkCouple();
     // Access is revoked immediately: couple resources are removed from this device
     // and the couple record is deleted. Shared content retention is described in
     // docs/BACKEND.md (30-day export window server-side).

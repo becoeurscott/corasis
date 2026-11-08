@@ -183,6 +183,7 @@ struct AppError: LocalizedError { var message: String; var errorDescription: Str
         } else { await syncProfile() }
         let preferences = try await InsForge.shared.fetchConnectionPreferences(userID: user.id)
         if preferences != nil || !draft { var values = db.connectionPreferences ?? [:]; values[user.id] = preferences; db.connectionPreferences = values }; db.connectionDraft = nil
+        await syncCouple()
     }
     /// Uploads a new local photo if needed, then saves the profile row on InsForge.
     func syncProfile() async {
@@ -226,6 +227,33 @@ struct AppError: LocalizedError { var message: String; var errorDescription: Str
         if isRemoteAccount { Task { await syncProfile() } }
     }
     func saveCouple(_ c: Couple) { guard let i = db.couples.firstIndex(where: { $0.id == couple?.id }), c.id == db.couples[i].id, c.members == db.couples[i].members else { return }; db.couples[i] = c }
+    // MARK: Partner connection on InsForge (real accounts); local accounts and the demo stay on-device.
+    var usesRemoteCouple: Bool { InsForge.configured && isRemoteAccount && !db.demo }
+    private func adoptRemoteCouple(_ rc: RemoteCouple) {
+        guard let me else { return }
+        let p = rc.partner
+        if let i = db.people.firstIndex(where: { $0.id == p.id }) { db.people[i].name = p.first_name; db.people[i].timezone = p.timezone; db.people[i].avatarURL = p.avatar_url }
+        else { var person = Person(id: p.id, name: p.first_name); person.timezone = p.timezone; person.avatarURL = p.avatar_url; db.people.append(person) }
+        if !db.couples.contains(where: { $0.id == rc.couple_id }) {
+            var c = Couple(id: rc.couple_id, members: [me.id, p.id]); c.timezone = rc.timezone
+            db.couples.removeAll { $0.members.contains(me.id) }; db.couples.append(c)
+        }
+        for i in db.invites.indices where db.invites[i].owner == me.id && db.invites[i].status == "pending" { db.invites[i].status = "accepted" }
+        pendingInvite = ""
+    }
+    func createInviteRemote() async throws {
+        guard let me, couple == nil else { throw AppError(message: "You are already connected with a partner.") }
+        let r = try await InsForge.shared.createInvitation()
+        for i in db.invites.indices where db.invites[i].owner == me.id && db.invites[i].status == "pending" { db.invites[i].status = "revoked" }
+        db.invites.append(Invite(owner: me.id, code: r.code, expires: ISO8601DateFormatter.flexible.date(from: r.expires_at) ?? Date().addingTimeInterval(86400)))
+    }
+    func acceptInviteRemote(_ code: String) async throws { adoptRemoteCouple(try await InsForge.shared.acceptInvitation(code: code)) }
+    /// Checks the server for a partner connection (e.g. the partner just entered our code). Returns true when connected.
+    @discardableResult func syncCouple() async -> Bool {
+        guard usesRemoteCouple else { return couple != nil }
+        guard let rc = try? await InsForge.shared.myCouple() else { return couple != nil }
+        adoptRemoteCouple(rc); return true
+    }
     func createInvite() throws -> Invite {
         guard let me, verified, couple == nil else { throw AppError(message: "You must be verified and unpaired to create an invitation.") }
         for i in db.invites.indices where db.invites[i].owner == me.id && db.invites[i].status == "pending" { db.invites[i].status = "revoked" }
@@ -238,6 +266,7 @@ struct AppError: LocalizedError { var message: String; var errorDescription: Str
     }
     func unlink() {
         guard let c = couple else { return }; generation = UUID()
+        if usesRemoteCouple { Task { try? await InsForge.shared.unlinkCouple() } }
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         db.couples.removeAll { $0.id == c.id }
         db.moments.removeAll { $0.coupleID == c.id }; db.activities.removeAll { $0.coupleID == c.id }
@@ -352,4 +381,9 @@ enum Secure {
     }
     static func get(_ key: String) -> String? { var result: CFTypeRef?; let q: [String:Any] = [kSecClass as String:kSecClassGenericPassword, kSecAttrService as String:service, kSecAttrAccount as String:key, kSecReturnData as String:true, kSecMatchLimit as String:kSecMatchLimitOne]; guard SecItemCopyMatching(q as CFDictionary, &result) == errSecSuccess, let data = result as? Data else { return nil }; return String(data:data, encoding:.utf8) }
     static func delete(_ key: String) { SecItemDelete([kSecClass as String:kSecClassGenericPassword, kSecAttrService as String:service, kSecAttrAccount as String:key] as CFDictionary) }
+}
+
+extension ISO8601DateFormatter {
+    /// Accepts timestamps with or without fractional seconds (Postgres returns both).
+    static let flexible: ISO8601DateFormatter = { let f = ISO8601DateFormatter(); f.formatOptions = [.withInternetDateTime, .withFractionalSeconds]; return f }()
 }

@@ -100,7 +100,7 @@ export default function GamesScreen() {
 
   return (
     <View style={[styles.flex, { backgroundColor: HERO_BG }]}>
-      <ScrollView style={styles.flex} contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
+      <ScrollView keyboardDismissMode="on-drag" keyboardShouldPersistTaps="handled" style={styles.flex} contentContainerStyle={{ flexGrow: 1 }}>
         {/* Hero */}
         <View style={[styles.column, { paddingTop: insets.top + spacing.sm }]}>
           <View style={styles.header}>
@@ -125,7 +125,7 @@ export default function GamesScreen() {
             <Txt style={styles.headline}>Games for two</Txt>
           </View>
 
-          <ScrollView
+          <ScrollView keyboardDismissMode="on-drag" keyboardShouldPersistTaps="handled"
             horizontal
             showsHorizontalScrollIndicator={false}
             snapToInterval={cardWidth + spacing.md}
@@ -184,7 +184,7 @@ export default function GamesScreen() {
               />
             ) : null}
 
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: spacing.sm }} style={{ marginHorizontal: -spacing.lg }}>
+            <ScrollView keyboardDismissMode="on-drag" keyboardShouldPersistTaps="handled" horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: spacing.sm }} style={{ marginHorizontal: -spacing.lg }}>
               <View style={{ width: spacing.lg - spacing.sm }} />
               {gameTags.map((t) => {
                 const on = selected.includes(t);
