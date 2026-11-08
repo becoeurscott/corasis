@@ -106,7 +106,7 @@ async function sharedItems(store: SyncStore, couple: Couple, st: State): Promise
   }
   for (const x of s.sessions.filter((y) => y.coupleId === couple.id)) {
     add(item('session', x.id, {
-      deckId: x.deckId, questionId: x.questionId, day: null, createdAt: x.createdAt, abandoned: x.status === 'abandoned',
+      deckId: x.deckId, questionId: x.questionId, day: x.id.startsWith('daily-') ? x.id.slice(-10) : null, createdAt: x.createdAt, abandoned: x.status === 'abandoned',
       submissions: x.submissions.map((u) => ({ userId: u.userId, answer: u.answer, comment: u.comment ?? null, skipped: u.skipped, submittedAt: u.submittedAt })),
       reactions: x.reactions ?? {},
     }));

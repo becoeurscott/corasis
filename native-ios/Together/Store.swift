@@ -294,8 +294,11 @@ struct AppError: LocalizedError { var message: String; var errorDescription: Str
     func startActivity(question: Question, deck: Deck, daily: Bool = false) throws -> String {
         let c = try requireCouple()
         if deck.premium && !db.prefs.premium { throw AppError(message: "This deck requires the Together Plus demo switch in Profile.") }
-        if daily, let existing = activities.first(where: { $0.day == today && $0.deckID == "deck_daily" }) { return existing.id }
-        let item = Activity(coupleID: c.id, deckID: deck.id, questionID: question.id, day: daily ? today : nil)
+        // Today's question has the same id on both phones, so both answers land in one session.
+        let dailyID = "daily-\(c.id)-\(today)"
+        if daily, let existing = activities.first(where: { $0.id == dailyID }) ?? activities.first(where: { $0.day == today && $0.deckID == "deck_daily" }) { return existing.id }
+        var item = Activity(coupleID: c.id, deckID: deck.id, questionID: question.id, day: daily ? today : nil)
+        if daily { item.id = dailyID }
         db.activities.append(item); return item.id
     }
     func activity(_ id: String) -> Activity? { activities.first { $0.id == id } }

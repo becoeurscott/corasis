@@ -859,7 +859,8 @@ export const backend = {
     if (!s || !c) return null;
     const day = todayKey(c.coupleTimezone);
     const q = dailyQuestionFor(day);
-    const existing = get().sessions.find((x) => x.coupleId === c.id && x.deckId === 'deck_daily' && x.questionId === q.id && x.createdAt.slice(0, 10) >= day.slice(0, 10));
+    // Today's question has the same id on both phones, so both answers land in one session.
+    const existing = get().sessions.find((x) => x.id === `daily-${c.id}-${day}`) ?? get().sessions.find((x) => x.coupleId === c.id && x.deckId === 'deck_daily' && x.questionId === q.id && x.createdAt.slice(0, 10) >= day.slice(0, 10));
     return existing ? redactSession(existing, s.userId) : null;
   },
 
@@ -871,7 +872,7 @@ export const backend = {
     const q = dailyQuestionFor(day);
     const existing = backend.findDailySession();
     if (existing) return existing;
-    const session: ActivitySession = { id: uid('sess'), coupleId: c.id, deckId: 'deck_daily', questionId: q.id, status: 'in_progress', createdAt: now(), revealedAt: null, submissions: [], reactions: {} };
+    const session: ActivitySession = { id: `daily-${c.id}-${day}`, coupleId: c.id, deckId: 'deck_daily', questionId: q.id, status: 'in_progress', createdAt: now(), revealedAt: null, submissions: [], reactions: {} };
     set((st) => ({ sessions: [session, ...st.sessions] }));
     return session;
   },

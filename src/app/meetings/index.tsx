@@ -31,7 +31,7 @@ export default function MeetingsOverview() {
     <Screen>
       <Header title="Next meeting" right={<Button title="＋ Event" size="sm" full={false} onPress={() => router.push('/meetings/edit')} />} />
       <View style={{ gap: spacing.lg }}>
-        <CountdownCard meeting={next} />
+        <CountdownCard meeting={next} timeZone={couple.coupleTimezone} />
         {next?.days === 0 ? <Banner kind="success" title="It's today" body="Enjoy it. We will stay quiet. When you are back, save a memory from the visit." actionTitle="Add a memory" onAction={() => router.push('/memories/new')} /> : null}
         {!next && justPassed ? <Banner kind="info" title={`How was ${justPassed.destination ?? 'the visit'}?`} body="Save a memory from it, or plan the next one so the countdown starts again." actionTitle="Plan the next visit" onAction={() => router.push('/meetings/edit?kind=meeting')} /> : null}
         {!next ? <Button title="Plan a meeting" onPress={() => router.push('/meetings/edit?kind=meeting')} /> : null}

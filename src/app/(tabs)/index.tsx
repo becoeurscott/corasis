@@ -3,13 +3,13 @@ import { router } from 'expo-router';
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
 
-import { AffectionRow } from '@/components/home/AffectionRow';
+import { BabyCard } from '@/components/home/BabyCard';
 import { CountdownCard } from '@/components/home/CountdownCard';
 import { FlameCard } from '@/components/home/FlameCard';
 import { AffectionBar } from '@/components/affection/AffectionBar';
 import { PartnerHeader } from '@/components/home/PartnerHeader';
 import { ShareLiveCard } from '@/components/home/ShareLiveCard';
-import { Avatar, Banner, Card, EmptyState, Screen, SectionTitle, Txt } from '@/components/ui';
+import { Avatar, Banner, Card, EmptyState, Screen, Txt } from '@/components/ui';
 import { dailyQuestionFor } from '@/data/questions';
 import { nextMeeting } from '@/lib/events';
 import { formatDistance, haversineKm } from '@/lib/geo';
@@ -74,7 +74,7 @@ export default function Home() {
         {partnerAnsweredDaily ? <Banner kind="info" title={`${partner?.firstName} answered today's question`} body="Answer yours to reveal both." actionTitle="Answer now" onAction={() => router.push('/activity/daily')} /> : null}
         {unansweredSessions > 0 && !partnerAnsweredDaily ? <Banner kind="info" body={`${partner?.firstName} is waiting on ${unansweredSessions} ${unansweredSessions === 1 ? 'answer' : 'answers'} from you.`} actionTitle="See activities" onAction={() => router.push('/activity/history')} /> : null}
 
-        <CountdownCard meeting={meeting} />
+        <CountdownCard meeting={meeting} timeZone={couple?.coupleTimezone ?? Intl.DateTimeFormat().resolvedOptions().timeZone} />
 
         <Card onPress={() => router.push('/activity/daily')} accessibilityLabel="Question of the day" style={{ gap: spacing.sm }}>
           <Txt variant="label" tone="primary">
@@ -86,8 +86,7 @@ export default function Home() {
           </Txt>
         </Card>
 
-        <SectionTitle title="Quick affection" action="History" onAction={() => router.push('/messages')} />
-        <AffectionRow disabled={!couple} />
+        <BabyCard />
 
         {lastFromPartner ? (
           <Card onPress={() => router.push('/messages')} accessibilityLabel="Latest message from partner" style={{ flexDirection: 'row', gap: spacing.md, alignItems: 'center' }}>

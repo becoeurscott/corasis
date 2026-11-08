@@ -25,11 +25,10 @@ struct HomeView: View {
                 }.buttonStyle(.smooth)
             }
             if let event = store.nextEvent { NavigationLink { EventDetail(id: event.id) } label: {
-                VStack(alignment: .leading, spacing: 12) { Text("NEXT MEETING").font(.caption.bold()).tracking(2); HStack(alignment: .firstTextBaseline, spacing: 10) { Text("\(Day.distance(store.today, event.day))").font(.system(size: 62, weight: .bold, design: .rounded)); Text("days to go").font(.title2.bold()) }; Text("\(event.destination.isEmpty ? event.title : event.destination) · \(Day.label(event.day))").font(.subheadline) }.foregroundStyle(.white).frame(maxWidth: .infinity, alignment: .leading).padding(24).background(p.gradient, in: RoundedRectangle(cornerRadius: 26))
+                VStack(alignment: .leading, spacing: 12) { Text("NEXT MEETING").font(.caption.bold()).tracking(2); MeetingCountdown(event: event, zone: store.couple?.timezone ?? TimeZone.current.identifier); Text("\(event.destination.isEmpty ? event.title : event.destination) · \(Day.label(event.day))").font(.subheadline) }.foregroundStyle(.white).frame(maxWidth: .infinity, alignment: .leading).padding(24).background(p.gradient, in: RoundedRectangle(cornerRadius: 26))
             }.buttonStyle(.smooth) } else { Card { RowLink(title: "Plan your next meeting", icon: "calendar.badge.plus") { EventEditor() } } }
             NavigationLink { DailyQuestionView() } label: { Card { Text("QUESTION OF THE DAY").font(.caption.bold()).tracking(1.5).foregroundStyle(p.primary); Text(Product.shared.daily(store.today).text).font(.title3.bold()); Text("Tap to answer · hidden until you both do").font(.caption).foregroundStyle(.secondary) } }.buttonStyle(.smooth)
-            SectionHeading(title: "A little affection")
-            HStack { ForEach(["😘", "🤗", "💭", "🫶"], id: \.self) { emoji in Button { store.perform { try store.send(emoji, kind: "affection") }; if store.db.prefs.haptics { UIImpactFeedbackGenerator(style: .light).impactOccurred() } } label: { Text(emoji).font(.system(size: 28)).frame(maxWidth: .infinity).padding(.vertical, 16).background(p.surface, in: RoundedRectangle(cornerRadius: 20)) }.accessibilityLabel(emoji == "😘" ? "Send a kiss" : emoji == "🤗" ? "Send a hug" : emoji == "💭" ? "Thinking of you" : "Need you") } }
+            if let baby = store.lifeGame, baby.status == "naming" || baby.status == "alive" { BabyCard(game: baby) }
         }.toolbar(.hidden, for: .navigationBar).sheet(isPresented: $capture) { NavigationStack { CaptureMomentView() } }
     }
     func status(_ person: Person?) -> some View { let sent = store.moments.contains { $0.author == person?.id && $0.day == store.today }; return Text("\(person?.name ?? "Partner"): \(sent ? "Sent ✓" : "Waiting…")").font(.caption.bold()).foregroundStyle(p.primary).padding(10).background(p.soft.opacity(0.5), in: Capsule()) }
@@ -208,5 +207,73 @@ struct ShareLiveCard: View {
                 }
             }
         }
+    }
+}
+
+/// Live countdown to a meeting: months, days, hours, minutes, seconds (couple's time zone).
+struct MeetingCountdown: View {
+    let event: Event; let zone: String
+    var target: Date? {
+        var cal = Calendar(identifier: .gregorian); cal.timeZone = TimeZone(identifier: zone) ?? .current
+        let d = event.day.split(separator: "-").compactMap { Int($0) }; guard d.count == 3 else { return nil }
+        let t = event.allDay ? [0, 0] : event.time.split(separator: ":").compactMap { Int($0) }
+        return cal.date(from: DateComponents(year: d[0], month: d[1], day: d[2], hour: t.first ?? 0, minute: t.count > 1 ? t[1] : 0))
+    }
+    var body: some View {
+        TimelineView(.periodic(from: .now, by: 1)) { ctx in
+            let parts = parts(at: ctx.date)
+            if let parts {
+                HStack(spacing: 8) {
+                    tile(parts.months, parts.months == 1 ? "month" : "months")
+                    tile(parts.days, parts.days == 1 ? "day" : "days")
+                    tile(parts.hours, "hrs"); tile(parts.minutes, "min"); tile(parts.seconds, "sec")
+                }
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("\(parts.months) months, \(parts.days) days, \(parts.hours) hours, \(parts.minutes) minutes to go")
+            } else {
+                Text("Today! 💞").font(.system(size: 44, weight: .bold, design: .rounded))
+            }
+        }
+    }
+    func parts(at now: Date) -> (months: Int, days: Int, hours: Int, minutes: Int, seconds: Int)? {
+        guard let target, target > now else { return nil }
+        var cal = Calendar(identifier: .gregorian); cal.timeZone = TimeZone(identifier: zone) ?? .current
+        let c = cal.dateComponents([.month, .day, .hour, .minute, .second], from: now, to: target)
+        return (c.month ?? 0, c.day ?? 0, c.hour ?? 0, c.minute ?? 0, c.second ?? 0)
+    }
+    func tile(_ value: Int, _ label: String) -> some View {
+        VStack(spacing: 2) {
+            Text(String(format: "%02d", value)).font(.system(size: 30, weight: .bold, design: .rounded)).monospacedDigit().contentTransition(.numericText())
+            Text(label).font(.caption2.weight(.semibold)).opacity(0.85)
+        }
+        .frame(maxWidth: .infinity).padding(.vertical, 8)
+        .background(.white.opacity(0.18), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+    }
+}
+
+/// Shortcut to the baby game once both partners said yes (theme gradient, like the meeting card).
+struct BabyCard: View {
+    @EnvironmentObject var store: Store
+    @Environment(\.appPalette) private var p
+    let game: LifeGame
+    var ageDays: Int { game.born.map { max(1, Int(Date().addingTimeInterval(game.clockOffset).timeIntervalSince($0) / 86400) + 1) } ?? 1 }
+    var stageLabel: String { Life.content.stages.first { $0.id == game.stage }?.label ?? "Baby" }
+    var body: some View {
+        NavigationLink { LifeGameView() } label: {
+            HStack(spacing: 16) {
+                BabyView(look: Life.stage(game.stage).look, mood: game.status == "alive" ? Life.mood(Life.decayed(game, at: Life.now(game))) : "happy", size: 150).allowsHitTesting(false).scaleEffect(0.62).offset(y: 6).frame(width: 84, height: 84).background(.white.opacity(0.25), in: Circle()).clipShape(Circle())
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("OUR LITTLE ONE").font(.caption.bold()).tracking(2).opacity(0.9)
+                    Text(game.name ?? "Your little one").font(.system(size: 26, weight: .bold, design: .rounded)).lineLimit(1)
+                    Text(game.status == "naming" ? "Choose a name together" : "\(stageLabel) · Day \(ageDays) of 365").font(.subheadline).opacity(0.92)
+                }
+                Spacer(minLength: 0)
+                Image(systemName: "chevron.right").font(.headline).opacity(0.8)
+            }
+            .foregroundStyle(.white).padding(22).frame(maxWidth: .infinity, alignment: .leading)
+            .background(p.gradient, in: RoundedRectangle(cornerRadius: 26, style: .continuous))
+        }
+        .buttonStyle(.smooth)
+        .accessibilityLabel("\(game.name ?? "Your little one"), \(game.status == "naming" ? "choose a name together" : stageLabel). Open the baby game.")
     }
 }
