@@ -1,8 +1,9 @@
+import { MotionPressable } from '@/components/ui/MotionPressable';
 import { Ionicons } from '@expo/vector-icons';
 import * as Sharing from 'expo-sharing';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
-import { Platform, Pressable, View } from 'react-native';
+import { Platform, View } from 'react-native';
 
 import { MediaThumb } from '@/components/MediaThumb';
 import { VoicePlayer } from '@/components/messages/VoicePlayer';
@@ -76,9 +77,9 @@ export default function MemoryDetail() {
   return (
     <Screen footer={editing ? <><Button title="Save" onPress={save} /><Button title="Cancel" variant="ghost" onPress={() => setEditing(false)} /></> : undefined}>
       <Header title={mem.kind === 'moment' ? 'Daily moment' : mem.kind[0].toUpperCase() + mem.kind.slice(1)} right={
-        <Pressable accessibilityRole="button" accessibilityLabel={fav ? 'Remove favorite' : 'Add to favorites'} onPress={() => backend.toggleMemoryFavorite(mem.id)} style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
+        <MotionPressable accessibilityRole="button" accessibilityLabel={fav ? 'Remove favorite' : 'Add to favorites'} onPress={() => backend.toggleMemoryFavorite(mem.id)} style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
           <Ionicons name={fav ? 'heart' : 'heart-outline'} size={24} color={fav ? colors.primary : colors.textMuted} />
-        </Pressable>
+        </MotionPressable>
       } />
       <View style={{ gap: spacing.lg }}>
         {mem.kind === 'letter' ? (

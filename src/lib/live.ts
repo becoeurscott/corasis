@@ -17,16 +17,18 @@ export async function refreshMyLocation(): Promise<LocationOutcome> {
     const pos = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
     let city: string | null = null;
     let country: string | null = null;
+    let countryCode: string | null = null;
     if (Platform.OS !== 'web') {
       try {
         const [place] = await Location.reverseGeocodeAsync({ latitude: pos.coords.latitude, longitude: pos.coords.longitude });
         city = place?.city ?? place?.region ?? null;
         country = place?.country ?? null;
+        countryCode = place?.isoCountryCode ?? null;
       } catch {
         /* geocoding optional */
       }
     }
-    await backend.pushLive({ lat: pos.coords.latitude, lon: pos.coords.longitude, accuracyMeters: pos.coords.accuracy ?? null, city, country });
+    await backend.pushLive({ lat: pos.coords.latitude, lon: pos.coords.longitude, accuracyMeters: pos.coords.accuracy ?? null, city, country, countryCode });
     return 'ok';
   } catch (e) {
     const msg = String((e as Error)?.message ?? '');

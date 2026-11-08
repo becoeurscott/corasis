@@ -1,6 +1,7 @@
+import { MotionPressable } from '@/components/ui/MotionPressable';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { Txt } from '@/components/ui';
 import { haptic } from '@/lib/haptics';
@@ -10,12 +11,13 @@ import { palettes, radius, spacing, ThemeName, themeOrder } from '@/theme/tokens
 type PressState = { pressed: boolean; focused?: boolean };
 
 interface Props {
+  compact?: boolean;
   value: ThemeName | null;
   onChange: (t: ThemeName) => void;
 }
 
 /** Four large swatches with live preview, name and checkmark. */
-export function ThemePicker({ value, onChange }: Props) {
+export function ThemePicker({ value, onChange, compact = false }: Props) {
   const { appearance, colors } = useTheme();
   return (
     <View style={styles.grid} accessibilityRole="radiogroup">
@@ -23,7 +25,7 @@ export function ThemePicker({ value, onChange }: Props) {
         const t = previewTheme(name, appearance);
         const selected = value === name;
         return (
-          <Pressable
+          <MotionPressable
             key={name}
             accessibilityRole="radio"
             accessibilityState={{ selected, checked: selected }}
@@ -32,13 +34,13 @@ export function ThemePicker({ value, onChange }: Props) {
               haptic('selection');
               onChange(name);
             }}
-            style={({ pressed, focused }: PressState) => [
+            style={({ focused }: PressState) => [
               styles.card,
+              compact && { minWidth: 100 },
               { backgroundColor: t.colors.surface, borderColor: selected ? t.colors.primary : colors.border, borderWidth: selected ? 3 : 1 },
               focused && { borderColor: t.colors.focus, borderWidth: 3 },
-              pressed && { transform: [{ scale: 0.98 }] },
             ]}>
-            <View style={[styles.preview, { backgroundColor: t.colors.gradientEnd }]}>
+            <View style={[styles.preview, compact && { height: 52 }, { backgroundColor: t.colors.gradientEnd }]}>
               <View style={[styles.blob, { backgroundColor: t.colors.gradientStart }]} />
               <View style={[styles.miniCard, { backgroundColor: t.colors.surface }]}>
                 <View style={[styles.miniLine, { backgroundColor: t.colors.text, width: '60%' }]} />
@@ -51,15 +53,13 @@ export function ThemePicker({ value, onChange }: Props) {
                 <Txt variant="bodyStrong" style={{ color: t.colors.text }}>
                   {palettes[name].label}
                 </Txt>
-                <Txt variant="caption" style={{ color: t.colors.textSecondary }}>
-                  {palettes[name].tagline}
-                </Txt>
+                {!compact ? <Txt variant="caption" style={{ color: t.colors.textSecondary }}>{palettes[name].tagline}</Txt> : null}
               </View>
               <View style={[styles.check, { backgroundColor: selected ? t.colors.primary : t.colors.surfaceTint, borderColor: t.colors.border }]}>
                 {selected ? <Ionicons name="checkmark" size={16} color={t.colors.onPrimary} /> : null}
               </View>
             </View>
-          </Pressable>
+          </MotionPressable>
         );
       })}
     </View>

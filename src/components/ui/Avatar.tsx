@@ -13,6 +13,9 @@ interface AvatarProps {
   ring?: boolean;
 }
 
+/** Built-in avatars a user can pick instead of a photo; stored as `avatar:<emoji>`. Same list in native-ios/Together/TogetherApp.swift. */
+export const PRESET_AVATARS = ['🦊', '🐻', '🐼', '🐨', '🐯', '🦁', '🐰', '🐱', '🐶', '🐧', '🦋', '🌸'];
+
 export function Avatar({ name, uri, size = 48, simulated, ring }: AvatarProps) {
   const { colors } = useTheme();
   const initial = (name || '?').trim().charAt(0).toUpperCase();
@@ -30,7 +33,9 @@ export function Avatar({ name, uri, size = 48, simulated, ring }: AvatarProps) {
         borderWidth: ring ? 3 : 0,
         borderColor: colors.surface,
       }}>
-      {uri ? (
+      {uri?.startsWith('avatar:') ? (
+        <Txt style={{ fontSize: size * 0.55, lineHeight: size * 0.68 }}>{uri.slice(7)}</Txt>
+      ) : uri ? (
         <Image source={{ uri }} style={{ width: size, height: size }} contentFit="cover" accessibilityIgnoresInvertColors />
       ) : (
         <Txt style={{ color: colors.primaryStrong, fontSize: size * 0.42, fontWeight: '800', lineHeight: size * 0.5 }}>{initial}</Txt>

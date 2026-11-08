@@ -1,6 +1,7 @@
+import { MotionPressable } from '@/components/ui/MotionPressable';
 import * as Linking from 'expo-linking';
 import React, { useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 
 import { Button, Card, Header, Screen, Txt } from '@/components/ui';
 import { spacing } from '@/theme/tokens';
@@ -22,9 +23,9 @@ export default function Help() {
       <View style={{ gap: spacing.sm }}>
         {faq.map(([q, a], i) => (
           <Card key={q} padded={false}>
-            <Pressable accessibilityRole="button" accessibilityState={{ expanded: open === i }} onPress={() => setOpen(open === i ? null : i)} style={{ padding: spacing.lg, minHeight: 52 }}>
+            <MotionPressable accessibilityRole="button" accessibilityState={{ expanded: open === i }} onPress={() => setOpen(open === i ? null : i)} style={{ padding: spacing.lg, minHeight: 52 }}>
               <Txt variant="bodyStrong">{q}</Txt>
-            </Pressable>
+            </MotionPressable>
             {open === i ? (
               <View style={{ paddingHorizontal: spacing.lg, paddingBottom: spacing.lg }}>
                 <Txt tone="secondary">{a}</Txt>

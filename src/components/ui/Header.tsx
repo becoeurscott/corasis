@@ -1,7 +1,8 @@
+import { MotionPressable } from '@/components/ui/MotionPressable';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { useTheme } from '@/theme/ThemeProvider';
 import { spacing, touchTarget } from '@/theme/tokens';
@@ -27,9 +28,9 @@ export function Header({ title, subtitle, back = true, onBack, right, large }: H
     <View style={styles.wrap}>
       <View style={styles.row}>
         {back ? (
-          <Pressable accessibilityRole="button" accessibilityLabel="Back" onPress={goBack} hitSlop={8} style={[styles.btn, { backgroundColor: colors.surfaceTint }]}>
+          <MotionPressable accessibilityRole="button" accessibilityLabel="Back" onPress={goBack} hitSlop={8} style={[styles.btn, { backgroundColor: colors.surfaceTint }]}>
             <Ionicons name="chevron-back" size={22} color={colors.text} />
-          </Pressable>
+          </MotionPressable>
         ) : (
           <View style={styles.btn} />
         )}

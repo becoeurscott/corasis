@@ -2,7 +2,7 @@ export { Txt } from './Text';
 export { Button } from './Button';
 export { Card } from './Card';
 export { Screen } from './Screen';
-export { Avatar } from './Avatar';
+export { Avatar, PRESET_AVATARS } from './Avatar';
 export { Input } from './Input';
 export { Chip } from './Chip';
 export { Sheet } from './Sheet';

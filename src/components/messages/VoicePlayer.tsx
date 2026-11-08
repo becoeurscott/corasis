@@ -1,7 +1,8 @@
+import { MotionPressable } from '@/components/ui/MotionPressable';
 import { Ionicons } from '@expo/vector-icons';
 import { useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
 import React from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -26,9 +27,9 @@ export function VoicePlayer({ uri, durationMs, light }: { uri: string; durationM
   };
   return (
     <View style={styles.row}>
-      <Pressable accessibilityRole="button" accessibilityLabel={status.playing ? 'Pause voice note' : 'Play voice note'} onPress={toggle} style={[styles.btn, { backgroundColor: light ? 'rgba(255,255,255,0.25)' : colors.primarySoft }]}>
+      <MotionPressable accessibilityRole="button" accessibilityLabel={status.playing ? 'Pause voice note' : 'Play voice note'} onPress={toggle} style={[styles.btn, { backgroundColor: light ? 'rgba(255,255,255,0.25)' : colors.primarySoft }]}>
         <Ionicons name={status.playing ? 'pause' : 'play'} size={18} color={light ? colors.onPrimary : colors.primaryStrong} />
-      </Pressable>
+      </MotionPressable>
       <View style={[styles.track, { backgroundColor: light ? 'rgba(255,255,255,0.35)' : colors.border }]}>
         <View style={{ width: `${pct * 100}%`, height: '100%', backgroundColor: light ? colors.onPrimary : colors.primary, borderRadius: 2 }} />
       </View>

@@ -27,21 +27,18 @@ export default function AuthChoiceStep() {
   };
 
   return (
-    <OnboardingFrame step="auth" title={`Nice to meet you${draft.firstName ? `, ${draft.firstName}` : ''}`} subtitle="An account lets you sync with your partner across devices. Your theme and answers are kept either way.">
+    <OnboardingFrame step="auth" title={`Nice to meet you${draft.firstName ? `, ${draft.firstName}` : ''}`} subtitle="Keep your profile and private preferences.">
       <View style={{ gap: spacing.md }}>
-        <Button title="Create an account" size="lg" onPress={() => router.push('/auth/sign-up')} />
-        <Button title="I already have an account" variant="secondary" onPress={() => router.push('/auth/sign-in')} />
+        <Button title="Continue with email" size="lg" onPress={() => router.push('/auth/sign-in')} />
         <Card tint style={{ marginTop: spacing.md, gap: spacing.sm }}>
           <Txt variant="heading">Just looking?</Txt>
-          <Txt tone="secondary">Explore the full app with a simulated partner. Everything stays on this device, and nothing you send reaches a real person.</Txt>
+          <Txt tone="secondary">Try it with a simulated partner.</Txt>
           <Button title="Explore a demo" variant="outline" onPress={demo} loading={loading} />
         </Card>
         {!remoteConfig.configured ? (
-          <Banner kind="info" title="Accounts are local in this build" body="No server is configured yet, so accounts and pairing run on this device only. Real multi-device sync needs the backend described in docs/BACKEND.md." />
+          <Banner kind="info" title="Accounts are local in this build" body="Local preview. Your data stays on this device." />
         ) : null}
-        <Txt variant="caption" tone="muted" center style={{ marginTop: spacing.md }}>
-          Apple and Google sign-in appear here once their credentials are configured.
-        </Txt>
+
       </View>
     </OnboardingFrame>
   );

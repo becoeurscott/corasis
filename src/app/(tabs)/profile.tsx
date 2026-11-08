@@ -6,8 +6,7 @@ import { Avatar, Banner, Button, Card, Divider, ListItem, Screen, SectionTitle, 
 import { diffDays, todayKey } from '@/lib/time';
 import { useCouple, useEntitlements, useMe, usePartner, useSession } from '@/store/hooks';
 import { usePrefs } from '@/store/prefs';
-import { palettes } from '@/theme/tokens';
-import { spacing } from '@/theme/tokens';
+import { palettes, spacing } from '@/theme/tokens';
 
 export default function ProfileTab() {
   const me = useMe();
@@ -62,6 +61,8 @@ export default function ProfileTab() {
 
         <SectionTitle title="Preferences" />
         <Card>
+          <ListItem icon="heart" title="Your connection preferences" subtitle="What feels right for you · private" onPress={() => router.push('/settings/connection')} />
+          <Divider />
           <ListItem icon="time" title="Time zone & couple day" subtitle="When a day starts for the flame" onPress={() => router.push('/settings/timezone')} />
           <Divider />
           <ListItem icon="notifications" title="Notifications" subtitle="Categories, reminder time, quiet hours" onPress={() => router.push('/settings/notifications')} />

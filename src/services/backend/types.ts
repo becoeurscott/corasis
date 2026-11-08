@@ -61,6 +61,8 @@ export interface LiveInfo {
   lon: number | null;
   city: string | null;
   country: string | null;
+  /** ISO 3166-1 alpha-2, e.g. "FR" — used to show the flag. */
+  countryCode?: string | null;
   accuracyMeters: number | null;
   locationUpdatedAt: ISODate | null;
   batteryPercent: number | null;
@@ -191,7 +193,68 @@ export interface Memory {
   momentId?: ID;
 }
 
-export type EventKind = 'meeting' | 'anniversary' | 'birthday' | 'visit' | 'custom';
+// ---------- Our Little One (co-parenting life game) ----------
+export type LifeNeed = 'hunger' | 'energy' | 'hygiene' | 'fun' | 'love';
+export type LifeSkill = 'smart' | 'kind' | 'creative' | 'sporty';
+export type LifeStageId = 'newborn' | 'toddler' | 'child' | 'teen' | 'adult' | 'partnered' | 'elder';
+export type LifeChoiceId = 'name' | 'school' | 'hobby' | 'job' | 'partner';
+
+export interface LifeVote {
+  id: ID;
+  choice: LifeChoiceId;
+  /** Option ids offered (jobs are narrowed to the child's best fits). */
+  options: string[];
+  round: number;
+  /** Secret picks for the current round; redacted for the viewer until both are in. */
+  picks: Record<ID, string>;
+  /** Picks from the previous round, shown when the parents disagreed. */
+  previousPicks: Record<ID, string> | null;
+  status: 'open' | 'decided';
+  result: string | null;
+  decidedBy: 'match' | 'coin' | null;
+  openedAt: ISODate;
+}
+
+export interface LifeLogEntry {
+  id: ID;
+  userId: ID;
+  actionId: string;
+  at: ISODate;
+}
+
+export interface LifeMilestone {
+  id: ID;
+  kind: 'proposed' | 'born' | 'grew' | 'choice' | 'wedding' | 'ended';
+  text: string;
+  at: ISODate;
+}
+
+export interface LifeGame {
+  id: ID;
+  coupleId: ID;
+  status: 'proposed' | 'naming' | 'alive' | 'ended';
+  proposedBy: ID;
+  acceptedBy: ID[];
+  name: string | null;
+  bornAt: ISODate | null;
+  stage: LifeStageId;
+  stageStartedAt: ISODate | null;
+  needs: Record<LifeNeed, number>;
+  needsAt: ISODate;
+  care: number;
+  skills: Record<LifeSkill, number>;
+  decisions: Partial<Record<LifeChoiceId, string>>;
+  votes: LifeVote[];
+  log: LifeLogEntry[];
+  milestones: LifeMilestone[];
+  endedAt: ISODate | null;
+  ending: string | null;
+  /** Demo-only clock shift used by "fast-forward"; 0 in normal play. */
+  clockOffsetMs: number;
+  keepsakeSaved?: boolean;
+}
+
+export type EventKind ='meeting' | 'anniversary' | 'birthday' | 'visit' | 'custom';
 export interface CalendarEvent {
   id: ID;
   coupleId: ID;

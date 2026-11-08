@@ -1,0 +1,65 @@
+{
+  "fps": 24,
+  "clips": {
+    "idle": {
+      "start": 1,
+      "end": 49,
+      "loop": true
+    },
+    "happy": {
+      "start": 52,
+      "end": 78,
+      "loop": false
+    },
+    "eat": {
+      "start": 81,
+      "end": 121,
+      "loop": false
+    },
+    "sleep": {
+      "start": 124,
+      "end": 184,
+      "loop": true
+    },
+    "wave": {
+      "start": 187,
+      "end": 223,
+      "loop": false
+    },
+    "dance": {
+      "start": 226,
+      "end": 274,
+      "loop": true
+    },
+    "sad": {
+      "start": 277,
+      "end": 325,
+      "loop": true
+    },
+    "listen": {
+      "start": 328,
+      "end": 358,
+      "loop": true
+    },
+    "talk": {
+      "start": 361,
+      "end": 385,
+      "loop": true
+    },
+    "splash": {
+      "start": 388,
+      "end": 424,
+      "loop": false
+    },
+    "giggle": {
+      "start": 427,
+      "end": 457,
+      "loop": false
+    },
+    "fall": {
+      "start": 460,
+      "end": 504,
+      "loop": false
+    }
+  }
+}

@@ -5,15 +5,20 @@
   "dependencies": {
     "@expo/ui": "~58.0.27",
     "@expo/vector-icons": "^15.0.2",
+    "@insforge/sdk": "^1.5.2",
     "@react-native-async-storage/async-storage": "2.2.0",
     "@react-native-community/datetimepicker": "9.2.1",
+    "@react-three/fiber": "^9.8.2",
     "expo": "~58.0.23",
+    "expo-asset": "~58.0.20",
     "expo-audio": "~58.0.11",
     "expo-battery": "~10.0.0",
     "expo-clipboard": "~58.0.4",
     "expo-constants": "~58.0.15",
     "expo-device": "~58.0.5",
+    "expo-file-system": "~58.0.13",
     "expo-font": "~58.0.11",
+    "expo-gl": "~58.0.4",
     "expo-glass-effect": "~58.0.5",
     "expo-haptics": "~58.0.7",
     "expo-image": "~58.0.18",
@@ -42,11 +47,13 @@
     "react-native-view-shot": "6.1.1",
     "react-native-web": "~0.21.4",
     "react-native-worklets": "0.13.0",
+    "three": "^0.180.0",
     "zustand": "^5.0.16"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
     "@types/react": "~19.3.0",
+    "@types/three": "^0.180.0",
     "eslint": "^9.0.0",
     "eslint-config-expo": "~58.0.4",
     "jest": "^30.5.2",
@@ -59,7 +66,11 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "ios:swift": "sh scripts/run-swift.sh",
+    "check:parity": "node scripts/check-platform-parity.cjs",
+    "check:changes": "node scripts/check-platform-parity.cjs --changes",
+    "check:react-native": "tsc --noEmit && expo lint && jest --runInBand"
   },
   "private": true
 }

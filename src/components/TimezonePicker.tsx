@@ -1,6 +1,7 @@
+import { MotionPressable } from '@/components/ui/MotionPressable';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useMemo, useState } from 'react';
-import { FlatList, Pressable, StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 
 import { Input, ListItem, Sheet, Txt } from '@/components/ui';
 import { commonTimezones, formatLocalTime } from '@/lib/time';
@@ -40,7 +41,7 @@ export function TimezonePicker({ label, value, onChange, hint }: Props) {
       <Txt variant="caption" tone="secondary" weight="600">
         {label}
       </Txt>
-      <Pressable accessibilityRole="button" accessibilityLabel={`${label}: ${value}`} onPress={() => setOpen(true)} style={[styles.field, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+      <MotionPressable accessibilityRole="button" accessibilityLabel={`${label}: ${value}`} onPress={() => setOpen(true)} style={[styles.field, { backgroundColor: colors.surface, borderColor: colors.border }]}>
         <View style={{ flex: 1 }}>
           <Txt variant="bodyStrong">{value.replace(/_/g, ' ')}</Txt>
           <Txt variant="caption" tone="muted">
@@ -48,7 +49,7 @@ export function TimezonePicker({ label, value, onChange, hint }: Props) {
           </Txt>
         </View>
         <Ionicons name="chevron-down" size={18} color={colors.textMuted} />
-      </Pressable>
+      </MotionPressable>
       {hint ? (
         <Txt variant="caption" tone="muted">
           {hint}

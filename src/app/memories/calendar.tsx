@@ -1,6 +1,7 @@
+import { MotionPressable } from '@/components/ui/MotionPressable';
 import { router } from 'expo-router';
 import React, { useMemo, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { Card, Header, Screen, Txt } from '@/components/ui';
 import { formatDate, todayKey } from '@/lib/time';
@@ -35,27 +36,27 @@ export default function MemoryCalendar() {
       <Header title="Calendar of moments" />
       <Card style={{ gap: spacing.md }}>
         <View style={styles.monthRow}>
-          <Pressable accessibilityRole="button" accessibilityLabel="Previous month" onPress={() => shift(-1)} style={styles.nav}>
+          <MotionPressable accessibilityRole="button" accessibilityLabel="Previous month" onPress={() => shift(-1)} style={styles.nav}>
             <Txt variant="heading">‹</Txt>
-          </Pressable>
+          </MotionPressable>
           <Txt variant="heading">{new Intl.DateTimeFormat(undefined, { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(first)}</Txt>
-          <Pressable accessibilityRole="button" accessibilityLabel="Next month" onPress={() => shift(1)} style={styles.nav}>
+          <MotionPressable accessibilityRole="button" accessibilityLabel="Next month" onPress={() => shift(1)} style={styles.nav}>
             <Txt variant="heading">›</Txt>
-          </Pressable>
+          </MotionPressable>
         </View>
         <View style={styles.grid}>
           {cells.map((d, i) => {
             if (!d) return <View key={`e${i}`} style={styles.cell} />;
             const n = counts.get(d) ?? 0;
             return (
-              <Pressable key={d} accessibilityRole="button" accessibilityLabel={`${formatDate(d)}, ${n} memories`} onPress={() => setSelected(d)} style={styles.cell}>
+              <MotionPressable key={d} accessibilityRole="button" accessibilityLabel={`${formatDate(d)}, ${n} memories`} onPress={() => setSelected(d)} style={styles.cell}>
                 <View style={[styles.dot, { backgroundColor: n ? colors.primarySoft : 'transparent', borderWidth: selected === d ? 2 : 0, borderColor: colors.primary }]}>
                   <Txt variant="caption" weight={n ? '700' : '400'}>
                     {Number(d.slice(-2))}
                   </Txt>
                   {n ? <View style={{ width: 5, height: 5, borderRadius: 3, backgroundColor: colors.primary, marginTop: 1 }} /> : null}
                 </View>
-              </Pressable>
+              </MotionPressable>
             );
           })}
         </View>

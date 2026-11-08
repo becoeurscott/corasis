@@ -29,7 +29,8 @@ export default function TabsLayout() {
         headerShown: false,
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textMuted,
-        tabBarStyle: { backgroundColor: colors.surface, borderTopColor: colors.border, height: Platform.OS === 'web' ? 64 : undefined, paddingTop: 6 },
+        // Never pass `height: undefined` here: it overrides the navigator's computed height (49pt + home-indicator inset).
+        tabBarStyle: [{ backgroundColor: colors.surface, borderTopColor: colors.border }, Platform.OS === 'web' ? { height: 64, paddingTop: 6 } : null],
         tabBarLabelStyle: { fontSize: 11, fontWeight: '600' },
         sceneStyle: { backgroundColor: colors.background },
       }}>

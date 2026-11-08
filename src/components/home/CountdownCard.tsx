@@ -1,6 +1,7 @@
+import { MotionPressable } from '@/components/ui/MotionPressable';
 import { router } from 'expo-router';
 import React from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 
 import { Gradient, Txt } from '@/components/ui';
 import { formatDate } from '@/lib/time';
@@ -9,7 +10,7 @@ import { radius, spacing } from '@/theme/tokens';
 
 export function CountdownCard({ meeting }: { meeting: { event: CalendarEvent; days: number } | null }) {
   return (
-    <Pressable accessibilityRole="button" accessibilityLabel={meeting ? `Next meeting in ${meeting.days} days` : 'Plan your next meeting'} onPress={() => router.push(meeting ? `/meetings/${meeting.event.id}` : '/meetings/edit')}>
+    <MotionPressable accessibilityRole="button" accessibilityLabel={meeting ? `Next meeting in ${meeting.days} days` : 'Plan your next meeting'} onPress={() => router.push(meeting ? `/meetings/${meeting.event.id}` : '/meetings/edit')}>
       <Gradient style={{ borderRadius: radius.lg, padding: spacing.lg }}>
         {meeting ? (
           <View style={{ gap: 2 }}>
@@ -39,6 +40,6 @@ export function CountdownCard({ meeting }: { meeting: { event: CalendarEvent; da
           </View>
         )}
       </Gradient>
-    </Pressable>
+    </MotionPressable>
   );
 }

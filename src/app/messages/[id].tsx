@@ -1,6 +1,7 @@
+import { MotionPressable } from '@/components/ui/MotionPressable';
 import { router, useLocalSearchParams } from 'expo-router';
 import React from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 
 import { affectionMeta } from '@/components/home/AffectionRow';
 import { MessageBubble } from '@/components/messages/MessageBubble';
@@ -71,9 +72,9 @@ export default function MessageDetail() {
               </Txt>
               <View style={{ flexDirection: 'row', gap: spacing.sm }}>
                 {emojis.map((e) => (
-                  <Pressable key={e} accessibilityRole="button" accessibilityLabel={`React ${e}`} onPress={() => { haptic('selection'); backend.reactToMessage(msg.id, e); }} style={{ width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center', backgroundColor: msg.reactions[me.id] === e ? colors.primarySoft : colors.surfaceTint }}>
+                  <MotionPressable key={e} accessibilityRole="button" accessibilityLabel={`React ${e}`} onPress={() => { haptic('selection'); backend.reactToMessage(msg.id, e); }} style={{ width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center', backgroundColor: msg.reactions[me.id] === e ? colors.primarySoft : colors.surfaceTint }}>
                     <Txt style={{ fontSize: 22 }}>{e}</Txt>
-                  </Pressable>
+                  </MotionPressable>
                 ))}
               </View>
             </Card>

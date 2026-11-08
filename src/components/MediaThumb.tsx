@@ -1,7 +1,8 @@
+import { MotionPressable } from '@/components/ui/MotionPressable';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import React from 'react';
-import { Pressable, StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 
 import { Txt } from '@/components/ui';
 import type { MediaAsset } from '@/services/backend';
@@ -64,9 +65,9 @@ export function MediaThumb({ media, style, label, onPress, openViewer = true, st
   const boxStyle = [styles.box, { backgroundColor: colors.surfaceTint }, style];
   if (isStatic) return <View accessibilityLabel={label ?? (media ? `${media.kind} thumbnail` : 'Missing media')} style={boxStyle}>{inner}</View>;
   return (
-    <Pressable accessibilityRole="imagebutton" accessibilityLabel={label ?? (media ? `${media.kind} thumbnail` : 'Missing media')} onPress={open} style={boxStyle}>
+    <MotionPressable accessibilityRole="imagebutton" accessibilityLabel={label ?? (media ? `${media.kind} thumbnail` : 'Missing media')} onPress={open} style={boxStyle}>
       {inner}
-    </Pressable>
+    </MotionPressable>
   );
 }
 

@@ -1,5 +1,6 @@
+import { MotionPressable } from '@/components/ui/MotionPressable';
 import React from 'react';
-import { Pressable, StyleSheet, View, ViewProps, ViewStyle } from 'react-native';
+import { StyleSheet, View, ViewProps, ViewStyle } from 'react-native';
 
 import { useTheme } from '@/theme/ThemeProvider';
 import { radius, spacing } from '@/theme/tokens';
@@ -29,14 +30,14 @@ export function Card({ tint, onPress, padded = true, style, children, accessibil
   };
   if (onPress) {
     return (
-      <Pressable
+      <MotionPressable
         accessibilityRole="button"
         accessibilityLabel={accessibilityLabel}
         onPress={onPress}
-        style={({ pressed, focused }: PressState) => [base, padded && styles.padded, pressed && { opacity: 0.9, transform: [{ scale: 0.99 }] }, focused && { borderWidth: 2, borderColor: colors.focus }, style]}
+        style={({ focused }: PressState) => [base, padded && styles.padded, focused && { borderWidth: 2, borderColor: colors.focus }, style]}
         {...rest}>
         {children}
-      </Pressable>
+      </MotionPressable>
     );
   }
   return (

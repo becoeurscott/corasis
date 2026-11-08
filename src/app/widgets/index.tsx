@@ -30,12 +30,12 @@ export default function WidgetsScreen() {
     <Screen>
       <Header title="Widgets" />
       <View style={{ gap: spacing.lg }}>
-        <Banner kind="info" title="Preview" body={Platform.OS === 'web' ? 'Home-screen widgets need the iOS/Android build. These previews show exactly what the widgets display; the data is shared through the same widget store.' : 'The widgets below ship as native extensions in a development build (WidgetKit / Glance). iOS refreshes widgets on its own schedule, usually within 15–30 minutes, so updates are not instant.'} />
+        <Banner kind="info" title="Preview" body={Platform.OS === 'web' ? 'Home-screen widgets need the iOS/Android build. These previews show exactly what the widgets display; the data is shared through the same widget store.' : 'These are in-app widget previews. Installing Home or Lock Screen widgets requires a WidgetKit / Glance extension, which is not configured in this preview.'} />
 
         <SectionTitle title="Partner's message" action="Write" onAction={() => router.push('/widgets/message')} />
         <Gradient style={styles.widget}>
           <Txt variant="label" style={{ color: 'rgba(255,255,255,0.85)' }}>
-            {msg ? `${profiles[msg.authorId]?.firstName ?? 'Partner'} says` : 'Together'}
+            {msg ? `${profiles[msg.authorId]?.firstName ?? 'Partner'} says` : 'Corasis'}
           </Txt>
           <Txt variant="title" style={{ color: '#fff' }}>
             {msg?.text ?? 'No message yet'}
@@ -71,7 +71,7 @@ export default function WidgetsScreen() {
 
         <Card style={{ gap: spacing.sm }}>
           <Txt variant="heading">How to add a widget</Txt>
-          <Txt tone="secondary">iOS: long-press the Home or Lock Screen → “+” → Together. Android: long-press the Home screen → Widgets → Together. Available in the development build, not in Expo Go or the browser.</Txt>
+          <Txt tone="secondary">Native widget extensions are not configured in this preview. You can try the previews and wallpaper editor here; installed widgets need a future WidgetKit / Glance integration.</Txt>
           <Button title="Wallpaper editor" variant="secondary" onPress={() => router.push('/widgets/wallpaper')} />
         </Card>
       </View>

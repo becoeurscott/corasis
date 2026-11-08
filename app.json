@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Together",
+    "name": "Corasis",
     "slug": "together",
     "version": "1.0.0",
     "orientation": "default",
@@ -9,9 +9,11 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon",
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ebenezer.corasis"
     },
     "android": {
+      "package": "com.ebenezer.corasis",
       "adaptiveIcon": {
         "backgroundColor": "#FBE3EC",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -43,7 +45,7 @@
       [
         "expo-location",
         {
-          "locationWhenInUsePermission": "Together shows your approximate location to your partner only while sharing is on."
+          "locationWhenInUsePermission": "Together uses your location to show your country flag, and shares it with your partner only while sharing is on."
         }
       ],
       [
@@ -59,7 +61,8 @@
           "faceIDPermission": "Unlock Together with Face ID."
         }
       ],
-      "expo-notifications"
+      "expo-notifications",
+      "expo-asset"
     ],
     "experiments": {
       "typedRoutes": false,

@@ -1,3 +1,4 @@
+import { ConnectionPreferences, connectionFlow, validateConnectionAnswers } from '@/lib/connectionPreferences';
 /**
  * LocalBackend — on-device implementation of the backend contract.
  *
@@ -15,6 +16,8 @@ import { dailyQuestionFor, questionById, simulatedAnswers } from '@/data/questio
 import { inviteCode, token, uid } from '@/lib/ids';
 import { computeStreak } from '@/lib/streak';
 import { addDays, todayKey } from '@/lib/time';
+import { actionDef, applyAction, applyDecision, castVote, currentVote, evaluate, fastForward, gameNow, life, newLifeGame, openVote, redactLifeGame, stageDef } from '@/lib/lifeGame';
+import { remote, remoteConfig, type RemoteUser } from './remote';
 import {
   ActivitySession,
   AffectionKind,
@@ -25,6 +28,7 @@ import {
   Entitlements,
   ID,
   Invitation,
+  LifeGame,
   LiveInfo,
   MediaAsset,
   Memory,
@@ -38,6 +42,7 @@ import {
 } from './types';
 
 export interface OnboardingDraft {
+  connectionDraft?: ConnectionPreferences;
   step: number;
   firstName: string;
   avatarUri: string | null;
@@ -63,6 +68,7 @@ export interface Account {
 }
 
 export interface DataState {
+  connectionPreferences: Record<ID, ConnectionPreferences>;
   session: AuthSession | null;
   pendingInviteCode: string | null;
   onboarding: OnboardingDraft;
@@ -79,6 +85,7 @@ export interface DataState {
   memories: Memory[];
   events: CalendarEvent[];
   widgetMessage: Record<ID, WidgetMessage>; // coupleId -> message
+  lifeGames: LifeGame[];
   entitlements: Entitlements;
   hydrated: boolean;
 }
@@ -100,6 +107,7 @@ export const emptyOnboarding: OnboardingDraft = {
 };
 
 const emptyState: Omit<DataState, 'hydrated'> = {
+  connectionPreferences: {},
   session: null,
   pendingInviteCode: null,
   onboarding: emptyOnboarding,
@@ -116,6 +124,7 @@ const emptyState: Omit<DataState, 'hydrated'> = {
   memories: [],
   events: [],
   widgetMessage: {},
+  lifeGames: [],
   entitlements: { premium: false, source: 'none' },
 };
 
@@ -127,7 +136,14 @@ export const useData = create<DataState>()(
       const { hydrated: _h, ...rest } = s;
       return rest;
     },
-    onRehydrateStorage: () => () => useData.setState({ hydrated: true }),
+    onRehydrateStorage: () => () => {
+      // Older demo data stored the simulated partner's country without its ISO code (needed for the flag).
+      const partnerLive = useData.getState().live[SIMULATED_PARTNER_ID];
+      if (partnerLive && !partnerLive.countryCode && partnerLive.country === 'Canada') {
+        useData.setState((st) => ({ live: { ...st.live, [SIMULATED_PARTNER_ID]: { ...partnerLive, countryCode: 'CA' } } }));
+      }
+      useData.setState({ hydrated: true });
+    },
   }),
 );
 
@@ -191,12 +207,77 @@ function maybeReveal(session: ActivitySession, memberIds: ID[]): ActivitySession
   return session;
 }
 
+/** Pushes the signed-in user's profile to InsForge, uploading a local photo first. */
+async function syncRemoteProfile(userId: ID): Promise<void> {
+  if (!remoteConfig.configured) return;
+  const p = get().profiles[userId];
+  if (!p) return;
+  let avatar: { avatar_url?: string | null; avatar_key?: string | null } = {};
+  if (p.avatarUri?.startsWith('avatar:')) {
+    avatar = { avatar_url: p.avatarUri, avatar_key: null };
+  } else if (p.avatarUri && !/^https?:/i.test(p.avatarUri)) {
+    const up = await remote.uploadAvatar(userId, p.avatarUri);
+    avatar = { avatar_url: up.url, avatar_key: up.key };
+    set((st) => ({ profiles: { ...st.profiles, [userId]: { ...st.profiles[userId], avatarUri: up.url } } }));
+  } else if (!p.avatarUri) {
+    avatar = { avatar_url: null, avatar_key: null };
+  }
+  await remote.upsertProfile({ id: userId, first_name: p.firstName, pronouns: p.pronouns, timezone: p.timezone, ...avatar });
+  const preferences = get().connectionPreferences[userId];
+  if (preferences) await remote.saveConnectionPreferences(userId, preferences);
+}
+
+/** Creates or refreshes the local mirror of a remote account after sign-up / sign-in. */
+/** After InsForge returns a user (password or OAuth): adopt it, then pull preferences + saved profile. */
+async function finishRemoteSignIn(user: RemoteUser, useDraft = false): Promise<AuthSession> {
+      adoptRemoteUser(user, true, useDraft);
+      const preferences = await remote.fetchConnectionPreferences(user.id);
+      set(st => { const values = { ...st.connectionPreferences }; if (preferences) values[user.id] = preferences; else if (!useDraft) delete values[user.id]; return { connectionPreferences: values, onboarding: { ...st.onboarding, connectionDraft: undefined } }; });
+      const saved = await remote.fetchProfile(user.id);
+      if (saved) {
+        set((st) => ({ profiles: { ...st.profiles, [user.id]: { ...st.profiles[user.id], firstName: saved.first_name || st.profiles[user.id].firstName, pronouns: saved.pronouns, timezone: saved.timezone, avatarUri: saved.avatar_url ?? st.profiles[user.id].avatarUri } } }));
+        if (!saved.avatar_url && get().profiles[user.id].avatarUri) syncInBackground(user.id);
+      } else {
+        syncInBackground(user.id);
+      }
+      return get().session!;
+}
+
+function adoptRemoteUser(user: { id: string; email: string }, verified: boolean, useDraft = false) {
+  const d = get().onboarding;
+  set((s) => ({
+    profiles: {
+      ...s.profiles,
+      [user.id]: s.profiles[user.id] ?? { id: user.id, firstName: d.firstName || 'You', avatarUri: d.avatarUri, pronouns: d.pronouns, timezone: d.timezone ?? 'UTC', email: user.email },
+    },
+    ...(useDraft && d.connectionDraft ? { connectionPreferences: { ...s.connectionPreferences, [user.id]: d.connectionDraft } } : {}),
+    session: { userId: user.id, email: user.email, verified, demo: false },
+  }));
+}
+
+function syncInBackground(userId: ID) {
+  syncRemoteProfile(userId).catch((e) => console.warn('[profile sync]', (e as Error).message));
+}
+
 export const backend = {
   // ---------- auth ----------
-  async signUp(email: string, password: string): Promise<{ verificationCode: string }> {
+  /** `verificationCode` is only set for local-only accounts (no email service). */
+  async signUp(email: string, password: string): Promise<{ verificationCode: string | null; needsVerification: boolean }> {
     const normalized = email.trim().toLowerCase();
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(normalized)) throw new BackendError('invalid_email', 'Enter a valid email address.');
     if (password.length < 8) throw new BackendError('weak_password', 'Use at least 8 characters.');
+    if (remoteConfig.configured) {
+      const d = get().onboarding;
+      const res = await remote.signUp(normalized, password, d.firstName);
+      const user = res.user ?? { id: '', email: normalized };
+      if (res.needsVerification) {
+        set({ session: { userId: user.id || `pending:${normalized}`, email: normalized, verified: false, demo: false } });
+      } else {
+        adoptRemoteUser(user, true, true);
+        await syncRemoteProfile(user.id);
+      }
+      return { verificationCode: null, needsVerification: res.needsVerification };
+    }
     if (get().accounts.some((a) => a.email === normalized)) throw new BackendError('exists', 'An account with this email already exists. Try signing in.');
     const id = uid('user');
     const verificationCode = String(Math.floor(100000 + Math.random() * 900000));
@@ -211,15 +292,22 @@ export const backend = {
       email: normalized,
     };
     set((s) => ({
+      ...(d.connectionDraft ? { connectionPreferences: { ...s.connectionPreferences, [id]: d.connectionDraft } } : {}),
       accounts: [...s.accounts, account],
       profiles: { ...s.profiles, [id]: profile },
       session: { userId: id, email: normalized, verified: false, demo: false },
     }));
-    return { verificationCode };
+    return { verificationCode, needsVerification: true };
   },
 
   async verifyEmail(code: string): Promise<void> {
     const s = requireSession();
+    if (remoteConfig.configured) {
+      const user = await remote.verifyEmail(s.email, code.trim());
+      adoptRemoteUser(user, true, true);
+      await syncRemoteProfile(user.id);
+      return;
+    }
     const acc = get().accounts.find((a) => a.id === s.userId);
     if (!acc) throw new BackendError('not_found', 'Account not found.');
     if (acc.verificationCode !== code.trim()) throw new BackendError('bad_code', 'That code does not match. Check the code and try again.');
@@ -229,14 +317,67 @@ export const backend = {
     }));
   },
 
-  async resendVerification(): Promise<{ verificationCode: string }> {
+  async resendVerification(): Promise<{ verificationCode: string | null }> {
     const s = requireSession();
+    if (remoteConfig.configured) {
+      await remote.resendVerification(s.email);
+      return { verificationCode: null };
+    }
     const acc = get().accounts.find((a) => a.id === s.userId)!;
     return { verificationCode: acc.verificationCode };
   },
 
+  /** Step 1 of email sign-in / sign-up. `demoCode` is only set when no email service is configured. */
+  async sendEmailCode(email: string): Promise<{ demoCode: string | null }> {
+    const normalized = email.trim().toLowerCase();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(normalized)) throw new BackendError('invalid_email', 'Enter a valid email address.');
+    if (remoteConfig.configured) { await remote.sendCode(normalized); return { demoCode: null }; }
+    const code = String(Math.floor(100000 + Math.random() * 900000));
+    const existing = get().accounts.find((a) => a.email === normalized);
+    if (existing) {
+      set((s) => ({ accounts: s.accounts.map((a) => (a.id === existing.id ? { ...a, verificationCode: code } : a)) }));
+    } else {
+      const id = uid('user');
+      const d = get().onboarding;
+      set((s) => ({
+        accounts: [...s.accounts, { id, email: normalized, password: '', verified: false, verificationCode: code, resetCode: null }],
+        profiles: { ...s.profiles, [id]: { id, firstName: d.firstName || 'You', avatarUri: d.avatarUri, pronouns: d.pronouns, timezone: d.timezone ?? 'UTC', email: normalized } },
+      }));
+    }
+    return { demoCode: code };
+  },
+
+  /** Step 2: the code signs the person in, creating the account on first use. */
+  async verifyEmailCode(email: string, code: string): Promise<AuthSession> {
+    const normalized = email.trim().toLowerCase();
+    const otp = code.trim();
+    if (remoteConfig.configured) {
+      const user = await remote.verifyCode(normalized, otp, get().onboarding.firstName || undefined);
+      return finishRemoteSignIn(user, true);
+    }
+    const acc = get().accounts.find((a) => a.email === normalized);
+    if (!acc || acc.verificationCode !== otp) throw new BackendError('bad_code', 'That code does not match. Check the code and try again.');
+    const session: AuthSession = { userId: acc.id, email: acc.email, verified: true, demo: false };
+    set((s) => ({ accounts: s.accounts.map((a) => (a.id === acc.id ? { ...a, verified: true } : a)), session }));
+    return session;
+  },
+
+  /** Returns null when the person closes the sign-in sheet. */
+  async signInWithOAuth(provider: 'google' | 'apple', returnUrl: string): Promise<AuthSession | null> {
+    if (!remoteConfig.configured) throw new BackendError('not_configured', 'Social sign-in needs the online backend.');
+    const enabled = await remote.oauthProviders();
+    const label = provider[0].toUpperCase() + provider.slice(1);
+    if (!enabled.includes(provider)) throw new BackendError('provider_off', `${label} sign-in isn't switched on yet. Use Google or your email for now.`);
+    const user = await remote.signInWithOAuth(provider, returnUrl);
+    return user ? finishRemoteSignIn(user) : null;
+  },
+
   async signIn(email: string, password: string): Promise<AuthSession> {
     const normalized = email.trim().toLowerCase();
+    if (remoteConfig.configured) {
+      const user = await remote.signIn(normalized, password);
+      return finishRemoteSignIn(user);
+    }
     const acc = get().accounts.find((a) => a.email === normalized);
     if (!acc || acc.password !== password) throw new BackendError('bad_credentials', 'Email or password is incorrect.');
     const session: AuthSession = { userId: acc.id, email: acc.email, verified: acc.verified, demo: false };
@@ -262,7 +403,9 @@ export const backend = {
   },
 
   async signOut(): Promise<void> {
-    set({ session: null });
+    const s = get().session;
+    if (remoteConfig.configured && s && !s.demo) await remote.signOut();
+    set(st => ({ session: null, onboarding: { ...st.onboarding, connectionDraft: undefined } }));
   },
 
   /** Demo mode: a local account with a clearly simulated partner. */
@@ -299,6 +442,7 @@ export const backend = {
     const session: AuthSession = { userId: me.id, email: me.email!, verified: true, demo: true };
     set((s) => ({
       session,
+      ...(d.connectionDraft ? { connectionPreferences: { ...s.connectionPreferences, [me.id]: d.connectionDraft } } : {}),
       profiles: { ...s.profiles, [me.id]: me, [partner.id]: s.profiles[partner.id] ?? partner },
       couples: { ...s.couples, [couple.id]: couple },
       sharing: {
@@ -314,6 +458,7 @@ export const backend = {
           lon: -73.5673,
           city: 'Montréal',
           country: 'Canada',
+          countryCode: 'CA',
           accuracyMeters: 35,
           locationUpdatedAt: new Date(Date.now() - 12 * 60_000).toISOString(),
           batteryPercent: 64,
@@ -345,6 +490,7 @@ export const backend = {
   async updateProfile(patch: Partial<Omit<Profile, 'id'>>): Promise<void> {
     const s = requireSession();
     set((st) => ({ profiles: { ...st.profiles, [s.userId]: { ...st.profiles[s.userId], ...patch } } }));
+    if (!s.demo) await syncRemoteProfile(s.userId);
   },
 
   async updateCouple(patch: Partial<Omit<Couple, 'id' | 'memberIds'>>): Promise<void> {
@@ -464,6 +610,7 @@ export const backend = {
         messages: st.messages.filter((m) => m.coupleId !== c.id),
         memories: st.memories.filter((m) => m.coupleId !== c.id),
         events: st.events.filter((e) => e.coupleId !== c.id),
+        lifeGames: st.lifeGames.filter((g) => g.coupleId !== c.id),
         live: Object.fromEntries(Object.entries(st.live).filter(([id]) => c.memberIds.indexOf(id) === -1 || id === s.userId)),
       };
     });
@@ -476,7 +623,8 @@ export const backend = {
     set((st) => {
       const profiles = { ...st.profiles };
       delete profiles[s.userId];
-      return { profiles, accounts: st.accounts.filter((a) => a.id !== s.userId), session: null, onboarding: emptyOnboarding };
+      const connectionPreferences = { ...st.connectionPreferences }; delete connectionPreferences[s.userId];
+      return { profiles, connectionPreferences, accounts: st.accounts.filter((a) => a.id !== s.userId), session: null, onboarding: emptyOnboarding };
     });
   },
 
@@ -489,7 +637,7 @@ export const backend = {
       const live = { ...st.live };
       // Turning sharing off revokes access to the live values immediately.
       if (live[s.userId]) {
-        if (patch.location === false) live[s.userId] = { ...live[s.userId], lat: null, lon: null, city: null, country: null, accuracyMeters: null, locationUpdatedAt: null };
+        if (patch.location === false) live[s.userId] = { ...live[s.userId], lat: null, lon: null, city: null, country: null, countryCode: null, accuracyMeters: null, locationUpdatedAt: null };
         if (patch.battery === false) live[s.userId] = { ...live[s.userId], batteryPercent: null, batteryUpdatedAt: null };
       }
       return { sharing: { ...st.sharing, [s.userId]: next }, live };
@@ -500,7 +648,7 @@ export const backend = {
     const s = requireSession();
     const perm = get().sharing[s.userId];
     const allowed: Partial<LiveInfo> = {};
-    if (perm?.location && ('lat' in patch || 'city' in patch)) Object.assign(allowed, { lat: patch.lat ?? null, lon: patch.lon ?? null, city: patch.city ?? null, country: patch.country ?? null, accuracyMeters: patch.accuracyMeters ?? null, locationUpdatedAt: now() });
+    if (perm?.location && ('lat' in patch || 'city' in patch)) Object.assign(allowed, { lat: patch.lat ?? null, lon: patch.lon ?? null, city: patch.city ?? null, country: patch.country ?? null, countryCode: patch.countryCode ?? null, accuracyMeters: patch.accuracyMeters ?? null, locationUpdatedAt: now() });
     if (perm?.battery && 'batteryPercent' in patch) Object.assign(allowed, { batteryPercent: patch.batteryPercent ?? null, batteryUpdatedAt: now() });
     if (Object.keys(allowed).length === 0) return;
     set((st) => ({
@@ -526,6 +674,7 @@ export const backend = {
       lon: perm?.location ? info.lon : null,
       city: perm?.location ? info.city : null,
       country: perm?.location ? info.country : null,
+      countryCode: perm?.location ? info.countryCode ?? null : null,
       accuracyMeters: perm?.location ? info.accuracyMeters : null,
       locationUpdatedAt: perm?.location ? info.locationUpdatedAt : null,
       batteryPercent: perm?.battery ? info.batteryPercent : null,
@@ -816,6 +965,22 @@ export const backend = {
     set({ entitlements: { premium, source: premium ? 'demo' : 'none' } });
   },
 
+  connectionPreferences(): ConnectionPreferences | null {
+    const session = get().session;
+    return session ? get().connectionPreferences[session.userId] ?? null : null;
+  },
+  saveConnectionDraft(answers: Record<string, string>, completed = false) {
+    const draft = { version: connectionFlow.version, answers: validateConnectionAnswers(answers), completed, updatedAt: now() };
+    set(st => ({ onboarding: { ...st.onboarding, connectionDraft: draft } }));
+  },
+  async saveConnectionPreferences(answers: Record<string, string>): Promise<void> {
+    const session = requireSession();
+    if (!session.verified && !session.demo) throw new BackendError('unverified', 'Verify your account before saving preferences.');
+    const value = { version: connectionFlow.version, answers: validateConnectionAnswers(answers), completed: true, updatedAt: now() };
+    // Write remotely before reporting success. A failed save leaves the prior settings intact.
+    if (remoteConfig.configured && !session.demo) await remote.saveConnectionPreferences(session.userId, value);
+    set(st => ({ connectionPreferences: { ...st.connectionPreferences, [session.userId]: value } }));
+  },
   // ---------- onboarding ----------
   /** `step` is the furthest step reached and never moves backwards. */
   saveOnboarding(patch: Partial<OnboardingDraft>) {
@@ -823,6 +988,110 @@ export const backend = {
   },
   setPendingInvite(code: string | null) {
     set({ pendingInviteCode: code });
+  },
+
+  // ---------- Our Little One ----------
+  /** The couple's current (or most recent) life game, brought up to date and redacted for the viewer. */
+  lifeGame(): LifeGame | null {
+    const s = get().session;
+    if (!s) return null;
+    const c = coupleOf(s.userId);
+    if (!c) return null;
+    const g = latestLifeGame(c.id);
+    return g ? redactLifeGame(g, s.userId) : null;
+  },
+
+  /** Decay needs, grow, open stage votes and end at the one-year limit. Called whenever the game is opened. */
+  async refreshLifeGame(): Promise<LifeGame | null> {
+    const s = requireSession();
+    const c = requireCouple(s.userId);
+    const g = latestLifeGame(c.id);
+    if (!g) return null;
+    const next = evaluate(g, gameNow(g), uid);
+    saveLifeGame(next);
+    if (s.demo) scheduleSimulatedLifeCare(next, c, s.userId);
+    return redactLifeGame(next, s.userId);
+  },
+
+  /** One parent proposes; the baby only arrives once the other parent accepts. */
+  async proposeBaby(): Promise<LifeGame> {
+    const s = requireSession();
+    const c = requireCouple(s.userId);
+    if (c.memberIds.length < 2) throw new BackendError('not_paired', 'You need your partner connected to have a baby together.');
+    const cur = latestLifeGame(c.id);
+    if (cur && cur.status !== 'ended') return redactLifeGame(cur, s.userId);
+    const g = newLifeGame(uid('life'), c.id, s.userId, now(), uid);
+    set((st) => ({ lifeGames: [g, ...st.lifeGames] }));
+    if (s.demo) scheduleSimulatedLifeAccept(g, c);
+    return g;
+  },
+
+  async respondToBaby(accept: boolean): Promise<LifeGame | null> {
+    const s = requireSession();
+    const c = requireCouple(s.userId);
+    const g = latestLifeGame(c.id);
+    if (!g || g.status !== 'proposed') throw new BackendError('not_found', 'There is no baby proposal waiting.');
+    if (g.proposedBy === s.userId) throw new BackendError('forbidden', 'Your partner has to answer this one.');
+    return acceptOrDecline(g, c, s.userId, accept);
+  },
+
+  async lifeAction(actionId: string): Promise<LifeGame> {
+    const s = requireSession();
+    const c = requireCouple(s.userId);
+    const g = latestLifeGame(c.id);
+    if (!g) throw new BackendError('not_found', 'You don’t have a little one yet.');
+    const t = gameNow(g);
+    let next: LifeGame;
+    try {
+      next = applyAction(evaluate(g, t, uid), actionId, s.userId, t, uid);
+    } catch (e) {
+      throw new BackendError('invalid', (e as Error).message);
+    }
+    next = evaluate(next, t, uid);
+    saveLifeGame(next);
+    if (s.demo) scheduleSimulatedLifeCare(next, c, s.userId);
+    return redactLifeGame(next, s.userId);
+  },
+
+  async castLifeVote(voteId: ID, optionId: string): Promise<LifeGame> {
+    const s = requireSession();
+    const c = requireCouple(s.userId);
+    const g = latestLifeGame(c.id);
+    const v = g?.votes.find((x) => x.id === voteId);
+    if (!g || !v) throw new BackendError('not_found', 'This choice no longer exists.');
+    if (v.picks[s.userId]) throw new BackendError('duplicate', 'You already picked. Waiting for your partner.');
+    const next = resolveVote(g, c, voteId, s.userId, optionId);
+    if (s.demo) scheduleSimulatedLifeVote(next, c, s.userId);
+    return redactLifeGame(next, s.userId);
+  },
+
+  /** Demo builds only: pretend both parents cared well for `days`, so every stage can be tried quickly. */
+  async fastForwardLife(days: number): Promise<LifeGame> {
+    const s = requireSession();
+    if (!s.demo) throw new BackendError('forbidden', 'Fast-forward is only available in the demo.');
+    const c = requireCouple(s.userId);
+    const g = latestLifeGame(c.id);
+    if (!g || g.status !== 'alive') throw new BackendError('not_found', 'There is no little one to fast-forward.');
+    const next = fastForward(g, days, Date.now(), uid);
+    saveLifeGame(next);
+    if (s.demo) {
+      scheduleSimulatedLifeVote(next, c, s.userId);
+      scheduleSimulatedLifeCare(next, c, s.userId);
+    }
+    return redactLifeGame(next, s.userId);
+  },
+
+  /** Save the life story to Memories as a letter, once. */
+  async saveLifeKeepsake(): Promise<Memory> {
+    const s = requireSession();
+    const c = requireCouple(s.userId);
+    const g = latestLifeGame(c.id);
+    if (!g || g.status !== 'ended') throw new BackendError('not_ready', 'The story isn’t finished yet.');
+    if (g.keepsakeSaved) throw new BackendError('duplicate', 'This story is already in your Memories.');
+    const story = [...g.milestones].reverse().map((m) => `• ${m.text}`).join('\n');
+    const mem = await backend.addMemory({ kind: 'letter', media: null, title: `The life of ${g.name}`, body: `${g.ending}\n\n${story}`, caption: null, takenOn: todayKey(c.coupleTimezone) });
+    saveLifeGame({ ...g, keepsakeSaved: true });
+    return mem;
   },
 
   /** Export everything the current user can see (demo-grade JSON export). */
@@ -834,12 +1103,14 @@ export const backend = {
       {
         exportedAt: now(),
         profile: st.profiles[s.userId],
+        connectionPreferences: st.connectionPreferences[s.userId] ?? null,
         couple: c,
         moments: c ? st.moments.filter((m) => m.coupleId === c.id) : [],
         sessions: c ? st.sessions.filter((x) => x.coupleId === c.id).map((x) => redactSession(x, s.userId)) : [],
         messages: c ? st.messages.filter((m) => m.coupleId === c.id) : [],
         memories: c ? st.memories.filter((m) => m.coupleId === c.id) : [],
         events: c ? st.events.filter((e) => e.coupleId === c.id) : [],
+        lifeGames: c ? st.lifeGames.filter((g) => g.coupleId === c.id).map((g) => redactLifeGame(g, s.userId)) : [],
       },
       null,
       2,
@@ -909,6 +1180,87 @@ function scheduleSimulatedReply(couple: Couple, msg: Message) {
 }
 
 /** Picsum placeholder images keep demo media clearly synthetic. */
+// ---------- Our Little One helpers ----------
+function latestLifeGame(coupleId: ID): LifeGame | null {
+  return get().lifeGames.find((g) => g.coupleId === coupleId) ?? null;
+}
+function saveLifeGame(g: LifeGame) {
+  set((st) => ({ lifeGames: st.lifeGames.map((x) => (x.id === g.id ? g : x)) }));
+}
+function acceptOrDecline(g: LifeGame, c: Couple, userId: ID, accept: boolean): LifeGame | null {
+  if (!accept) {
+    set((st) => ({ lifeGames: st.lifeGames.filter((x) => x.id !== g.id) }));
+    return null;
+  }
+  const iso = now();
+  const accepted: LifeGame = { ...g, status: 'naming', acceptedBy: [...new Set([...g.acceptedBy, userId])] };
+  const next: LifeGame = { ...accepted, votes: [openVote(accepted, 'name', uid('vote'), iso)] };
+  saveLifeGame(next);
+  return redactLifeGame(next, userId);
+}
+function resolveVote(g: LifeGame, c: Couple, voteId: ID, userId: ID, optionId: string): LifeGame {
+  let vote = g.votes.find((x) => x.id === voteId)!;
+  try {
+    vote = castVote(vote, userId, optionId, c.memberIds);
+  } catch (e) {
+    throw new BackendError('invalid', (e as Error).message);
+  }
+  let next: LifeGame = { ...g, votes: g.votes.map((x) => (x.id === voteId ? vote : x)) };
+  if (vote.status === 'decided') {
+    const t = gameNow(next);
+    next = evaluate(applyDecision(next, vote, t, uid), t, uid);
+  }
+  saveLifeGame(next);
+  return next;
+}
+
+const LIFE_SIM_GAP_MS = 90 * 1000;
+function scheduleSimulatedLifeAccept(g: LifeGame, c: Couple) {
+  const partnerId = c.memberIds.find((id) => id !== g.proposedBy);
+  if (partnerId !== SIMULATED_PARTNER_ID) return;
+  later(() => {
+    const cur = latestLifeGame(c.id);
+    if (!cur || cur.id !== g.id || cur.status !== 'proposed') return;
+    const next = acceptOrDecline(cur, c, partnerId, true);
+    if (next) scheduleSimulatedLifeVote(latestLifeGame(c.id)!, c, g.proposedBy);
+  });
+}
+/** The simulated partner votes after a short delay. It agrees with your pick most of the time. */
+function scheduleSimulatedLifeVote(g: LifeGame, c: Couple, userId: ID) {
+  const partnerId = c.memberIds.find((id) => id !== userId);
+  if (partnerId !== SIMULATED_PARTNER_ID) return;
+  const open = currentVote(g);
+  if (!open || open.picks[partnerId]) return;
+  later(() => {
+    const cur = latestLifeGame(c.id);
+    const v = cur?.votes.find((x) => x.id === open.id);
+    if (!cur || !v || v.status !== 'open' || v.picks[partnerId]) return;
+    // Lean towards agreeing: copy your pick (or your last-round pick) most of the time.
+    const mine = v.picks[userId] ?? v.previousPicks?.[userId];
+    const pick = mine && Math.random() < 0.75 ? mine : v.options[Math.floor(Math.random() * v.options.length)];
+    resolveVote(cur, c, v.id, partnerId, pick);
+    const after = latestLifeGame(c.id);
+    if (after) scheduleSimulatedLifeVote(after, c, userId);
+  }, SIM_DELAY + Math.random() * 2000);
+}
+/** The simulated partner looks after the child now and then, so co-parenting shows up in the care log. */
+function scheduleSimulatedLifeCare(g: LifeGame, c: Couple, userId: ID) {
+  const partnerId = c.memberIds.find((id) => id !== userId);
+  if (partnerId !== SIMULATED_PARTNER_ID || g.status !== 'alive') return;
+  const last = g.log.find((e) => e.userId === partnerId);
+  if (last && gameNow(g) - Date.parse(last.at) < LIFE_SIM_GAP_MS) return;
+  later(() => {
+    const cur = latestLifeGame(c.id);
+    if (!cur || cur.status !== 'alive') return;
+    const t = gameNow(cur);
+    const fresh = evaluate(cur, t, uid);
+    const options = stageDef(fresh.stage).actions;
+    const neediest = [...life.needs].sort((a, b) => fresh.needs[a.id] - fresh.needs[b.id])[0].id;
+    const action = options.find((id) => (actionDef(id)?.effects[neediest] ?? 0) > 0) ?? options[0];
+    saveLifeGame(evaluate(applyAction(fresh, action, partnerId, t, uid), t, uid));
+  }, SIM_DELAY * 2 + Math.random() * 3000);
+}
+
 export function demoImage(seed: number, w = 480, h = 640) {
   return `https://picsum.photos/seed/together${seed}/${w}/${h}`;
 }

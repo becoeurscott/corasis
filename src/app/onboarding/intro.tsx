@@ -9,9 +9,9 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { spacing } from '@/theme/tokens';
 
 const items = [
-  { emoji: '🔥', title: 'Daily moments', body: 'Share one photo or video a day. When you both do, your flame grows.' },
-  { emoji: '💬', title: 'Private activities', body: 'Questions and games, answered separately and revealed together.' },
-  { emoji: '📖', title: 'Shared memories', body: 'Everything you send lands in a private album only you two can see.' },
+  { emoji: '🔥', title: 'Daily moments', body: 'A photo. A little moment.' },
+  { emoji: '💬', title: 'Private activities', body: 'Discover each other.' },
+  { emoji: '📖', title: 'Shared memories', body: 'Your favorite moments, together.' },
 ];
 
 export default function IntroStep() {
@@ -21,16 +21,16 @@ export default function IntroStep() {
     router.push('/onboarding/profile');
   };
   return (
-    <OnboardingFrame step="intro" title="A small daily ritual" subtitle="Three things Together is built around." onContinue={next} onSkip={next} skipTitle="Skip">
+    <OnboardingFrame step="intro" title="A little closer, every day." subtitle="Small moments. More connection." onContinue={next} onSkip={next} skipTitle="Skip">
       <View style={{ gap: spacing.md }}>
         {items.map((it) => (
-          <Card key={it.title} style={styles.row}>
+          <Card key={it.title} style={[styles.row, { padding: 12 }]}>
             <View style={[styles.emoji, { backgroundColor: colors.primarySoft }]}>
               <Txt style={{ fontSize: 24 }}>{it.emoji}</Txt>
             </View>
             <View style={{ flex: 1, gap: 2 }}>
               <Txt variant="heading">{it.title}</Txt>
-              <Txt tone="secondary">{it.body}</Txt>
+              <Txt variant="caption" tone="secondary">{it.body}</Txt>
             </View>
           </Card>
         ))}

@@ -1,6 +1,7 @@
+import { MotionPressable } from '@/components/ui/MotionPressable';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 
 import { TimezonePicker } from '@/components/TimezonePicker';
 import { Avatar, Button, Header, Input, Screen, toast, Txt } from '@/components/ui';
@@ -26,9 +27,9 @@ export default function EditProfile() {
     <Screen footer={<Button title="Save" size="lg" onPress={save} />}>
       <Header title="Edit profile" />
       <View style={{ alignItems: 'center', gap: spacing.sm, marginBottom: spacing.xl }}>
-        <Pressable accessibilityRole="button" accessibilityLabel="Change profile photo" onPress={async () => { const r = await pickFromLibrary({ square: true }); if (r && 'error' in r) toast(r.error, 'error'); else if (r) setAvatar(r.asset.uri); }}>
+        <MotionPressable accessibilityRole="button" accessibilityLabel="Change profile photo" onPress={async () => { const r = await pickFromLibrary({ square: true }); if (r && 'error' in r) toast(r.error, 'error'); else if (r) setAvatar(r.asset.uri); }}>
           <Avatar name={name} uri={avatar} size={96} />
-        </Pressable>
+        </MotionPressable>
         <Button title={avatar ? 'Change photo' : 'Add photo'} variant="ghost" size="sm" full={false} onPress={async () => { const r = await pickFromLibrary({ square: true }); if (r && 'error' in r) toast(r.error, 'error'); else if (r) setAvatar(r.asset.uri); }} />
         {avatar ? <Button title="Remove photo" variant="ghost" size="sm" full={false} onPress={() => setAvatar(null)} /> : null}
       </View>

@@ -1,6 +1,7 @@
+import { MotionPressable } from '@/components/ui/MotionPressable';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Pressable, StyleSheet, Switch, View } from 'react-native';
+import { StyleSheet, Switch, View } from 'react-native';
 
 import { haptic } from '@/lib/haptics';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -73,9 +74,9 @@ export function ListItem({ title, subtitle, icon, emoji, onPress, right, value, 
   );
   if (onPress && !isToggle) {
     return (
-      <Pressable accessibilityRole="button" accessibilityLabel={title} accessibilityHint={subtitle} disabled={disabled} onPress={onPress} style={({ pressed, focused }: PressState) => [pressed && { opacity: 0.7 }, focused && { backgroundColor: colors.selected }]}>
+      <MotionPressable accessibilityRole="button" accessibilityLabel={title} accessibilityHint={subtitle} disabled={disabled} onPress={onPress} style={({ focused }: PressState) => [focused && { backgroundColor: colors.selected }]}>
         {content}
-      </Pressable>
+      </MotionPressable>
     );
   }
   return content;

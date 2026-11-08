@@ -4,17 +4,15 @@ import { View } from 'react-native';
 
 import { DateField } from '@/components/DateField';
 import { OnboardingFrame } from '@/components/OnboardingFrame';
-import { Avatar, Banner, Card, Input, Txt } from '@/components/ui';
+import { Banner, Input } from '@/components/ui';
 import { backend } from '@/services/backend';
-import { useCouple, useMe, useOnboarding, usePartner } from '@/store/hooks';
+import { useCouple, useOnboarding } from '@/store/hooks';
 import { spacing } from '@/theme/tokens';
 
 export default function CoupleStep() {
-  const me = useMe();
-  const partner = usePartner();
   const couple = useCouple();
   const draft = useOnboarding();
-  const [start, setStart] = useState(couple?.relationshipStart ?? draft.relationshipStart);
+  const start = couple?.relationshipStart ?? draft.relationshipStart;
   const [meetDate, setMeetDate] = useState<string | null>(draft.nextMeetingDate);
   const [dest, setDest] = useState(draft.nextMeetingDestination ?? '');
 
@@ -30,31 +28,11 @@ export default function CoupleStep() {
   };
 
   return (
-    <OnboardingFrame step="couple" title="The two of you" subtitle="Confirm the shared details. Either of you can edit them later." onContinue={next}>
+    <OnboardingFrame step="couple" title="Your next visit" subtitle="Optional. Something to look forward to." onContinue={next}>
       <View style={{ gap: spacing.lg }}>
-        <Card style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
-          <View style={{ flexDirection: 'row' }}>
-            <Avatar name={me?.firstName ?? 'You'} uri={me?.avatarUri} size={56} ring />
-            <View style={{ marginLeft: -16 }}>
-              <Avatar name={partner?.firstName ?? '?'} uri={partner?.avatarUri} size={56} ring simulated={partner?.isSimulated} />
-            </View>
-          </View>
-          <View style={{ flex: 1 }}>
-            <Txt variant="heading">
-              {me?.firstName} & {partner?.firstName}
-            </Txt>
-            {partner?.isSimulated ? (
-              <Txt variant="caption" tone="muted">
-                {partner.firstName} is a simulated partner for the demo.
-              </Txt>
-            ) : null}
-          </View>
-        </Card>
-        <DateField label="Relationship start date" value={start} onChange={setStart} optional />
-        <Txt variant="heading">Next meeting (optional)</Txt>
         <DateField label="When?" value={meetDate} onChange={setMeetDate} optional minToday />
         <Input label="Where?" value={dest} onChangeText={setDest} placeholder="e.g. Montréal" />
-        {!couple ? <Banner kind="info" body="You are not connected yet. These details are saved and applied once your partner joins." /> : null}
+        {!couple ? <Banner kind="info" body="You can plan this later." /> : null}
       </View>
     </OnboardingFrame>
   );

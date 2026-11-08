@@ -8,6 +8,7 @@ import { spacing } from '@/theme/tokens';
 interface ScreenProps {
   children: React.ReactNode;
   scroll?: boolean;
+  scrollRef?: React.Ref<React.ComponentRef<typeof ScrollView>>;
   padded?: boolean;
   style?: ViewStyle;
   contentStyle?: ViewStyle;
@@ -20,10 +21,11 @@ interface ScreenProps {
 const MAX_WIDTH = 640;
 
 /** Base screen: themed background, safe areas, optional scroll + sticky footer, keyboard avoidance. */
-export function Screen({ children, scroll = true, padded = true, style, contentStyle, edges = ['top', 'bottom'], footer, keyboard = true, alt }: ScreenProps) {
+export function Screen({ children, scroll = true, scrollRef, padded = true, style, contentStyle, edges = ['top', 'bottom'], footer, keyboard = true, alt }: ScreenProps) {
   const { colors } = useTheme();
   const body = scroll ? (
     <ScrollView
+      ref={scrollRef}
       keyboardShouldPersistTaps="handled"
       contentInsetAdjustmentBehavior="automatic"
       style={styles.flex}

@@ -1,5 +1,6 @@
+import { MotionPressable } from '@/components/ui/MotionPressable';
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { Button, Input, Sheet, toast, Txt } from '@/components/ui';
 import { haptic } from '@/lib/haptics';
@@ -37,18 +38,18 @@ export function AffectionRow({ disabled }: { disabled?: boolean }) {
   return (
     <View style={styles.row}>
       {(Object.keys(affectionMeta) as AffectionKind[]).map((k) => (
-        <Pressable
+        <MotionPressable
           key={k}
           accessibilityRole="button"
           accessibilityLabel={`Send ${affectionMeta[k].label}`}
           disabled={disabled || busy}
           onPress={() => (k === 'need_you' ? setNeedOpen(true) : send(k))}
-          style={({ pressed }) => [styles.item, { backgroundColor: colors.surfaceTint, opacity: disabled ? 0.5 : pressed ? 0.8 : 1 }]}>
+          style={() => [styles.item, { backgroundColor: colors.surfaceTint, opacity: disabled ? 0.5 : 1 }]}>
           <Txt style={{ fontSize: 26, lineHeight: 32 }}>{affectionMeta[k].emoji}</Txt>
           <Txt variant="caption" weight="600" center numberOfLines={2}>
             {affectionMeta[k].label}
           </Txt>
-        </Pressable>
+        </MotionPressable>
       ))}
       <Sheet visible={needOpen} onClose={() => setNeedOpen(false)} title="I need you">
         <Txt tone="secondary">This sends one gentle notification, not an alarm. Add a word or two if you want so they know what kind of support helps.</Txt>

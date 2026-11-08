@@ -1,3 +1,4 @@
+import { connectionRecommendation } from '@/lib/connectionPreferences';
 import { router } from 'expo-router';
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
@@ -12,13 +13,14 @@ import { nextMeeting } from '@/lib/events';
 import { formatDistance, haversineKm } from '@/lib/geo';
 import { isStale, relativeTime, todayKey } from '@/lib/time';
 import { backend } from '@/services/backend';
-import { useCouple, useDailySession, useEvents, useLive, useMe, useMessages, useMoments, usePartner, useSessions, useStreak } from '@/store/hooks';
+import { useConnectionPreferences, useCouple, useDailySession, useEvents, useLive, useMe, useMessages, useMoments, usePartner, useSessions, useStreak } from '@/store/hooks';
 import { usePrefs } from '@/store/prefs';
 import { useTheme } from '@/theme/ThemeProvider';
 import { spacing } from '@/theme/tokens';
 
 export default function Home() {
   const { colors } = useTheme();
+  const suggestion = connectionRecommendation(useConnectionPreferences());
   const me = useMe();
   const partner = usePartner();
   const couple = useCouple();
@@ -61,6 +63,9 @@ export default function Home() {
 
         {couple && streak ? <FlameCard couple={couple} me={me} partner={partner} moments={moments} streak={streak} /> : null}
 
+        {suggestion ? <Card onPress={() => router.push(`/activity/${suggestion.deck.id}`)} accessibilityLabel={suggestion.title} style={{ gap: spacing.sm }}>
+          <Txt variant="label" tone="primary">{suggestion.title}</Txt><Txt variant="heading">{suggestion.deck.emoji} {suggestion.deck.title}</Txt><Txt tone="secondary">{suggestion.body}</Txt><Txt variant="caption" tone="muted">{suggestion.duration}</Txt>
+        </Card> : null}
         {/* Contextual suggestions */}
         {partnerAnsweredDaily ? <Banner kind="info" title={`${partner?.firstName} answered today's question`} body="Answer yours to reveal both." actionTitle="Answer now" onAction={() => router.push('/activity/daily')} /> : null}
         {unansweredSessions > 0 && !partnerAnsweredDaily ? <Banner kind="info" body={`${partner?.firstName} is waiting on ${unansweredSessions} ${unansweredSessions === 1 ? 'answer' : 'answers'} from you.`} actionTitle="See activities" onAction={() => router.push('/activity/history')} /> : null}

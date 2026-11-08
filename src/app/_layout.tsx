@@ -1,3 +1,4 @@
+import { useReducedMotion } from '@/lib/motion';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider as NavThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
@@ -16,6 +17,7 @@ SplashScreen.preventAutoHideAsync().catch(() => {});
 
 function Shell() {
   const { colors, isDark } = useTheme();
+  const reduced = useReducedMotion();
   const navTheme = {
     ...(isDark ? DarkTheme : DefaultTheme),
     colors: { ...(isDark ? DarkTheme : DefaultTheme).colors, background: colors.background, card: colors.surface, text: colors.text, primary: colors.primary, border: colors.border },
@@ -23,11 +25,11 @@ function Shell() {
   return (
     <NavThemeProvider value={navTheme}>
       <StatusBar style={isDark ? 'light' : 'dark'} />
-      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.background }, animation: 'slide_from_right' }}>
+      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.background }, animation: reduced ? 'none' : 'slide_from_right' }}>
         <Stack.Screen name="index" />
-        <Stack.Screen name="(tabs)" options={{ animation: 'fade' }} />
-        <Stack.Screen name="viewer" options={{ presentation: 'fullScreenModal', animation: 'fade' }} />
-        <Stack.Screen name="lock" options={{ presentation: 'fullScreenModal', animation: 'fade', gestureEnabled: false }} />
+        <Stack.Screen name="(tabs)" options={{ animation: reduced ? 'none' : 'fade' }} />
+        <Stack.Screen name="viewer" options={{ presentation: 'fullScreenModal', animation: reduced ? 'none' : 'fade' }} />
+        <Stack.Screen name="lock" options={{ presentation: 'fullScreenModal', animation: reduced ? 'none' : 'fade', gestureEnabled: false }} />
       </Stack>
       <DeepLinkHandler />
       <AppLockGate />

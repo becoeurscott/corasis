@@ -15,8 +15,8 @@ export default function PartnerStep() {
     router.push(couple ? '/onboarding/couple' : '/onboarding/privacy');
   };
   return (
-    <OnboardingFrame step="partner" title="Connect your partner" subtitle="Share an invitation, or enter the code they sent you." onContinue={couple ? next : undefined} onSkip={couple ? undefined : next} skipTitle="I'll invite them later">
-      {couple ? <Banner kind="success" title={`Connected with ${partner?.firstName ?? 'your partner'}`} body="You can manage this connection any time from Profile." /> : <InvitePanel onPaired={next} />}
+    <OnboardingFrame step="partner" title="Connect your partner" subtitle="Share a code or enter theirs." onContinue={couple ? next : undefined} onSkip={couple ? undefined : next} skipTitle="I'll invite them later">
+      {couple ? <Banner kind="success" title={`Connected with ${partner?.firstName ?? 'your partner'}`} body="You’re connected." /> : <InvitePanel compact onPaired={next} />}
     </OnboardingFrame>
   );
 }

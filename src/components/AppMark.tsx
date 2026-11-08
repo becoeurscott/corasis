@@ -13,7 +13,7 @@ export function AppMark({ size = 96, onLight = false }: { size?: number; onLight
   const r = size / 2;
   const pebble = size * 0.5;
   return (
-    <View accessibilityRole="image" accessibilityLabel="Together app mark" style={{ width: size, height: size, borderRadius: r, backgroundColor: onLight ? colors.primarySoft : 'rgba(255,255,255,0.18)', alignItems: 'center', justifyContent: 'center' }}>
+    <View accessibilityRole="image" accessibilityLabel="Corasis app mark" style={{ width: size, height: size, borderRadius: r, backgroundColor: onLight ? colors.primarySoft : 'rgba(255,255,255,0.18)', alignItems: 'center', justifyContent: 'center' }}>
       <View style={{ position: 'absolute', width: pebble, height: pebble, borderRadius: pebble / 2, backgroundColor: fill, opacity: 0.95, transform: [{ translateX: -pebble * 0.22 }, { translateY: -pebble * 0.08 }] }} />
       <View style={{ position: 'absolute', width: pebble, height: pebble, borderRadius: pebble / 2, backgroundColor: fill, opacity: 0.75, transform: [{ translateX: pebble * 0.22 }, { translateY: pebble * 0.08 }] }} />
       <View style={{ position: 'absolute', width: pebble * 0.36, height: pebble * 0.36, borderRadius: pebble * 0.18, backgroundColor: onLight ? colors.primaryStrong : colors.gradientEnd, opacity: 0.9 }} />

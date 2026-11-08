@@ -1,15 +1,14 @@
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { View } from 'react-native';
 
 import { OnboardingFrame } from '@/components/OnboardingFrame';
 import { ThemePicker } from '@/components/ThemePicker';
-import { Button, Card, Txt } from '@/components/ui';
+import { Txt } from '@/components/ui';
 import { haptic } from '@/lib/haptics';
 import { useT } from '@/lib/i18n';
 import { backend } from '@/services/backend';
 import { usePrefs } from '@/store/prefs';
-import { spacing, ThemeName } from '@/theme/tokens';
+import { ThemeName } from '@/theme/tokens';
 
 /** Mandatory first question. Theme applies immediately and persists. */
 export default function ThemeStep() {
@@ -36,17 +35,8 @@ export default function ThemeStep() {
         router.push('/onboarding/intro');
       }}
       continueDisabled={!choice}>
-      <ThemePicker value={choice} onChange={pick} />
-      <View style={{ marginTop: spacing.xl, gap: spacing.md }}>
-        <Card tint>
-          <Txt variant="caption" tone="secondary">
-            Live preview · {choice ? `${choice[0].toUpperCase()}${choice.slice(1)} is on.` : 'Pick a color to see it everywhere.'} You can change it any time in Settings. Your partner keeps their own theme.
-          </Txt>
-          <View style={{ marginTop: spacing.md }}>
-            <Button title="Example button" full={false} size="sm" />
-          </View>
-        </Card>
-      </View>
+      <ThemePicker compact value={choice} onChange={pick} />
+      <Txt variant="caption" tone="muted" style={{ marginTop: 12 }}>Change your colors anytime.</Txt>
     </OnboardingFrame>
   );
 }

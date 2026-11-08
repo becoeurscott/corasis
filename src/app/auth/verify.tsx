@@ -36,7 +36,7 @@ export default function Verify() {
         <Txt tone="secondary">We sent a 6-digit code to {session?.email ?? 'your email'}. Enter it below.</Txt>
         {shown ? <Banner kind="demo" title="No email service in this build" body={`Your verification code is ${shown}. A configured backend would email it instead.`} /> : null}
         <Input label="Verification code" value={code} onChangeText={(v) => { setCode(v.replace(/\D/g, '').slice(0, 6)); setError(null); }} keyboardType="number-pad" maxLength={6} error={error} onSubmitEditing={submit} />
-        <Button title="Resend code" variant="ghost" onPress={async () => { const r = await backend.resendVerification(); setShown(r.verificationCode); toast('Code resent'); }} />
+        <Button title="Resend code" variant="ghost" onPress={async () => { try { const r = await backend.resendVerification(); if (r.verificationCode) setShown(r.verificationCode); toast('Code resent'); } catch (e) { toast((e as Error).message, 'error'); } }} />
         <Button title="Use a different account" variant="ghost" onPress={async () => { await backend.signOut(); router.replace('/onboarding/auth'); }} />
       </View>
     </Screen>

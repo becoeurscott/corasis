@@ -1,5 +1,7 @@
+import { useReducedMotion } from '@/lib/motion';
 import { Stack } from 'expo-router';
 
 export default function OnboardingLayout() {
-  return <Stack screenOptions={{ headerShown: false, animation: 'slide_from_right' }} />;
+  const reduced = useReducedMotion();
+  return <Stack screenOptions={{ headerShown: false, animation: reduced ? 'none' : 'slide_from_right' }} />;
 }

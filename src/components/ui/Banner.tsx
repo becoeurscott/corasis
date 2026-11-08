@@ -1,5 +1,6 @@
+import { MotionPressable } from '@/components/ui/MotionPressable';
 import React from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { useTheme } from '@/theme/ThemeProvider';
 import { radius, spacing } from '@/theme/tokens';
@@ -35,11 +36,11 @@ export function Banner({ kind = 'info', title, body, actionTitle, onAction }: Ba
           {body}
         </Txt>
         {actionTitle && onAction ? (
-          <Pressable accessibilityRole="button" onPress={onAction} hitSlop={8} style={styles.action}>
+          <MotionPressable accessibilityRole="button" onPress={onAction} hitSlop={8} style={styles.action}>
             <Txt variant="caption" weight="700" style={{ color: fg }}>
               {actionTitle} →
             </Txt>
-          </Pressable>
+          </MotionPressable>
         ) : null}
       </View>
     </View>

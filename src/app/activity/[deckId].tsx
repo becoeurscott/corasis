@@ -1,7 +1,8 @@
+import { MotionPressable } from '@/components/ui/MotionPressable';
 import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 
 import { Banner, Button, Card, EmptyState, Header, Screen, SectionTitle, toast, Txt } from '@/components/ui';
 import { categoryMeta, deckById, questionById } from '@/data/questions';
@@ -86,17 +87,17 @@ export default function DeckDetail() {
             const fav = favorites.includes(id);
             return (
               <Card key={id} style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
-                <Pressable accessibilityRole="button" accessibilityLabel={q.text} onPress={() => start(id)} style={{ flex: 1, minHeight: 44, justifyContent: 'center' }}>
+                <MotionPressable accessibilityRole="button" accessibilityLabel={q.text} onPress={() => start(id)} style={{ flex: 1, minHeight: 44, justifyContent: 'center' }}>
                   <Txt>{q.options && q.type === 'would_you_rather' ? `${q.options[0]}  or  ${q.options[1]}?` : q.text}</Txt>
                   {played.has(id) ? (
                     <Txt variant="caption" tone="success">
                       Played ✓
                     </Txt>
                   ) : null}
-                </Pressable>
-                <Pressable accessibilityRole="button" accessibilityLabel={fav ? 'Remove from favorites' : 'Add to favorites'} hitSlop={8} onPress={() => backend.toggleFavorite(id)} style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
+                </MotionPressable>
+                <MotionPressable accessibilityRole="button" accessibilityLabel={fav ? 'Remove from favorites' : 'Add to favorites'} hitSlop={8} onPress={() => backend.toggleFavorite(id)} style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
                   <Ionicons name={fav ? 'star' : 'star-outline'} size={22} color={fav ? colors.warning : colors.textMuted} />
-                </Pressable>
+                </MotionPressable>
               </Card>
             );
           })}

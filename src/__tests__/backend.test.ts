@@ -8,12 +8,12 @@ async function twoAccounts() {
   await backend.resetAll();
   backend.saveOnboarding({ firstName: 'Ada', timezone: 'Europe/Paris' });
   const a = await backend.signUp('ada@example.com', 'password123');
-  await backend.verifyEmail(a.verificationCode);
+  await backend.verifyEmail(a.verificationCode!);
   const inv = await backend.createInvitation();
   await backend.signOut();
   backend.saveOnboarding({ firstName: 'Bo', timezone: 'America/Montreal' });
   const b = await backend.signUp('bo@example.com', 'password123');
-  await backend.verifyEmail(b.verificationCode);
+  await backend.verifyEmail(b.verificationCode!);
   return { inv, adaId: useData.getState().accounts[0].id, boId: useData.getState().accounts[1].id };
 }
 
@@ -50,7 +50,7 @@ describe('pairing', () => {
     await backend.signOut();
     backend.saveOnboarding({ firstName: 'Cy' });
     const c = await backend.signUp('cy@example.com', 'password123');
-    await backend.verifyEmail(c.verificationCode);
+    await backend.verifyEmail(c.verificationCode!);
     await expect(backend.acceptInvitation(inv.code)).rejects.toMatchObject({ code: 'used' });
     await expect(backend.acceptInvitation('ZZZZZZ')).rejects.toMatchObject({ code: 'invalid' });
   });
@@ -58,7 +58,7 @@ describe('pairing', () => {
     await backend.resetAll();
     backend.saveOnboarding({ firstName: 'Ada' });
     const a = await backend.signUp('ada@example.com', 'password123');
-    await backend.verifyEmail(a.verificationCode);
+    await backend.verifyEmail(a.verificationCode!);
     const inv = await backend.createInvitation();
     expect((await backend.previewInvitation(inv.code)).reason).toBe('self');
     await backend.revokeInvitation(inv.id);
@@ -125,7 +125,7 @@ describe('activities', () => {
     await backend.signOut();
     backend.saveOnboarding({ firstName: 'Cy' });
     const c = await backend.signUp('cy@example.com', 'password123');
-    await backend.verifyEmail(c.verificationCode);
+    await backend.verifyEmail(c.verificationCode!);
     expect(() => backend.session(s.id)).toThrow(BackendError);
     await expect(backend.submit(s.id, 'leak', null)).rejects.toMatchObject({ code: 'forbidden' });
   });
@@ -177,10 +177,47 @@ describe('start routing', () => {
   });
   it('resumes interrupted onboarding at the right step', () => {
     expect(resolveStartRoute({ theme: 'pink', onboarding: { ...emptyOnboarding, introSeen: true }, session: null, couple: null, pendingInviteCode: null })).toBe('/onboarding/profile');
-    expect(resolveStartRoute({ theme: 'pink', onboarding: { ...emptyOnboarding, introSeen: true, firstName: 'A', step: 3 }, session: null, couple: null, pendingInviteCode: null })).toBe('/onboarding/auth');
+    expect(resolveStartRoute({ theme: 'pink', onboarding: { ...emptyOnboarding, introSeen: true, firstName: 'A', step: 3 }, session: null, couple: null, pendingInviteCode: null })).toBe('/onboarding/connection');
     const session = { userId: 'u', email: 'e', verified: true, demo: false };
     expect(resolveStartRoute({ theme: 'pink', onboarding: { ...emptyOnboarding, introSeen: true, firstName: 'A', step: 4 }, session, couple: null, pendingInviteCode: null })).toBe('/onboarding/partner');
     expect(resolveStartRoute({ theme: 'pink', onboarding: { ...emptyOnboarding, completed: true }, session, couple: null, pendingInviteCode: null })).toBe('/(tabs)');
     expect(resolveStartRoute({ theme: 'pink', onboarding: { ...emptyOnboarding, completed: true }, session, couple: null, pendingInviteCode: 'ABC123' })).toBe('/invite/ABC123');
+  });
+});
+
+describe('Our Little One', () => {
+  it('needs both parents: one proposes, the other accepts, both name the baby', async () => {
+    const { inv } = await twoAccounts();
+    await backend.acceptInvitation(inv.code); // Bo is signed in
+    const g = await backend.proposeBaby();
+    expect(g.status).toBe('proposed');
+    await expect(backend.respondToBaby(true)).rejects.toMatchObject({ code: 'forbidden' });
+    await expect(backend.lifeAction('feed')).rejects.toBeInstanceOf(Error);
+    await backend.signOut();
+    await backend.signIn('ada@example.com', 'password123');
+    const accepted = await backend.respondToBaby(true);
+    expect(accepted?.status).toBe('naming');
+    const vote = accepted!.votes[0];
+    const afterAda = await backend.castLifeVote(vote.id, 'leo');
+    expect(afterAda.status).toBe('naming');
+    await backend.signOut();
+    await backend.signIn('bo@example.com', 'password123');
+    expect(backend.lifeGame()!.votes[0].picks).toEqual(expect.objectContaining({ [useData.getState().accounts[0].id]: 'hidden' }));
+    const born = await backend.castLifeVote(vote.id, 'leo');
+    expect(born).toMatchObject({ status: 'alive', name: 'Leo' });
+    const fed = await backend.lifeAction('feed');
+    expect(fed.log[0].actionId).toBe('feed');
+  });
+
+  it('keeps the game private to the couple', async () => {
+    const { inv } = await twoAccounts();
+    await backend.acceptInvitation(inv.code);
+    await backend.proposeBaby();
+    await backend.signOut();
+    backend.saveOnboarding({ firstName: 'Cy' });
+    const c = await backend.signUp('cy@example.com', 'password123');
+    await backend.verifyEmail(c.verificationCode!);
+    expect(backend.lifeGame()).toBeNull();
+    await expect(backend.lifeAction('feed')).rejects.toMatchObject({ code: 'not_paired' });
   });
 });

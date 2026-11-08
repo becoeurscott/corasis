@@ -1,11 +1,12 @@
 # Backend contract
 
-This build runs entirely on-device (`src/services/backend/local.ts`). To sync two real devices, implement the same contract server-side and wire `src/services/backend/remote.ts`.
+Accounts, `profiles`, private `connection_preferences` and profile photos run on **InsForge** (`src/services/backend/remote.ts`, project `together`, linked in `.insforge/project.json`). The photo picked during onboarding is uploaded to the public `avatars` bucket at `avatars/<userId>/…` right after sign-up/verification, and its URL + key are saved on `profiles`. RLS: a user can only read/write their own `profiles` row, and can only write inside their own `avatars/<userId>/` folder (restrictive policies). Everything else below still runs on-device (`local.ts`) until migrated.
 
 ## Tables
 
 | Table | Key fields | Notes |
 |---|---|---|
+| `connection_preferences` | user_id, schema_version, answers, completed, updated_at | Live on InsForge. Owner-only RLS; never shared with partner. See `docs/ONBOARDING.md`. |
 | `profiles` | id, first_name, avatar_path, pronouns, timezone, theme (per user) | Theme never shared with partner |
 | `couples` | id, relationship_stage, relationship_start, distance_mode, goals[], couple_timezone | `couple_timezone` is the single day boundary |
 | `couple_members` | couple_id, user_id | **Unique (user_id)** + check `count(*) per couple <= 2` (trigger) |
@@ -51,7 +52,7 @@ Push via FCM/APNs. Server-side rules: quiet hours per recipient, one notificatio
 
 ## Environment variables (client)
 
-- `EXPO_PUBLIC_API_URL` — base URL of the backend. Unset → demo/local mode.
-- `EXPO_PUBLIC_API_ANON_KEY` — public anon key (never a service key).
+- `EXPO_PUBLIC_INSFORGE_URL` — InsForge project URL. Unset → local-only accounts.
+- `EXPO_PUBLIC_INSFORGE_ANON_KEY` — public anon key (never the admin API key).
 - `EXPO_PUBLIC_MAPS_KEY` — optional, for native map tiles.
 - `EXPO_PUBLIC_BILLING_KEY` — optional, RevenueCat public key.

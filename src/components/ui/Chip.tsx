@@ -1,5 +1,6 @@
+import { MotionPressable } from '@/components/ui/MotionPressable';
 import React from 'react';
-import { Pressable, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { haptic } from '@/lib/haptics';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -19,7 +20,7 @@ interface ChipProps {
 export function Chip({ label, selected, onPress, icon, small }: ChipProps) {
   const { colors } = useTheme();
   return (
-    <Pressable
+    <MotionPressable
       accessibilityRole={onPress ? 'button' : undefined}
       accessibilityState={{ selected: !!selected }}
       onPress={() => {
@@ -41,7 +42,7 @@ export function Chip({ label, selected, onPress, icon, small }: ChipProps) {
         {selected ? '✓ ' : ''}
         {label}
       </Txt>
-    </Pressable>
+    </MotionPressable>
   );
 }
 

@@ -55,7 +55,7 @@ export default function SplashRoute() {
       <Animated.View style={{ opacity, transform: [{ scale }], alignItems: 'center', gap: 16 }}>
         <AppMark size={112} />
         <Txt variant="display" style={{ color: '#fff' }}>
-          Together
+          Corasis
         </Txt>
       </Animated.View>
       <View style={styles.footer}>

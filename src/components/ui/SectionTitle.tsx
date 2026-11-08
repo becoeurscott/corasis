@@ -1,5 +1,6 @@
+import { MotionPressable } from '@/components/ui/MotionPressable';
 import React from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { spacing } from '@/theme/tokens';
 import { Txt } from './Text';
@@ -11,11 +12,11 @@ export function SectionTitle({ title, action, onAction }: { title: string; actio
         {title}
       </Txt>
       {action && onAction ? (
-        <Pressable accessibilityRole="button" onPress={onAction} hitSlop={8} style={styles.action}>
+        <MotionPressable accessibilityRole="button" onPress={onAction} hitSlop={8} style={styles.action}>
           <Txt variant="caption" tone="primary" weight="700">
             {action}
           </Txt>
-        </Pressable>
+        </MotionPressable>
       ) : null}
     </View>
   );

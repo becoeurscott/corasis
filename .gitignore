@@ -41,3 +41,24 @@ example
 # generated native folders
 /ios
 /android
+
+# SwiftUI build and per-user Xcode state
+native-ios/build/
+native-ios/DerivedData/
+*.xcuserstate
+xcuserdata/
+
+# InsForge & AI agent skills
+.insforge
+.agent
+.agents
+.augment
+.claude
+.cline
+.github/copilot*
+.kilocode
+.qoder
+.qwen
+.roo
+.trae
+.windsurf

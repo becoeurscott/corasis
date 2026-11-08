@@ -4,51 +4,26 @@ import { Platform, View } from 'react-native';
 
 import { OnboardingFrame } from '@/components/OnboardingFrame';
 import { TimeField } from '@/components/TimeField';
-import { Banner, Button, Card, ListItem, Txt } from '@/components/ui';
+import { Button, Card, ListItem, Txt } from '@/components/ui';
 import { requestNotificationPermission, scheduleDailyReminder } from '@/lib/notifications';
 import { backend } from '@/services/backend';
 import { usePrefs } from '@/store/prefs';
-import { spacing } from '@/theme/tokens';
 
 export default function PrivacyStep() {
-  const prefs = usePrefs((s) => s.notifications);
-  const setNotifications = usePrefs((s) => s.setNotifications);
-  const [perm, setPerm] = useState<'idle' | 'granted' | 'denied' | 'unavailable'>('idle');
-
-  const ask = async () => {
-    const r = await requestNotificationPermission();
-    setPerm(r);
-    if (r === 'granted') await scheduleDailyReminder();
-  };
-
-  const next = () => {
-    backend.saveOnboarding({ step: 7 });
-    router.push('/onboarding/welcome');
-  };
-
-  return (
-    <OnboardingFrame step="privacy" title="Privacy and reminders" subtitle="You stay in control of what is shared." onContinue={next}>
-      <View style={{ gap: spacing.lg }}>
-        <Card tint style={{ gap: spacing.sm }}>
-          <Txt variant="heading">Location and battery are off by default</Txt>
-          <Txt tone="secondary">Sharing is optional, per person, and can be paused any time from the Map tab or Settings. Camera, microphone, photos and location permissions are only requested when you first use that feature.</Txt>
-        </Card>
-        <Card style={{ gap: spacing.sm }}>
-          <Txt variant="heading">Daily reminder</Txt>
-          <Txt tone="secondary">A gentle nudge at a time you choose, so you remember to send your moment. Nothing fires during quiet hours.</Txt>
-          <ListItem title="Remind me daily" toggle={prefs.dailyReminder} onToggle={(v) => setNotifications({ dailyReminder: v })} />
-          <TimeField label="Reminder time" value={prefs.reminderTime} onChange={(v) => setNotifications({ reminderTime: v })} />
-          <View style={{ flexDirection: 'row', gap: spacing.md }}>
-            <View style={{ flex: 1 }}>
-              <TimeField label="Quiet from" value={prefs.quietStart} onChange={(v) => setNotifications({ quietStart: v })} />
-            </View>
-            <View style={{ flex: 1 }}>
-              <TimeField label="Until" value={prefs.quietEnd} onChange={(v) => setNotifications({ quietEnd: v })} />
-            </View>
-          </View>
-          {perm === 'granted' ? <Banner kind="success" body="Notifications enabled. Your daily reminder is scheduled on this device." /> : perm === 'denied' ? <Banner kind="warning" body="Notifications are off. You can enable them later in system Settings." /> : perm === 'unavailable' || Platform.OS === 'web' ? <Banner kind="info" body="Push notifications need the mobile app. The browser preview cannot schedule reminders." /> : <Button title="Allow notifications" variant="secondary" onPress={ask} />}
-        </Card>
-      </View>
-    </OnboardingFrame>
-  );
+  const prefs = usePrefs(s => s.notifications);
+  const setNotifications = usePrefs(s => s.setNotifications);
+  const [notice, setNotice] = useState('');
+  const ask = async () => { const result = await requestNotificationPermission(); if (result === 'granted') { await scheduleDailyReminder(); setNotice('Reminder enabled.'); } else setNotice('You can enable reminders in Settings.'); };
+  const next = () => { backend.saveOnboarding({ step: 7 }); router.push('/onboarding/welcome'); };
+  return <OnboardingFrame step="privacy" title="Your space. Your choice." subtitle="Sharing stays off until you choose it." onContinue={next}>
+    <View style={{ gap: 12 }}>
+      <Card style={{ padding: 14 }}><Txt variant="caption">Location & battery sharing: off.</Txt></Card>
+      <Card style={{ padding: 14, gap: 8 }}>
+        <ListItem title="Daily reminder" toggle={prefs.dailyReminder} onToggle={value => setNotifications({ dailyReminder: value })} />
+        {prefs.dailyReminder ? <TimeField label="What time?" value={prefs.reminderTime} onChange={value => setNotifications({ reminderTime: value })} /> : null}
+        {prefs.dailyReminder && Platform.OS !== 'web' ? <Button title="Enable reminders" size="sm" variant="secondary" onPress={ask} /> : null}
+        <Txt variant="caption" tone="muted">{notice || (Platform.OS === 'web' ? 'Reminders need the mobile app.' : 'Quiet hours apply. Edit anytime in Settings.')}</Txt>
+      </Card>
+    </View>
+  </OnboardingFrame>;
 }

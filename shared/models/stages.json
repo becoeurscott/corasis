@@ -1,0 +1,99 @@
+{
+  "stages": {
+    "newborn": {
+      "scale": 0.62,
+      "head": 1.18,
+      "body": 0.9,
+      "limbs": 0.8,
+      "hair": null,
+      "acc": [
+        "Acc_Pacifier"
+      ],
+      "outfit": "#F7B8CF"
+    },
+    "toddler": {
+      "scale": 0.72,
+      "head": 1.12,
+      "body": 0.95,
+      "limbs": 0.88,
+      "hair": "Hair_Tuft",
+      "acc": [],
+      "outfit": "#FFD36E"
+    },
+    "child": {
+      "scale": 0.84,
+      "head": 1.05,
+      "body": 1.0,
+      "limbs": 1.0,
+      "hair": "Hair_Short",
+      "acc": [
+        "Acc_Backpack"
+      ],
+      "outfit": "#7CCFA2"
+    },
+    "teen": {
+      "scale": 0.95,
+      "head": 0.98,
+      "body": 1.04,
+      "limbs": 1.12,
+      "hair": [
+        "Hair_Long",
+        "Hair_Short",
+        "Hair_Fringe"
+      ],
+      "acc": [
+        "Acc_Headphones"
+      ],
+      "outfit": "#9C8CFF"
+    },
+    "adult": {
+      "scale": 1.0,
+      "head": 0.94,
+      "body": 1.08,
+      "limbs": 1.2,
+      "hair": "Hair_Short",
+      "acc": [
+        "Acc_Tie"
+      ],
+      "outfit": "#5FB3D4"
+    },
+    "partnered": {
+      "scale": 1.0,
+      "head": 0.94,
+      "body": 1.08,
+      "limbs": 1.2,
+      "hair": "Hair_Short",
+      "acc": [
+        "Acc_Ring"
+      ],
+      "outfit": "#FF8FAB"
+    },
+    "elder": {
+      "scale": 0.95,
+      "head": 0.96,
+      "body": 1.1,
+      "limbs": 1.12,
+      "hair": "Hair_Grey",
+      "acc": [
+        "Acc_Glasses"
+      ],
+      "outfit": "#C9A27E"
+    }
+  },
+  "hairs": [
+    "Hair_Tuft",
+    "Hair_Short",
+    "Hair_Fringe",
+    "Hair_Long",
+    "Hair_Grey"
+  ],
+  "accessories": [
+    "Acc_Pacifier",
+    "Acc_Glasses",
+    "Acc_Headphones",
+    "Acc_Cap",
+    "Acc_Tie",
+    "Acc_Backpack",
+    "Acc_Ring"
+  ]
+}

@@ -1,6 +1,7 @@
+import { MotionPressable } from '@/components/ui/MotionPressable';
 import { router } from 'expo-router';
 import React, { useMemo, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { Card, Chip, EmptyState, Header, Screen, Txt } from '@/components/ui';
 import { daysCompleted } from '@/lib/streak';
@@ -43,13 +44,13 @@ export default function FlameHistory() {
       {view === 'calendar' ? (
         <Card style={{ gap: spacing.md }}>
           <View style={styles.monthRow}>
-            <Pressable accessibilityRole="button" accessibilityLabel="Previous month" onPress={() => shift(-1)} hitSlop={10} style={styles.nav}>
+            <MotionPressable accessibilityRole="button" accessibilityLabel="Previous month" onPress={() => shift(-1)} hitSlop={10} style={styles.nav}>
               <Txt variant="heading">‹</Txt>
-            </Pressable>
+            </MotionPressable>
             <Txt variant="heading">{monthLabel}</Txt>
-            <Pressable accessibilityRole="button" accessibilityLabel="Next month" onPress={() => shift(1)} hitSlop={10} style={styles.nav}>
+            <MotionPressable accessibilityRole="button" accessibilityLabel="Next month" onPress={() => shift(1)} hitSlop={10} style={styles.nav}>
               <Txt variant="heading">›</Txt>
-            </Pressable>
+            </MotionPressable>
           </View>
           <View style={styles.grid}>
             {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((d, i) => (
@@ -63,13 +64,13 @@ export default function FlameHistory() {
               const some = partial.has(day);
               const future = day > today;
               return (
-                <Pressable key={day} accessibilityRole="button" accessibilityLabel={`${formatDate(day)}${done ? ', completed' : some ? ', partial' : ''}`} disabled={!some} onPress={() => router.push(`/flame/${day}`)} style={styles.cell}>
+                <MotionPressable key={day} accessibilityRole="button" accessibilityLabel={`${formatDate(day)}${done ? ', completed' : some ? ', partial' : ''}`} disabled={!some} onPress={() => router.push(`/flame/${day}`)} style={styles.cell}>
                   <View style={[styles.dot, { backgroundColor: done ? colors.primary : some ? colors.primarySoft : 'transparent', borderColor: day === today ? colors.primary : 'transparent', borderWidth: day === today ? 2 : 0, opacity: future ? 0.4 : 1 }]}>
                     <Txt variant="caption" weight="600" style={{ color: done ? colors.onPrimary : colors.text }}>
                       {Number(day.slice(-2))}
                     </Txt>
                   </View>
-                </Pressable>
+                </MotionPressable>
               );
             })}
           </View>

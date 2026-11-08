@@ -1,5 +1,6 @@
+import { MotionPressable } from '@/components/ui/MotionPressable';
 import React from 'react';
-import { ActivityIndicator, Pressable, StyleSheet, View, ViewStyle } from 'react-native';
+import { ActivityIndicator, StyleSheet, View, ViewStyle } from 'react-native';
 
 import { haptic } from '@/lib/haptics';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -39,7 +40,7 @@ export function Button({ title, onPress, variant = 'primary', size = 'md', disab
     : colors.primary;
   const height = size === 'lg' ? 56 : size === 'sm' ? touchTarget : 50;
   return (
-    <Pressable
+    <MotionPressable
       accessibilityRole="button"
       accessibilityState={{ disabled: isDisabled, busy: loading }}
       accessibilityHint={accessibilityHint}
@@ -49,9 +50,9 @@ export function Button({ title, onPress, variant = 'primary', size = 'md', disab
         haptic('light');
         onPress?.();
       }}
-      style={({ pressed, focused }: PressState) => [
+      style={({ focused }: PressState) => [
         styles.base,
-        { backgroundColor: bg, height, borderRadius: radius.pill, opacity: isDisabled ? 0.5 : pressed ? 0.85 : 1 },
+        { backgroundColor: bg, height, borderRadius: radius.pill, opacity: isDisabled ? 0.5 : 1 },
         variant === 'outline' && { borderWidth: 1.5, borderColor: colors.primary },
         focused && { borderWidth: 2, borderColor: colors.focus },
         !full && { alignSelf: 'flex-start', paddingHorizontal: spacing.xl },
@@ -67,7 +68,7 @@ export function Button({ title, onPress, variant = 'primary', size = 'md', disab
           </Txt>
         </View>
       )}
-    </Pressable>
+    </MotionPressable>
   );
 }
 

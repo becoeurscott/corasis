@@ -1,7 +1,8 @@
+import { MotionPressable } from '@/components/ui/MotionPressable';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 
 import { Card, EmptyState, Header, Screen, Txt } from '@/components/ui';
 import { categoryMeta, decks, questionById } from '@/data/questions';
@@ -30,9 +31,9 @@ export default function Favorites() {
                     {categoryMeta[q.category].emoji} {categoryMeta[q.category].label}
                   </Txt>
                 </View>
-                <Pressable accessibilityRole="button" accessibilityLabel="Remove from favorites" onPress={() => backend.toggleFavorite(id)} style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
+                <MotionPressable accessibilityRole="button" accessibilityLabel="Remove from favorites" onPress={() => backend.toggleFavorite(id)} style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
                   <Ionicons name="star" size={22} color={colors.warning} />
-                </Pressable>
+                </MotionPressable>
               </Card>
             );
           })}

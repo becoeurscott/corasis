@@ -1,6 +1,7 @@
+import { MotionPressable } from '@/components/ui/MotionPressable';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useRef, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { Avatar, Banner, Button, Card, Chip, EmptyState, Header, Input, Screen, toast, Txt } from '@/components/ui';
 import { deckById, questionById } from '@/data/questions';
@@ -119,9 +120,9 @@ export default function SessionScreen() {
             </Txt>
             <View style={{ flexDirection: 'row', gap: spacing.sm }}>
               {reactions.map((r) => (
-                <Pressable key={r} accessibilityRole="button" accessibilityLabel={`React ${r}`} accessibilityState={{ selected: myReaction === r }} onPress={() => { haptic('selection'); backend.react(session.id, r); }} style={[styles.reaction, { backgroundColor: myReaction === r ? colors.primarySoft : colors.surfaceTint, borderColor: myReaction === r ? colors.primary : 'transparent' }]}>
+                <MotionPressable key={r} accessibilityRole="button" accessibilityLabel={`React ${r}`} accessibilityState={{ selected: myReaction === r }} onPress={() => { haptic('selection'); backend.react(session.id, r); }} style={[styles.reaction, { backgroundColor: myReaction === r ? colors.primarySoft : colors.surfaceTint, borderColor: myReaction === r ? colors.primary : 'transparent' }]}>
                   <Txt style={{ fontSize: 22 }}>{r}</Txt>
-                </Pressable>
+                </MotionPressable>
               ))}
             </View>
             {partner && session.reactions[partner.id] ? (

@@ -7,9 +7,10 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { dailyQuestionFor } from '@/data/questions';
+import { redactLifeGame } from '@/lib/lifeGame';
 import { computeStreak } from '@/lib/streak';
 import { todayKey } from '@/lib/time';
-import { ActivitySession, LiveInfo, redactSession, useData } from '@/services/backend';
+import { ActivitySession, LifeGame, LiveInfo, redactSession, useData } from '@/services/backend';
 
 export function useSession() {
   return useData((s) => s.session);
@@ -104,6 +105,7 @@ export function useLive(userId: string | undefined): LiveInfo | null {
     lon: perm?.location ? info.lon : null,
     city: perm?.location ? info.city : null,
     country: perm?.location ? info.country : null,
+    countryCode: perm?.location ? info.countryCode ?? null : null,
     accuracyMeters: perm?.location ? info.accuracyMeters : null,
     locationUpdatedAt: perm?.location ? info.locationUpdatedAt : null,
     batteryPercent: perm?.battery ? info.batteryPercent : null,
@@ -138,4 +140,23 @@ export function useNow(intervalMs = 30_000) {
     return () => clearInterval(t);
   }, [intervalMs]);
   return now;
+}
+
+/** Connection answers are private to the signed-in user, never derived from a partner profile. */
+export function useConnectionPreferences() {
+  const session = useData(s => s.session);
+  const values = useData(s => s.connectionPreferences);
+  return session ? values[session.userId] ?? null : null;
+}
+
+/** The couple's life game, redacted for the viewer. Re-renders when the stored game changes. */
+export function useLifeGame(): LifeGame | null {
+  const session = useData((s) => s.session);
+  const couple = useCouple();
+  const games = useData((s) => s.lifeGames);
+  return useMemo(() => {
+    if (!session || !couple) return null;
+    const g = games.find((x) => x.coupleId === couple.id);
+    return g ? redactLifeGame(g, session.userId) : null;
+  }, [session, couple, games]);
 }

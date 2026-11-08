@@ -57,6 +57,23 @@ export default function TogetherTab() {
           ) : null}
         </Card>
 
+        <Card onPress={() => router.push('/games')} accessibilityLabel="Games" style={[styles.rowCard, styles.gamesCard]}>
+          <View style={[styles.emojiBox, { backgroundColor: 'rgba(255,255,255,0.12)' }]}>
+            <Txt style={{ fontSize: 22 }}>🎮</Txt>
+          </View>
+          <View style={{ flex: 1 }}>
+            <Txt variant="heading" style={{ color: '#FFFFFF' }}>
+              Games for two
+            </Txt>
+            <Txt variant="caption" style={{ color: 'rgba(255,255,255,0.7)' }}>
+              Draw, puzzle and duel, one turn at a time
+            </Txt>
+          </View>
+          <Txt variant="label" style={{ color: '#FFFFFF' }}>
+            NEW
+          </Txt>
+        </Card>
+
         <Card onPress={() => router.push('/activity/daily')} tint style={{ gap: 4 }}>
           <Txt variant="label" tone="primary">
             Daily question
@@ -129,4 +146,5 @@ const styles = StyleSheet.create({
   emojiBox: { width: 48, height: 48, borderRadius: 16, alignItems: 'center', justifyContent: 'center' },
   badge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 999 },
   featured: { width: 150, gap: 6 },
+  gamesCard: { backgroundColor: '#15101A', borderColor: '#15101A' },
 });

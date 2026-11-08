@@ -1,7 +1,7 @@
 import type { AuthSession, Couple, OnboardingDraft } from '@/services/backend';
 import type { ThemeName } from '@/theme/tokens';
 
-export const onboardingSteps = ['theme', 'intro', 'profile', 'relationship', 'auth', 'partner', 'couple', 'privacy', 'welcome'] as const;
+export const onboardingSteps = ['theme', 'intro', 'profile', 'relationship', 'connection', 'auth', 'partner', 'couple', 'privacy', 'welcome'] as const;
 export type OnboardingStep = (typeof onboardingSteps)[number];
 
 /**
@@ -15,6 +15,7 @@ export function resolveStartRoute(input: { theme: ThemeName | null; onboarding: 
   if (!o.introSeen) return '/onboarding/intro';
   if (!o.firstName) return '/onboarding/profile';
   if (o.step < 3) return '/onboarding/relationship';
+  if (!o.connectionDraft?.completed && !session) return '/onboarding/connection';
   if (!session) return '/onboarding/auth';
   if (!session.verified && !session.demo) return '/auth/verify';
   if (pendingInviteCode && !couple) return `/invite/${pendingInviteCode}`;
