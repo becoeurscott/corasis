@@ -101,6 +101,35 @@ actor InsForge {
         return try JSONDecoder().decode(RemoteLive.self, from: data)
     }
 
+    // MARK: Couple sync (docs/SYNC.md)
+    /// Sends changed items, returns the server's answer as raw JSON (items keep free-form `data`).
+    func syncItems(_ items: [[String: Any]], since: String?) async throws -> [String: Any] {
+        var args: [String: Any] = ["p_items": items]
+        args["p_since"] = since ?? NSNull()
+        let data = try await rpc("sync_couple_items", args)
+        return (try JSONSerialization.jsonObject(with: data) as? [String: Any]) ?? [:]
+    }
+    private func objectPath(_ key: String) -> String {
+        "/api/storage/buckets/couple-media/objects/" + (key.addingPercentEncoding(withAllowedCharacters: .alphanumerics.union(CharacterSet(charactersIn: "-._~"))) ?? key)
+    }
+    /// Uploads a photo/video/voice note to the couple's private folder; returns its key.
+    func uploadCoupleMedia(coupleID: String, file: URL) async throws -> String {
+        try await ensureSession()
+        let ext = file.pathExtension.isEmpty ? "bin" : file.pathExtension.lowercased()
+        let key = "\(coupleID)/\(UUID().uuidString.lowercased()).\(ext)"
+        let mime = ["jpg": "image/jpeg", "jpeg": "image/jpeg", "png": "image/png", "heic": "image/heic", "mov": "video/quicktime", "mp4": "video/mp4", "m4a": "audio/mp4", "caf": "audio/x-caf"][ext] ?? "application/octet-stream"
+        let boundary = "Boundary-\(UUID().uuidString)"
+        var body = Data()
+        body.append("--\(boundary)\r\nContent-Disposition: form-data; name=\"file\"; filename=\"media.\(ext)\"\r\nContent-Type: \(mime)\r\n\r\n".data(using: .utf8)!)
+        body.append(try Data(contentsOf: file)); body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+        let data = try await request("PUT", objectPath(key), auth: true, headers: ["Content-Type": "multipart/form-data; boundary=\(boundary)"], body: body)
+        return (try? JSONDecoder().decode(StoredObject.self, from: data).key) ?? key
+    }
+    func downloadCoupleMedia(key: String) async throws -> Data {
+        try await ensureSession()
+        return try await request("GET", objectPath(key), auth: true)
+    }
+
     // MARK: Affection
     struct ReceivedAffection: Decodable { var id: String; var emoji: String; var created_at: String }
     private struct SentAffection: Decodable { var id: String }

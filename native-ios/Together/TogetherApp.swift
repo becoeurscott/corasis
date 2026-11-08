@@ -18,6 +18,7 @@ import LocalAuthentication
                     while !Task.isCancelled {
                         await store.checkAffection()
                         if tick % 8 == 0 { await store.syncLive() }   // location/battery every ~30s
+                        if tick % 2 == 0 { await CoupleSync.shared.sync(store) }   // shared content every ~8s
                         tick += 1
                         try? await Task.sleep(for: .seconds(4))
                     }

@@ -17,6 +17,7 @@ import { inviteCode, token, uid } from '@/lib/ids';
 import { computeStreak } from '@/lib/streak';
 import { addDays, todayKey } from '@/lib/time';
 import { actionDef, applyAction, applyDecision, castVote, currentVote, evaluate, fastForward, gameNow, life, newLifeGame, openVote, redactLifeGame, stageDef } from '@/lib/lifeGame';
+import { syncCouple as runCoupleSync } from './coupleSync';
 import { remote, remoteConfig, type RemoteCouple, type RemoteUser } from './remote';
 import {
   ActivitySession,
@@ -641,6 +642,12 @@ export const backend = {
       pendingInviteCode: null,
     }));
     return couple;
+  },
+
+  // ---------- shared content across phones (docs/SYNC.md) ----------
+  async syncShared(): Promise<void> {
+    if (!isRemoteSession()) return;
+    await runCoupleSync({ get: () => get(), set: (fn) => set((st) => fn(st) as Partial<DataState>) });
   },
 
   // ---------- live status across phones ----------

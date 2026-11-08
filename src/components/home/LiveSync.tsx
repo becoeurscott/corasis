@@ -37,7 +37,7 @@ async function readMine(userId: string) {
   return out;
 }
 
-/** Every ~30s while the app is open (and right after a switch changes): share mine, fetch my partner's. */
+/** While the app is open: shared content every ~10s, location/battery every ~30s (and right after a switch changes). */
 export function LiveSync() {
   const session = useSession();
   const couple = useCouple();
@@ -47,8 +47,12 @@ export function LiveSync() {
   useEffect(() => {
     if (!on || !session) return;
     let timer: ReturnType<typeof setInterval> | null = null;
-    const tick = async () => { try { await backend.syncLive(await readMine(session.userId)); } catch { /* try again */ } };
-    const start = () => { if (!timer) { tick(); timer = setInterval(tick, 30_000); } };
+    let n = 0;
+    const tick = async () => {
+      try { await backend.syncShared(); } catch { /* try again */ }
+      if (n++ % 3 === 0) { try { await backend.syncLive(await readMine(session.userId)); } catch { /* try again */ } }
+    };
+    const start = () => { if (!timer) { tick(); timer = setInterval(tick, 10_000); } };
     const stop = () => { if (timer) { clearInterval(timer); timer = null; } };
     if (AppState.currentState === 'active') start();
     const sub = AppState.addEventListener('change', (st) => (st === 'active' ? start() : stop()));
