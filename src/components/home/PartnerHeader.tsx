@@ -9,7 +9,7 @@ import { Avatar, Txt } from '@/components/ui';
 import { formatDistance, haversineKm } from '@/lib/geo';
 import { describeDifference, formatLocalTime, zoneDifferenceHours } from '@/lib/time';
 import { useData, type Profile } from '@/services/backend';
-import { useLive, useNow } from '@/store/hooks';
+import { useCouple, useLive, useNow } from '@/store/hooks';
 import { usePrefs } from '@/store/prefs';
 import { useTheme } from '@/theme/ThemeProvider';
 import { spacing } from '@/theme/tokens';
@@ -25,6 +25,9 @@ export function PartnerHeader({ me, partner }: { me: Profile; partner: Profile |
   const now = useNow(15_000);
   const diff = partner ? zoneDifferenceHours(me.timezone, partner.timezone, now) : 0;
   const [rowWidth, setRowWidth] = useState(0);
+  const couple = useCouple();
+  // Days since the couple's start date, when it's known.
+  const daysTogether = partner && couple?.relationshipStart ? Math.floor((Date.parse(todayKeyLocal(now)) - Date.parse(couple.relationshipStart)) / 86_400_000) : null;
   // Your own info is always visible to you; your partner's only when they share it.
   const myInfo = useData((s) => s.live[me.id]);
   const theirLive = useLive(partner?.id);
@@ -51,7 +54,12 @@ export function PartnerHeader({ me, partner }: { me: Profile; partner: Profile |
         </View>
       ) : null}
       <Person profile={me} now={now} label="You" country={myCountry ?? (myInfo?.countryCode ? { code: myInfo.countryCode, name: myInfo.country ?? myInfo.countryCode } : null)} battery={myBattery?.level ?? myInfo?.batteryPercent ?? null} charging={myBattery?.charging} />
-      <View style={styles.middle}>
+      <View style={[styles.middle, daysTogether != null && daysTogether >= 0 ? { paddingTop: 0 } : null]}>
+        {daysTogether != null && daysTogether >= 0 ? (
+          <Txt variant="caption" tone="primary" weight="700" center accessibilityLabel={`Together for ${daysTogether} days`}>
+            {daysTogether === 1 ? '1 day' : `${daysTogether.toLocaleString()} days`}
+          </Txt>
+        ) : null}
         <View style={[styles.heart, { backgroundColor: colors.primarySoft }]}>
           <Txt style={{ fontSize: 18 }}>{partner ? '💞' : '🔗'}</Txt>
         </View>
@@ -107,6 +115,11 @@ function useDeviceBattery(): { level: number; charging: boolean } | null {
     };
   }, []);
   return state;
+}
+
+/** Local calendar day as YYYY-MM-DD. */
+function todayKeyLocal(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
 /** "FR" → 🇫🇷 */

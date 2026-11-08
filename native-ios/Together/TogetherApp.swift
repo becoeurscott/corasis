@@ -47,6 +47,7 @@ struct RootView: View {
             else if debugBabyGame { NavigationStack { LifeGameView() } }
             else { MainTabs() }
             AffectionRain()
+            if store.me != nil { FlameCelebration() }
             if store.locked { LockView() }
         }
         .onAppear { if debugBabyGame && (store.me == nil || store.couple == nil) { store.demo() } }

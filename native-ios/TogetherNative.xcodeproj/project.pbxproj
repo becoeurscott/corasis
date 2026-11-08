@@ -28,6 +28,7 @@
 		646D622370D621B98C3381A0 /* pickup.wav in Resources */ = {isa = PBXBuildFile; fileRef = E3BDF324C5CF97B426840FAB /* pickup.wav */; };
 		6C0F43267C72760A40F7FD79 /* LifeGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F12120B21DE5A191D14C210 /* LifeGame.swift */; };
 		704D07530EED45A4A025EC0C /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = AC794FCE5E67CFA6DA09FD33 /* click.wav */; };
+		74127963209A4AB9694F2906 /* FlameCelebration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9CDC935B84833155DC32D3B /* FlameCelebration.swift */; };
 		75FF4F0F821F1C346D325877 /* LifeSound.swift in Sources */ = {isa = PBXBuildFile; fileRef = F53224176484FE008B0FDE5B /* LifeSound.swift */; };
 		765A466D37524B4544EF45E9 /* giggle1.wav in Resources */ = {isa = PBXBuildFile; fileRef = EA56AB40A83716867C581598 /* giggle1.wav */; };
 		78E7E841AAD49600B4D5C252 /* chew1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 838F6D02E2BED4375131B341 /* chew1.wav */; };
@@ -100,6 +101,7 @@
 		E367E54B32C0850004A99BD9 /* music_day.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = music_day.wav; sourceTree = "<group>"; };
 		E3BDF324C5CF97B426840FAB /* pickup.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pickup.wav; sourceTree = "<group>"; };
 		E77C8FF37585AE26C7E26CC2 /* music_night.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = music_night.wav; sourceTree = "<group>"; };
+		E9CDC935B84833155DC32D3B /* FlameCelebration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlameCelebration.swift; sourceTree = "<group>"; };
 		EA56AB40A83716867C581598 /* giggle1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = giggle1.wav; sourceTree = "<group>"; };
 		F53224176484FE008B0FDE5B /* LifeSound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeSound.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -114,6 +116,7 @@
 				3F31C83652FA2A8DC11F21AE /* Calendar.swift */,
 				33A5A73C340681AE3E70D800 /* ConnectionPreferences.swift */,
 				58EDE065F639FE85E93F48B3 /* CoupleSync.swift */,
+				E9CDC935B84833155DC32D3B /* FlameCelebration.swift */,
 				89A4A36B24EDD62276A977B0 /* Home.swift */,
 				81CBFFE15D681CEB5B499883 /* Info.plist */,
 				28973FB019367B16765F4D95 /* InsForge.swift */,
@@ -313,6 +316,7 @@
 				5C1EE7D604534AEC1B007161 /* Calendar.swift in Sources */,
 				15540DD739227986D28D7B32 /* ConnectionPreferences.swift in Sources */,
 				9026B79635F9BEE85C2B229A /* CoupleSync.swift in Sources */,
+				74127963209A4AB9694F2906 /* FlameCelebration.swift in Sources */,
 				B9541B1DF9D909A1BF1BF616 /* Home.swift in Sources */,
 				0E37FBABFF1D9AE758B402AB /* InsForge.swift in Sources */,
 				6C0F43267C72760A40F7FD79 /* LifeGame.swift in Sources */,

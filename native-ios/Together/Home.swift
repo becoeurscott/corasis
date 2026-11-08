@@ -14,7 +14,7 @@ struct HomeView: View {
             if store.partner?.simulated == true { InfoBanner(text: "Alex is a simulated partner. Replies are generated on this device and never reach a real person.", icon: "testtube.2") }
             if store.partner == nil { Card { Text("Your shared space starts here").font(.title2.bold()); Text("Invite your partner or explore with a simulated partner.").foregroundStyle(.secondary); NavigationLink("Partner connection") { PartnerSettings() } } }
             Card {
-                HStack(spacing: 16) { Text("🔥").font(.system(size: 36)).padding(16).background(p.soft, in: RoundedRectangle(cornerRadius: 18)); VStack(alignment: .leading) { Text("\(store.streak.current) days").font(.system(size: 30, weight: .bold)); Text("Send a moment to keep your flame growing").font(.subheadline).foregroundStyle(.secondary) } }
+                HStack(spacing: 16) { Text("🔥").font(.system(size: 36)).padding(16).background(p.soft, in: RoundedRectangle(cornerRadius: 18)); VStack(alignment: .leading) { Text(store.streak.current == 1 ? "1 day" : "\(store.streak.current) days").font(.system(size: 30, weight: .bold)); Text(store.streak.days.contains(store.today) ? "Today is complete. Nice." : store.streak.current > 0 ? "Keep it going: send today’s moment" : "Send a moment to start your flame").font(.subheadline).foregroundStyle(.secondary) } }
                 HStack { status(store.me); Spacer(); status(store.partner) }
                 PrimaryButton(title: "Send my moment") { capture = true }
                 NavigationLink { FlameView() } label: { Text("Flame details & history").font(.subheadline.bold()).frame(maxWidth: .infinity).padding(.top, 4) }
@@ -42,12 +42,17 @@ struct PartnerHeader: View {
     @State private var charging = false
     private let avatar: CGFloat = 72
     var body: some View {
-        HStack(alignment: .top) { person(store.me); Spacer(minLength: 0); VStack(spacing: 8) { Text(store.partner == nil ? "🔗" : "💕").font(.title).frame(width: 48, height: 48).background(p.soft, in: Circle()).padding(.top, avatar / 2 - 24); if store.partner != nil { Text(timeDifference).font(.caption).foregroundStyle(.secondary) }; if let distance { Text("📍 " + distance).font(.caption).foregroundStyle(.secondary).accessibilityLabel(distance + " apart") } }.frame(width: 96); Spacer(minLength: 0); if store.partner != nil { person(store.partner) } else { invitePartner } }
+        HStack(alignment: .top) { person(store.me); Spacer(minLength: 0); VStack(spacing: 8) { if let days = daysTogether { Text(days == 1 ? "1 day" : "\(days.formatted()) days").font(.caption.weight(.bold)).foregroundStyle(p.primary).padding(.top, 2).accessibilityLabel("Together for \(days) days") }; Text(store.partner == nil ? "🔗" : "💕").font(.title).frame(width: 48, height: 48).background(p.soft, in: Circle()).padding(.top, daysTogether == nil ? avatar / 2 - 24 : 0); if store.partner != nil { Text(timeDifference).font(.caption).foregroundStyle(.secondary) }; if let distance { Text("📍 " + distance).font(.caption).foregroundStyle(.secondary).accessibilityLabel(distance + " apart") } }.frame(width: 96); Spacer(minLength: 0); if store.partner != nil { person(store.partner) } else { invitePartner } }
             .background(alignment: .top) { if store.partner != nil { GeometryReader { geo in let column = (geo.size.width - 96) / 2; let half = max(0, (geo.size.width - column - avatar - 12 - 52) / 2); HStack(spacing: 52) { DottedConnector(color: p.primary).frame(width: half, height: 4); DottedConnector(color: p.primary).frame(width: half, height: 4).scaleEffect(x: -1) }.position(x: geo.size.width / 2, y: avatar / 2) } } }
             .padding(.vertical, 12)
             .onAppear { readBattery(); locator.start() }
             .onReceive(NotificationCenter.default.publisher(for: UIDevice.batteryLevelDidChangeNotification)) { _ in readBattery() }
             .onReceive(NotificationCenter.default.publisher(for: UIDevice.batteryStateDidChangeNotification)) { _ in readBattery() }
+    }
+    /// Days since the couple's start date (set in onboarding or settings); nil when unknown.
+    var daysTogether: Int? {
+        guard store.partner != nil, let start = store.couple?.start, !start.isEmpty else { return nil }
+        let d = Day.distance(start, store.today); return d >= 0 ? d : nil
     }
     /// No partner yet: a dashed circle that opens the invite screen.
     var invitePartner: some View {
