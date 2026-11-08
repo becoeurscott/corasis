@@ -330,6 +330,7 @@ struct AppError: LocalizedError { var message: String; var errorDescription: Str
         guard let id = db.currentUser else { return }; var sharing = db.sharing[id] ?? Sharing()
         if let location { sharing.location = location; if !location { sharing.latitude = nil; sharing.longitude = nil; sharing.updated = nil; sharing.country = nil; sharing.countryCode = nil } }
         if let battery { sharing.battery = battery; if !battery { sharing.batteryPercent = nil } }; db.sharing[id] = sharing
+        Task { await syncLive() }
     }
     func exportData() throws -> URL {
         guard let user = me else { throw AppError(message: "Sign in to export your data.") }

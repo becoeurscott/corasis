@@ -14,7 +14,13 @@ import LocalAuthentication
                 .task(id: "\(store.couple?.id ?? "")-\(phase == .active)") {
                     guard store.couple != nil, phase == .active else { return }
                     await AppDelegate.requestPush()
-                    while !Task.isCancelled { await store.checkAffection(); try? await Task.sleep(for: .seconds(4)) }
+                    var tick = 0
+                    while !Task.isCancelled {
+                        await store.checkAffection()
+                        if tick % 8 == 0 { await store.syncLive() }   // location/battery every ~30s
+                        tick += 1
+                        try? await Task.sleep(for: .seconds(4))
+                    }
                 }
                 .onChange(of: phase) { _, value in
                     if value == .background && store.db.prefs.lock && store.me != nil { store.locked = true }

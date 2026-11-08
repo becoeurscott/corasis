@@ -1,4 +1,5 @@
 import SwiftUI
+import CoreLocation
 import UIKit
 import UserNotifications
 
@@ -50,6 +51,28 @@ extension Store {
         let environment = "production"
         #endif
         Task { try? await InsForge.shared.savePushToken(token, environment: environment) }
+    }
+}
+
+// MARK: Live status sync
+
+extension Store {
+    /// Sends my shared location/battery and pulls my partner's (both opt-in).
+    func syncLive() async {
+        guard usesRemoteCouple, let me, let partner else { return }
+        let mine = db.sharing[me.id] ?? Sharing()
+        var battery: Int?
+        if mine.battery { UIDevice.current.isBatteryMonitoringEnabled = true; let level = UIDevice.current.batteryLevel; if level >= 0 { battery = Int((level * 100).rounded()) } }
+        let loc = mine.location ? (CountryLocator.cachedLocation ?? mine.latitude.flatMap { la in mine.longitude.map { CLLocation(latitude: la, longitude: $0) } }) : nil
+        let code = mine.location ? (CountryLocator.cached ?? mine.countryCode) : nil
+        try? await InsForge.shared.updateLive(shareLocation: mine.location, shareBattery: mine.battery, lat: loc?.coordinate.latitude, lon: loc?.coordinate.longitude,
+                                              country: code.flatMap { Locale.current.localizedString(forRegionCode: $0) }, countryCode: code, battery: battery)
+        guard let theirs = try? await InsForge.shared.partnerLive(), theirs.user_id == partner.id else { return }
+        var s = db.sharing[partner.id] ?? Sharing()
+        s.location = theirs.share_location; s.battery = theirs.share_battery
+        s.latitude = theirs.lat; s.longitude = theirs.lon; s.country = theirs.country; s.countryCode = theirs.country_code
+        s.batteryPercent = theirs.battery; s.updated = theirs.location_at.flatMap { ISO8601DateFormatter.flexible.date(from: $0) }
+        db.sharing[partner.id] = s
     }
 }
 

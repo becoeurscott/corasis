@@ -51,6 +51,8 @@ function fail(error: { message?: string; statusCode?: number } | null, fallback:
 
 export type RemoteCouple = { couple_id: string; timezone: string; created_at: string; partner: { id: string; first_name: string; timezone: string; avatar_url: string | null } };
 
+export type RemoteLive = { user_id: string; share_location: boolean; share_battery: boolean; lat: number | null; lon: number | null; country: string | null; country_code: string | null; location_at: string | null; battery: number | null; battery_at: string | null };
+
 export type RemoteUser = { id: string; email: string; emailVerified: boolean };
 
 function toUser(u: { id: string; email: string; emailVerified?: boolean }): RemoteUser {
@@ -129,6 +131,22 @@ export const remote = {
     if (error || !data) fail(error, 'That code does not match.');
     await storeRefreshToken((data as { refreshToken?: string }).refreshToken);
     return toUser((data as { user: RemoteUser }).user);
+  },
+
+  // ---------- live status (migrations/*live-status.sql) ----------
+  async updateLive(v: { shareLocation: boolean; shareBattery: boolean; lat?: number | null; lon?: number | null; country?: string | null; countryCode?: string | null; battery?: number | null }): Promise<void> {
+    await ensureSession();
+    const { error } = await client().database.rpc('update_live_status', {
+      p_share_location: v.shareLocation, p_share_battery: v.shareBattery,
+      p_lat: v.lat ?? null, p_lon: v.lon ?? null, p_country: v.country ?? null, p_country_code: v.countryCode ?? null, p_battery: v.battery ?? null,
+    });
+    if (error) fail(error, 'Could not share your status.');
+  },
+  async partnerLive(): Promise<RemoteLive | null> {
+    await ensureSession();
+    const { data, error } = await client().database.rpc('partner_live_status');
+    if (error) fail(error, "Could not load your partner's status.");
+    return (data as RemoteLive | null) ?? null;
   },
 
   // ---------- affection (migrations/*affection.sql + functions/affection-push.ts) ----------

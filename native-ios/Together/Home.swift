@@ -10,6 +10,7 @@ struct HomeView: View {
             HStack { VStack(alignment: .leading, spacing: 4) { Text("OUR LITTLE WORLD").font(.caption.weight(.bold)).tracking(2).foregroundStyle(p.primary); Text("Closer, together.").font(.system(size: 30, weight: .bold, design: .rounded)) }; Spacer(); NavigationLink { MessagesView() } label: { Image(systemName: "envelope").font(.title2).padding(12).background(p.soft, in: Circle()) } }
             PartnerHeader()
             if store.couple != nil { AffectionBar() }
+            if store.couple != nil { ShareLiveCard() }
             if store.partner?.simulated == true { InfoBanner(text: "Alex is a simulated partner. Replies are generated on this device and never reach a real person.", icon: "testtube.2") }
             if store.partner == nil { Card { Text("Your shared space starts here").font(.title2.bold()); Text("Invite your partner or explore with a simulated partner.").foregroundStyle(.secondary); NavigationLink("Partner connection") { PartnerSettings() } } }
             Card {
@@ -93,8 +94,8 @@ enum Flag {
     @Published var code: String?
     @Published var location: CLLocation?
     private let manager = CLLocationManager()
-    private static var cached: String?
-    private static var cachedLocation: CLLocation?
+    static var cached: String?
+    static var cachedLocation: CLLocation?
     override init() { super.init(); manager.delegate = self; manager.desiredAccuracy = kCLLocationAccuracyReduced; code = Self.cached; location = Self.cachedLocation }
     func start() { guard Self.cached == nil else { return }; switch manager.authorizationStatus { case .notDetermined: manager.requestWhenInUseAuthorization(); case .authorizedWhenInUse, .authorizedAlways: manager.requestLocation(); default: break } }
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) { if manager.authorizationStatus == .authorizedWhenInUse || manager.authorizationStatus == .authorizedAlways { manager.requestLocation() } }
@@ -170,4 +171,27 @@ struct CoupleMapView: View {
         InfoBanner(text: "This build stores data on this device. Live sharing between phones requires a shared backend.")
     }.navigationTitle("Map").onChange(of: phase) { _, phase in if phase == .active && ownSharing?.location == true { location.request(store: store) } }.onAppear { if ownSharing?.location == true { location.request(store: store) } } }
     var ownSharing: Sharing? { store.db.sharing[store.db.currentUser ?? ""] }
+}
+
+/// One-time ask on Home: share location (flag + distance) and battery with the partner.
+struct ShareLiveCard: View {
+    @EnvironmentObject var store: Store
+    @Environment(\.appPalette) private var p
+    @AppStorage("share-live-asked") private var asked = false
+    var mine: Sharing? { store.db.sharing[store.db.currentUser ?? ""] }
+    var body: some View {
+        if !asked, store.usesRemoteCouple, mine?.location != true, mine?.battery != true {
+            Card {
+                Text("Share with \(store.partner?.name ?? "your partner")?").font(.headline)
+                Text("They'll see your country flag, how far apart you are, and your battery. You can change this anytime in Map.").font(.subheadline).foregroundStyle(.secondary)
+                HStack {
+                    Button("Not now") { asked = true }.frame(minHeight: 44)
+                    Spacer()
+                    Button { store.setSharing(location: true, battery: true); UIDevice.current.isBatteryMonitoringEnabled = true; asked = true; Task { await store.syncLive() } } label: {
+                        Text("Share").font(.headline).padding(.horizontal, 22).frame(minHeight: 44).foregroundStyle(p.color("onPrimary")).background(p.primary, in: Capsule())
+                    }.buttonStyle(.smooth)
+                }
+            }
+        }
+    }
 }

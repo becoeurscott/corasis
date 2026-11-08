@@ -643,6 +643,33 @@ export const backend = {
     return couple;
   },
 
+  // ---------- live status across phones ----------
+  /** Uploads my shared values (only what my switches allow) and pulls my partner's. */
+  async syncLive(mine: { lat?: number | null; lon?: number | null; country?: string | null; countryCode?: string | null; battery?: number | null }): Promise<void> {
+    if (!isRemoteSession()) return;
+    const s = requireSession();
+    const c = coupleOf(s.userId);
+    if (!c) return;
+    const perm = get().sharing[s.userId];
+    await remote.updateLive({ shareLocation: !!perm?.location, shareBattery: !!perm?.battery, ...(perm?.location ? mine : {}), battery: perm?.battery ? mine.battery : null });
+    const theirs = await remote.partnerLive();
+    const partnerId = c.memberIds.find((m) => m !== s.userId);
+    if (!theirs || theirs.user_id !== partnerId) return;
+    set((st) => ({
+      sharing: { ...st.sharing, [partnerId]: { userId: partnerId, location: theirs.share_location, battery: theirs.share_battery, updatedAt: now() } },
+      live: {
+        ...st.live,
+        [partnerId]: {
+          ...({ city: null, accuracyMeters: null } as Partial<LiveInfo>),
+          ...st.live[partnerId],
+          userId: partnerId,
+          lat: theirs.lat, lon: theirs.lon, country: theirs.country, countryCode: theirs.country_code, locationUpdatedAt: theirs.location_at,
+          batteryPercent: theirs.battery, batteryUpdatedAt: theirs.battery_at,
+        } as LiveInfo,
+      },
+    }));
+  },
+
   // ---------- affection ----------
   /** Saves the emoji and pushes it to the partner. The simulated partner sends one back. */
   async sendAffection(emoji: string): Promise<{ simulatedReply: boolean }> {

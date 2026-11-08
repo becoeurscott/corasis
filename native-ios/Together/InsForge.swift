@@ -8,6 +8,7 @@ import AuthenticationServices
 /// Configure with the `InsForgeURL` and `InsForgeAnonKey` Info.plist keys (public anon key only).
 struct RemoteUser: Decodable { var id: String; var email: String; var emailVerified: Bool? }
 struct RemoteCouple: Decodable { struct Partner: Decodable { var id: String; var first_name: String; var timezone: String; var avatar_url: String? }; var couple_id: String; var timezone: String; var partner: Partner }
+struct RemoteLive: Decodable { var user_id: String; var share_location: Bool; var share_battery: Bool; var lat: Double?; var lon: Double?; var country: String?; var country_code: String?; var location_at: String?; var battery: Int? }
 struct RemoteInvite: Decodable { var code: String; var expires_at: String }
 struct RemoteProfile: Codable { var id: String; var first_name: String; var pronouns: String?; var timezone: String; var avatar_url: String?; var avatar_key: String? }
 
@@ -85,6 +86,20 @@ actor InsForge {
         return try JSONDecoder().decode(RemoteCouple.self, from: data)
     }
     func unlinkCouple() async throws { _ = try await rpc("unlink_couple") }
+
+    // MARK: Live status (location + battery, migrations/*live-status.sql)
+    func updateLive(shareLocation: Bool, shareBattery: Bool, lat: Double?, lon: Double?, country: String?, countryCode: String?, battery: Int?) async throws {
+        var args: [String: Any] = ["p_share_location": shareLocation, "p_share_battery": shareBattery]
+        if let lat { args["p_lat"] = lat }; if let lon { args["p_lon"] = lon }
+        if let country { args["p_country"] = country }; if let countryCode { args["p_country_code"] = countryCode }
+        if let battery { args["p_battery"] = battery }
+        _ = try await rpc("update_live_status", args)
+    }
+    func partnerLive() async throws -> RemoteLive? {
+        let data = try await rpc("partner_live_status")
+        if let text = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines), text.isEmpty || text == "null" { return nil }
+        return try JSONDecoder().decode(RemoteLive.self, from: data)
+    }
 
     // MARK: Affection
     struct ReceivedAffection: Decodable { var id: String; var emoji: String; var created_at: String }

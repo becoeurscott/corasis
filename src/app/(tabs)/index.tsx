@@ -8,6 +8,7 @@ import { CountdownCard } from '@/components/home/CountdownCard';
 import { FlameCard } from '@/components/home/FlameCard';
 import { AffectionBar } from '@/components/affection/AffectionBar';
 import { PartnerHeader } from '@/components/home/PartnerHeader';
+import { ShareLiveCard } from '@/components/home/ShareLiveCard';
 import { Avatar, Banner, Card, EmptyState, Screen, SectionTitle, Txt } from '@/components/ui';
 import { dailyQuestionFor } from '@/data/questions';
 import { nextMeeting } from '@/lib/events';
@@ -54,6 +55,7 @@ export default function Home() {
       <View style={{ gap: spacing.lg }}>
         <PartnerHeader me={me} partner={partner} />
         {couple && partner ? <AffectionBar partnerName={partner.firstName} /> : null}
+        {couple && partner ? <ShareLiveCard partnerName={partner.firstName} /> : null}
 
         {!couple ? (
           <Card tint>

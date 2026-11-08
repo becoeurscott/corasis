@@ -9,6 +9,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AffectionRain } from '@/components/affection/AffectionRain';
 import { AffectionSync } from '@/components/affection/AffectionSync';
 import { AppLockGate } from '@/components/AppLockGate';
+import { LiveSync } from '@/components/home/LiveSync';
 import { DeepLinkHandler } from '@/components/DeepLinkHandler';
 import { Confirm, ToastHost } from '@/components/ui';
 import { useHydrated } from '@/store/hooks';
@@ -35,6 +36,7 @@ function Shell() {
       </Stack>
       <DeepLinkHandler />
       <AffectionSync />
+      <LiveSync />
       <AffectionRain />
       <AppLockGate />
       <ToastHost />
