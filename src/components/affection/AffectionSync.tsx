@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { AppState, Platform } from 'react-native';
 
 import { remote } from '@/services/backend/remote';

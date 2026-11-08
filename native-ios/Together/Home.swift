@@ -42,12 +42,22 @@ struct PartnerHeader: View {
     @State private var charging = false
     private let avatar: CGFloat = 72
     var body: some View {
-        HStack(alignment: .top) { person(store.me); Spacer(minLength: 0); VStack(spacing: 8) { Text("💕").font(.title).frame(width: 48, height: 48).background(p.soft, in: Circle()).padding(.top, avatar / 2 - 24); Text(timeDifference).font(.caption).foregroundStyle(.secondary); if let distance { Text("📍 " + distance).font(.caption).foregroundStyle(.secondary).accessibilityLabel(distance + " apart") } }.frame(width: 96); Spacer(minLength: 0); person(store.partner) }
+        HStack(alignment: .top) { person(store.me); Spacer(minLength: 0); VStack(spacing: 8) { Text(store.partner == nil ? "🔗" : "💕").font(.title).frame(width: 48, height: 48).background(p.soft, in: Circle()).padding(.top, avatar / 2 - 24); if store.partner != nil { Text(timeDifference).font(.caption).foregroundStyle(.secondary) }; if let distance { Text("📍 " + distance).font(.caption).foregroundStyle(.secondary).accessibilityLabel(distance + " apart") } }.frame(width: 96); Spacer(minLength: 0); if store.partner != nil { person(store.partner) } else { invitePartner } }
             .background(alignment: .top) { if store.partner != nil { GeometryReader { geo in let column = (geo.size.width - 96) / 2; let half = max(0, (geo.size.width - column - avatar - 12 - 52) / 2); HStack(spacing: 52) { DottedConnector(color: p.primary).frame(width: half, height: 4); DottedConnector(color: p.primary).frame(width: half, height: 4).scaleEffect(x: -1) }.position(x: geo.size.width / 2, y: avatar / 2) } } }
             .padding(.vertical, 12)
             .onAppear { readBattery(); locator.start() }
             .onReceive(NotificationCenter.default.publisher(for: UIDevice.batteryLevelDidChangeNotification)) { _ in readBattery() }
             .onReceive(NotificationCenter.default.publisher(for: UIDevice.batteryStateDidChangeNotification)) { _ in readBattery() }
+    }
+    /// No partner yet: a dashed circle that opens the invite screen.
+    var invitePartner: some View {
+        NavigationLink { PartnerSettings() } label: {
+            VStack(spacing: 6) {
+                Image(systemName: "plus").font(.title2.weight(.semibold)).foregroundStyle(p.primary)
+                    .frame(width: avatar, height: avatar).overlay(Circle().strokeBorder(p.primary, style: StrokeStyle(lineWidth: 2, dash: [5, 4])))
+                Text("Invite partner").font(.headline).foregroundStyle(p.primary).lineLimit(1)
+            }.frame(maxWidth: .infinity)
+        }.accessibilityLabel("Invite your partner")
     }
     func person(_ person: Person?) -> some View {
         let mine = person?.id == store.me?.id

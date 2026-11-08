@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Animated, Easing, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 
 import { useReducedMotion } from '@/lib/motion';
@@ -18,7 +18,8 @@ function Burst({ id, emoji }: { id: string; emoji: string }) {
   const { width, height } = useWindowDimensions();
   const reduced = useReducedMotion();
   const done = useAffection((s) => s.done);
-  const particles = useMemo(
+  // Random positions are picked once, when the burst starts.
+  const [particles] = useState(
     () => Array.from({ length: reduced ? 1 : 18 }, () => ({
       x: reduced ? width / 2 - 48 : 24 + Math.random() * Math.max(1, width - 72),
       delay: reduced ? 0 : Math.random() * 800,
@@ -28,7 +29,6 @@ function Burst({ id, emoji }: { id: string; emoji: string }) {
       duration: 2200 + Math.random() * 1200,
       progress: new Animated.Value(0),
     })),
-    [width, reduced],
   );
   const finished = useRef(false);
   useEffect(() => {
