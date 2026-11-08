@@ -6,6 +6,7 @@ import { View } from 'react-native';
 import { AffectionRow } from '@/components/home/AffectionRow';
 import { CountdownCard } from '@/components/home/CountdownCard';
 import { FlameCard } from '@/components/home/FlameCard';
+import { AffectionBar } from '@/components/affection/AffectionBar';
 import { PartnerHeader } from '@/components/home/PartnerHeader';
 import { Avatar, Banner, Card, EmptyState, Screen, SectionTitle, Txt } from '@/components/ui';
 import { dailyQuestionFor } from '@/data/questions';
@@ -52,6 +53,7 @@ export default function Home() {
     <Screen edges={['top']}>
       <View style={{ gap: spacing.lg }}>
         <PartnerHeader me={me} partner={partner} />
+        {couple && partner ? <AffectionBar partnerName={partner.firstName} /> : null}
 
         {!couple ? (
           <Card tint>

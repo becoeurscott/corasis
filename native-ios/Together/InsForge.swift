@@ -86,6 +86,18 @@ actor InsForge {
     }
     func unlinkCouple() async throws { _ = try await rpc("unlink_couple") }
 
+    // MARK: Affection
+    struct ReceivedAffection: Decodable { var id: String; var emoji: String; var created_at: String }
+    private struct SentAffection: Decodable { var id: String }
+    func sendAffection(emoji: String) async throws -> String { try JSONDecoder().decode(SentAffection.self, from: try await rpc("send_affection", ["p_emoji": emoji])).id }
+    func receivedAffections(since: String) async throws -> [ReceivedAffection] { try JSONDecoder().decode([ReceivedAffection].self, from: try await rpc("received_affections", ["p_since": since])) }
+    func savePushToken(_ token: String, environment: String) async throws { _ = try await rpc("save_push_token", ["p_token": token, "p_platform": "ios", "p_environment": environment]) }
+    func removePushToken(_ token: String) async { _ = try? await rpc("remove_push_token", ["p_token": token]) }
+    /// Asks the affection-push function to notify the partner's phones (best effort).
+    func pushAffection(id: String) async {
+        _ = try? await request("POST", "/functions/affection-push", json: ["affection_id": id], auth: true)
+    }
+
     // MARK: Email code (passwordless) — a new email becomes a verified account on first code
     func sendCode(email: String) async throws { _ = try await request("POST", "/api/auth/email/send-otp", json: ["email": email]) }
     func verifyCode(email: String, code: String, name: String) async throws -> RemoteUser {

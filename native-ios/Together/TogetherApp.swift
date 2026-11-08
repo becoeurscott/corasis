@@ -3,11 +3,19 @@ import LocalAuthentication
 
 @main struct TogetherApp: App {
     @StateObject private var store = Store()
+    @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @Environment(\.scenePhase) private var phase
     var body: some Scene {
         WindowGroup {
             RootView().environmentObject(store)
                 .preferredColorScheme(store.db.prefs.appearance == "system" ? nil : store.db.prefs.appearance == "dark" ? .dark : .light)
+                .onAppear { appDelegate.store = store }
+                // Foreground: look for new affection every few seconds while connected.
+                .task(id: "\(store.couple?.id ?? "")-\(phase == .active)") {
+                    guard store.couple != nil, phase == .active else { return }
+                    await AppDelegate.requestPush()
+                    while !Task.isCancelled { await store.checkAffection(); try? await Task.sleep(for: .seconds(4)) }
+                }
                 .onChange(of: phase) { _, value in
                     if value == .background && store.db.prefs.lock && store.me != nil { store.locked = true }
                 }
@@ -31,6 +39,7 @@ struct RootView: View {
             else if store.couple == nil && !store.db.demo && store.db.partnerStepDone != true { PartnerStepView() }
             else if debugBabyGame { NavigationStack { LifeGameView() } }
             else { MainTabs() }
+            AffectionRain()
             if store.locked { LockView() }
         }
         .onAppear { if debugBabyGame && (store.me == nil || store.couple == nil) { store.demo() } }

@@ -643,6 +643,24 @@ export const backend = {
     return couple;
   },
 
+  // ---------- affection ----------
+  /** Saves the emoji and pushes it to the partner. The simulated partner sends one back. */
+  async sendAffection(emoji: string): Promise<{ simulatedReply: boolean }> {
+    const s = requireSession();
+    const c = requireCouple(s.userId);
+    if (!isRemoteSession()) {
+      const partner = get().profiles[c.memberIds.find((m) => m !== s.userId) ?? ''];
+      return { simulatedReply: !!partner?.isSimulated };
+    }
+    const id = await remote.sendAffection(emoji);
+    remote.pushAffection(id);
+    return { simulatedReply: false };
+  },
+  async receivedAffections(since: string) {
+    return isRemoteSession() ? remote.receivedAffections(since) : [];
+  },
+  isRemoteSession,
+
   /** Pull the partner connection from the server (e.g. after the partner entered our code). */
   async syncCouple(): Promise<Couple | null> {
     if (!isRemoteSession()) return coupleOf(requireSession().userId);

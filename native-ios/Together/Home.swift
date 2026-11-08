@@ -9,6 +9,7 @@ struct HomeView: View {
         Page {
             HStack { VStack(alignment: .leading, spacing: 4) { Text("OUR LITTLE WORLD").font(.caption.weight(.bold)).tracking(2).foregroundStyle(p.primary); Text("Closer, together.").font(.system(size: 30, weight: .bold, design: .rounded)) }; Spacer(); NavigationLink { MessagesView() } label: { Image(systemName: "envelope").font(.title2).padding(12).background(p.soft, in: Circle()) } }
             PartnerHeader()
+            if store.couple != nil { AffectionBar() }
             if store.partner?.simulated == true { InfoBanner(text: "Alex is a simulated partner. Replies are generated on this device and never reach a real person.", icon: "testtube.2") }
             if store.partner == nil { Card { Text("Your shared space starts here").font(.title2.bold()); Text("Invite your partner or explore with a simulated partner.").foregroundStyle(.secondary); NavigationLink("Partner connection") { PartnerSettings() } } }
             Card {

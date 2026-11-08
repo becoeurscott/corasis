@@ -6,6 +6,8 @@ import React, { useEffect } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { AffectionRain } from '@/components/affection/AffectionRain';
+import { AffectionSync } from '@/components/affection/AffectionSync';
 import { AppLockGate } from '@/components/AppLockGate';
 import { DeepLinkHandler } from '@/components/DeepLinkHandler';
 import { Confirm, ToastHost } from '@/components/ui';
@@ -32,6 +34,8 @@ function Shell() {
         <Stack.Screen name="lock" options={{ presentation: 'fullScreenModal', animation: reduced ? 'none' : 'fade', gestureEnabled: false }} />
       </Stack>
       <DeepLinkHandler />
+      <AffectionSync />
+      <AffectionRain />
       <AppLockGate />
       <ToastHost />
       <Confirm />

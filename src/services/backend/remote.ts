@@ -131,6 +131,31 @@ export const remote = {
     return toUser((data as { user: RemoteUser }).user);
   },
 
+  // ---------- affection (migrations/*affection.sql + functions/affection-push.ts) ----------
+  async sendAffection(emoji: string): Promise<string> {
+    await ensureSession();
+    const { data, error } = await client().database.rpc('send_affection', { p_emoji: emoji });
+    if (error || !data) fail(error, 'Could not send.');
+    return (data as { id: string }).id;
+  },
+  async receivedAffections(since: string): Promise<{ id: string; emoji: string; created_at: string }[]> {
+    await ensureSession();
+    const { data, error } = await client().database.rpc('received_affections', { p_since: since });
+    if (error) fail(error, 'Could not check for affection.');
+    return (data as { id: string; emoji: string; created_at: string }[]) ?? [];
+  },
+  /** Best effort: the partner's phones get a push even if Corasis is closed. */
+  async pushAffection(id: string): Promise<void> {
+    await client().functions.invoke('affection-push', { body: { affection_id: id } }).catch(() => undefined);
+  },
+  async savePushToken(token: string, environment: 'sandbox' | 'production'): Promise<void> {
+    await ensureSession();
+    await client().database.rpc('save_push_token', { p_token: token, p_platform: Platform.OS === 'android' ? 'android' : 'ios', p_environment: environment });
+  },
+  async removePushToken(token: string): Promise<void> {
+    try { await client().database.rpc('remove_push_token', { p_token: token }); } catch { /* best effort */ }
+  },
+
   // ---------- partner connection (server functions in migrations/*partner-invitations.sql) ----------
   async createInvitation(): Promise<{ code: string; expires_at: string }> {
     await ensureSession();

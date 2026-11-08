@@ -5,6 +5,7 @@ import UserNotifications
 
 struct AppError: LocalizedError { var message: String; var errorDescription: String? { message } }
 @MainActor final class Store: ObservableObject {
+    @Published var affectionBursts: [AffectionBurst] = []
     @Published var db: Database { didSet { persist() } }
     @Published var error: String?
     @Published var locked = false
@@ -204,7 +205,7 @@ struct AppError: LocalizedError { var message: String; var errorDescription: Str
             if let i = db.people.firstIndex(where: { $0.id == p.id }) { db.people[i].avatarURL = p.avatarURL; db.people[i].avatarKey = p.avatarKey; db.people[i].avatarSource = p.avatarSource }
         } catch { self.error = "Your profile is saved on this iPhone but did not sync: \(error.localizedDescription)" }
     }
-    func signOut() { if isRemoteAccount { Task { await InsForge.shared.signOut() } }; UNUserNotificationCenter.current().removeAllPendingNotificationRequests(); generation = UUID(); db.currentUser = nil; db.demo = false; db.connectionDraft = nil; locked = false }
+    func signOut() { if isRemoteAccount { let token = UserDefaults.standard.string(forKey: "apns-token"); Task { if let token { await InsForge.shared.removePushToken(token) }; await InsForge.shared.signOut() } }; UNUserNotificationCenter.current().removeAllPendingNotificationRequests(); generation = UUID(); db.currentUser = nil; db.demo = false; db.connectionDraft = nil; locked = false }
     func demo(name: String = "Sam") {
         generation = UUID()
         if db.people.contains(where: { $0.id == "demo-me" }), db.couples.contains(where: { $0.members.contains("demo-me") }) {
