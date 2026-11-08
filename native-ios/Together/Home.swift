@@ -175,16 +175,54 @@ struct CoupleMapView: View {
     @Environment(\.scenePhase) var phase
     var body: some View { Page {
         Text("Two places, one connection.").font(.title2.bold())
-        Map {
-            if let sharing = ownSharing, sharing.location, let lat = sharing.latitude, let lon = sharing.longitude { Marker(store.me?.name ?? "You", coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon)) }
-            if store.partner?.simulated == true { Marker("Alex · simulated Montréal", systemImage: "heart.fill", coordinate: CLLocationCoordinate2D(latitude: 45.5019, longitude: -73.5674)) }
-        }.frame(height: 340).clipShape(RoundedRectangle(cornerRadius: 24))
+        Map(position: $camera) {
+            if let mine = myCoordinate, let theirs = partnerCoordinate {
+                MapPolyline(coordinates: [mine, theirs]).stroke(p.primary, style: StrokeStyle(lineWidth: 3, lineCap: .round, dash: [6, 8]))
+            }
+            if let mine = myCoordinate { Annotation(store.me?.name ?? "You", coordinate: mine, anchor: .bottom) { MapAvatarPin(person: store.me) } }
+            if let theirs = partnerCoordinate { Annotation(store.partner?.name ?? "Partner", coordinate: theirs, anchor: .bottom) { MapAvatarPin(person: store.partner) } }
+        }
+        .mapStyle(.standard(pointsOfInterest: .excludingAll))
+        .frame(height: 340).clipShape(RoundedRectangle(cornerRadius: 24))
+        .overlay(alignment: .bottom) {
+            if partnerCoordinate == nil, store.partner != nil {
+                Text("\(store.partner?.name ?? "Your partner") hasn’t shared their location yet").font(.caption.weight(.semibold)).padding(.horizontal, 12).padding(.vertical, 8).background(.ultraThinMaterial, in: Capsule()).padding(12)
+            }
+        }
+        .onChange(of: pinsKey) { _, _ in camera = .automatic }
         if store.partner?.simulated == true { InfoBanner(text: "Alex’s Montréal pin is a fixed demo location, not a live person’s position.") }
         PartnerHeader()
         Card { Toggle("Share my location", isOn: Binding(get: { ownSharing?.location ?? false }, set: { store.setSharing(location: $0); if $0 { location.request(store: store) } })); Toggle("Share my battery", isOn: Binding(get: { ownSharing?.battery ?? false }, set: { store.setSharing(battery: $0); UIDevice.current.isBatteryMonitoringEnabled = $0 })); if ownSharing?.battery == true { Text(UIDevice.current.batteryLevel >= 0 ? "Your battery: \(Int(UIDevice.current.batteryLevel * 100))%" : "Battery unavailable in this simulator").font(.caption) }; Text("Sharing is opt-in. Turning location off immediately clears your saved position. No location history is recorded.").font(.caption).foregroundStyle(.secondary) }
-        InfoBanner(text: "This build stores data on this device. Live sharing between phones requires a shared backend.")
     }.navigationTitle("Map").onChange(of: phase) { _, phase in if phase == .active && ownSharing?.location == true { location.request(store: store) } }.onAppear { if ownSharing?.location == true { location.request(store: store) } } }
     var ownSharing: Sharing? { store.db.sharing[store.db.currentUser ?? ""] }
+    @State private var camera: MapCameraPosition = .automatic
+    @Environment(\.appPalette) private var p
+    /// Your own position is always shown to you; your partner's only when they share it.
+    var myCoordinate: CLLocationCoordinate2D? {
+        if let s = ownSharing, let lat = s.latitude, let lon = s.longitude { return CLLocationCoordinate2D(latitude: lat, longitude: lon) }
+        return CountryLocator.cachedLocation?.coordinate
+    }
+    var partnerCoordinate: CLLocationCoordinate2D? {
+        guard let partner = store.partner, let s = store.db.sharing[partner.id], s.location, let lat = s.latitude, let lon = s.longitude else { return nil }
+        return CLLocationCoordinate2D(latitude: lat, longitude: lon)
+    }
+    var pinsKey: String { "\(myCoordinate?.latitude ?? 0),\(myCoordinate?.longitude ?? 0),\(partnerCoordinate?.latitude ?? 0),\(partnerCoordinate?.longitude ?? 0)" }
+}
+
+/// Map pin: the person's profile picture in a ring with a small pointer.
+struct MapAvatarPin: View {
+    @Environment(\.appPalette) private var p
+    let person: Person?
+    var body: some View {
+        VStack(spacing: -4) {
+            Avatar(person: person, size: 48)
+                .padding(3).background(Circle().fill(.white))
+                .overlay(Circle().strokeBorder(p.primary, lineWidth: 3))
+                .shadow(color: .black.opacity(0.25), radius: 6, y: 3)
+            Image(systemName: "triangle.fill").font(.system(size: 12)).foregroundStyle(p.primary).rotationEffect(.degrees(180))
+        }
+        .accessibilityLabel(person?.name ?? "Partner")
+    }
 }
 
 /// One-time ask on Home: share location (flag + distance) and battery with the partner.
