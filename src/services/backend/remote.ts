@@ -162,6 +162,16 @@ export const remote = {
     if (error) fail(error, 'Could not check for affection.');
     return (data as { id: string; emoji: string; created_at: string }[]) ?? [];
   },
+  /** Place / proximity alert (migrations/*partner-alerts.sql). Returns null for a duplicate. */
+  async sendPartnerAlert(kind: 'arrive' | 'leave' | 'near', place: string | null): Promise<string | null> {
+    await ensureSession();
+    const { data, error } = await client().database.rpc('send_partner_alert', { p_kind: kind, p_place: place });
+    if (error) return null;
+    return (data as string | null) ?? null;
+  },
+  async pushPartnerAlert(id: string): Promise<void> {
+    await client().functions.invoke('partner-alert-push', { body: { alert_id: id } }).catch(() => undefined);
+  },
   /** Best effort: the partner's phones get a push even if Corasis is closed. */
   async pushAffection(id: string): Promise<void> {
     await client().functions.invoke('affection-push', { body: { affection_id: id } }).catch(() => undefined);

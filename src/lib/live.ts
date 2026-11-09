@@ -2,6 +2,7 @@ import * as Location from 'expo-location';
 import { Platform } from 'react-native';
 
 import { backend } from '@/services/backend';
+import { askPermission } from '@/lib/permissions';
 
 export type LocationOutcome = 'ok' | 'denied' | 'unavailable' | 'error';
 
@@ -12,6 +13,7 @@ export type LocationOutcome = 'ok' | 'denied' | 'unavailable' | 'error';
  */
 export async function refreshMyLocation(): Promise<LocationOutcome> {
   try {
+    if (!(await askPermission('location'))) return 'denied';
     const perm = await Location.requestForegroundPermissionsAsync();
     if (!perm.granted) return 'denied';
     const pos = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });

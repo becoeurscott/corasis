@@ -73,6 +73,7 @@ extension Store {
         s.latitude = theirs.lat; s.longitude = theirs.lon; s.country = theirs.country; s.countryCode = theirs.country_code
         s.batteryPercent = theirs.battery; s.updated = theirs.location_at.flatMap { ISO8601DateFormatter.flexible.date(from: $0) }
         db.sharing[partner.id] = s
+        checkProximity()
     }
 }
 
@@ -82,6 +83,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
     weak var store: Store?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         UNUserNotificationCenter.current().delegate = self
+        _ = PlaceMonitor.shared   // ready for region events when iOS wakes the app
         return true
     }
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
@@ -108,7 +110,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
     @MainActor static func requestPush() async {
         let center = UNUserNotificationCenter.current()
         let settings = await center.notificationSettings()
-        if settings.authorizationStatus == .notDetermined { _ = try? await center.requestAuthorization(options: [.alert, .sound, .badge]) }
+        if settings.authorizationStatus == .notDetermined, await PermissionGate.shared.ask(.notifications) { _ = try? await center.requestAuthorization(options: [.alert, .sound, .badge]) }
         let after = await center.notificationSettings()
         if after.authorizationStatus == .authorized || after.authorizationStatus == .provisional { UIApplication.shared.registerForRemoteNotifications() }
     }

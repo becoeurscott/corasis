@@ -7,6 +7,7 @@ import { Banner, Button, Txt } from '@/components/ui';
 import { uid } from '@/lib/ids';
 import type { MediaAsset } from '@/services/backend';
 import { spacing } from '@/theme/tokens';
+import { askPermission } from '@/lib/permissions';
 
 const MAX_SECONDS = 90;
 
@@ -20,6 +21,7 @@ export function VoiceRecorder({ onSend, onCancel }: { onSend: (asset: MediaAsset
   const start = async () => {
     setError(null);
     try {
+      if (!(await askPermission('microphone'))) return;
       const perm = await requestRecordingPermissionsAsync();
       if (!perm.granted) return setError('Microphone access is off. Enable it in system Settings to record a voice note.');
       await setAudioModeAsync({ allowsRecording: true, playsInSilentMode: true });

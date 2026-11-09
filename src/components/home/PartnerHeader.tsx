@@ -16,6 +16,7 @@ import { spacing } from '@/theme/tokens';
 
 import { BatteryGauge } from './BatteryGauge';
 import { DottedConnector } from './DottedConnector';
+import { askPermission } from '@/lib/permissions';
 
 const AVATAR = 64;
 const HEART_GAP = 52;
@@ -139,7 +140,7 @@ function useMyCountry(): Here | null {
     (async () => {
       try {
         let perm = await Location.getForegroundPermissionsAsync();
-        if (!perm.granted && perm.canAskAgain) perm = await Location.requestForegroundPermissionsAsync();
+        if (!perm.granted && perm.canAskAgain && (await askPermission('location'))) perm = await Location.requestForegroundPermissionsAsync();
         if (!perm.granted) return;
         const pos = (await Location.getLastKnownPositionAsync()) ?? (await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Low }));
         if (!pos) return;

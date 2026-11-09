@@ -36,6 +36,7 @@ targets:
         UISupportedInterfaceOrientations~ipad: [UIInterfaceOrientationPortrait, UIInterfaceOrientationPortraitUpsideDown, UIInterfaceOrientationLandscapeLeft, UIInterfaceOrientationLandscapeRight]
         NSCameraUsageDescription: Capture a daily moment to share with your partner.
         NSMicrophoneUsageDescription: Record a private voice note for your partner.
+        NSLocationAlwaysAndWhenInUseUsageDescription: Tell your partner when you arrive at or leave a saved place, and alert you both when you are close, even when Corasis is closed.
         NSLocationWhenInUseUsageDescription: Show your country flag on Home, and your location to your partner only while sharing is enabled.
         NSPhotoLibraryAddUsageDescription: Save your Together wallpaper to Photos.
         NSFaceIDUsageDescription: Unlock Together using Face ID.

@@ -12,6 +12,7 @@ import { pickFromLibrary } from '@/lib/media';
 import { useCouple, useMe, useMemories, usePartner } from '@/store/hooks';
 import { useTheme } from '@/theme/ThemeProvider';
 import { radius, spacing } from '@/theme/tokens';
+import { askPermission } from '@/lib/permissions';
 
 type Style = 'gradient' | 'photo' | 'minimal';
 
@@ -51,6 +52,7 @@ export default function WallpaperEditor() {
         }
         toast('Wallpaper downloaded', 'success');
       } else {
+        if (!(await askPermission('photos'))) return;
         const perm = await requestMediaPermissions();
         if (perm.granted) {
           await saveToLibraryAsync(uri);

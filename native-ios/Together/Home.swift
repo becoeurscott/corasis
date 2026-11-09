@@ -111,7 +111,7 @@ enum Flag {
     static var cached: String?
     static var cachedLocation: CLLocation?
     override init() { super.init(); manager.delegate = self; manager.desiredAccuracy = kCLLocationAccuracyReduced; code = Self.cached; location = Self.cachedLocation }
-    func start() { guard Self.cached == nil else { return }; switch manager.authorizationStatus { case .notDetermined: manager.requestWhenInUseAuthorization(); case .authorizedWhenInUse, .authorizedAlways: manager.requestLocation(); default: break } }
+    func start() { guard Self.cached == nil else { return }; switch manager.authorizationStatus { case .notDetermined: Task { if await PermissionGate.shared.ask(.location) { manager.requestWhenInUseAuthorization() } }; case .authorizedWhenInUse, .authorizedAlways: manager.requestLocation(); default: break } }
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) { if manager.authorizationStatus == .authorizedWhenInUse || manager.authorizationStatus == .authorizedAlways { manager.requestLocation() } }
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
@@ -181,6 +181,10 @@ struct CoupleMapView: View {
             }
             if let mine = myCoordinate { Annotation(store.me?.name ?? "You", coordinate: mine, anchor: .bottom) { MapAvatarPin(person: store.me) } }
             if let theirs = partnerCoordinate { Annotation(store.partner?.name ?? "Partner", coordinate: theirs, anchor: .bottom) { MapAvatarPin(person: store.partner) } }
+            ForEach(store.places) { place in
+                MapCircle(center: place.coordinate, radius: place.radius).foregroundStyle(p.primary.opacity(0.12)).stroke(p.primary.opacity(0.5), lineWidth: 1)
+                Annotation(place.name, coordinate: place.coordinate) { Text(place.emoji).font(.title3).padding(6).background(.white, in: Circle()).shadow(radius: 2) }
+            }
         }
         .mapStyle(.standard(pointsOfInterest: .excludingAll))
         .frame(height: 340).clipShape(RoundedRectangle(cornerRadius: 24))
@@ -189,6 +193,7 @@ struct CoupleMapView: View {
                 Text("\(store.partner?.name ?? "Your partner") hasn’t shared their location yet").font(.caption.weight(.semibold)).padding(.horizontal, 12).padding(.vertical, 8).background(.ultraThinMaterial, in: Capsule()).padding(12)
             }
         }
+        .overlay(alignment: .top) { MapAlertButtons().padding(.top, 12) }
         .onChange(of: pinsKey) { _, _ in camera = .automatic }
         if store.partner?.simulated == true { InfoBanner(text: "Alex’s Montréal pin is a fixed demo location, not a live person’s position.") }
         PartnerHeader()

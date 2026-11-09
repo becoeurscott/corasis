@@ -39,6 +39,8 @@
 	<string>Capture a daily moment to share with your partner.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Unlock Together using Face ID.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Tell your partner when you arrive at or leave a saved place, and alert you both when you are close, even when Corasis is closed.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Show your country flag on Home, and your location to your partner only while sharing is enabled.</string>
 	<key>NSMicrophoneUsageDescription</key>

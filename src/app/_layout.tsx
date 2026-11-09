@@ -8,6 +8,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { AffectionRain } from '@/components/affection/AffectionRain';
 import { AffectionSync } from '@/components/affection/AffectionSync';
+import { AlertWatcher } from '@/lib/alerts';
+import { PermissionPrimerHost } from '@/lib/permissions';
 import { AppLockGate } from '@/components/AppLockGate';
 import { FlameCelebration } from '@/components/home/FlameCelebration';
 import { LiveSync } from '@/components/home/LiveSync';
@@ -37,6 +39,8 @@ function Shell() {
       </Stack>
       <DeepLinkHandler />
       <AffectionSync />
+      <PermissionPrimerHost />
+      <AlertWatcher />
       <LiveSync />
       <AffectionRain />
       <FlameCelebration />

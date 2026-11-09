@@ -7,6 +7,7 @@ import { remote } from '@/services/backend/remote';
 import { backend } from '@/services/backend';
 import { useCouple, useSession } from '@/store/hooks';
 import { useAffection } from '@/store/affection';
+import { askPermission } from '@/lib/permissions';
 
 type AffectionPayload = { affection?: { emoji?: string } };
 const emojiOf = (n: Notifications.Notification) => (n.request.content.data as AffectionPayload | undefined)?.affection?.emoji;
@@ -32,7 +33,7 @@ export function AffectionSync() {
     (async () => {
       try {
         let perm = await Notifications.getPermissionsAsync();
-        if (!perm.granted && perm.canAskAgain) perm = await Notifications.requestPermissionsAsync();
+        if (!perm.granted && perm.canAskAgain && (await askPermission('notifications'))) perm = await Notifications.requestPermissionsAsync();
         if (!perm.granted) return;
         const { data } = await Notifications.getDevicePushTokenAsync();
         await AsyncStorage.setItem('apns-token', String(data));

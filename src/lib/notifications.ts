@@ -2,6 +2,7 @@ import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 
 import { usePrefs } from '@/store/prefs';
+import { askPermission } from '@/lib/permissions';
 
 /** Ask for notification permission only after explaining why. */
 export async function requestNotificationPermission(): Promise<'granted' | 'denied' | 'unavailable'> {
@@ -9,6 +10,7 @@ export async function requestNotificationPermission(): Promise<'granted' | 'deni
   try {
     const cur = await Notifications.getPermissionsAsync();
     if (cur.granted) return 'granted';
+    if (!(await askPermission('notifications'))) return 'denied';
     const res = await Notifications.requestPermissionsAsync();
     return res.granted ? 'granted' : 'denied';
   } catch {

@@ -308,3 +308,17 @@ export class BackendError extends Error {
     super(message);
   }
 }
+
+/** A saved place (home, work…). Its owner's phone reports arrivals and departures. Synced as kind "place". */
+export interface Place {
+  id: ID;
+  coupleId: ID;
+  ownerId: ID;
+  addedBy: ID;
+  name: string;
+  emoji: string;
+  lat: number;
+  lon: number;
+  radius: number;
+  alerts: boolean;
+}

@@ -6,6 +6,7 @@ import { MapCanvas } from '@/components/map/MapCanvas';
 import { Banner, Button, Card, EmptyState, ListItem, Screen, SectionTitle, Txt } from '@/components/ui';
 import { formatDistance, haversineKm } from '@/lib/geo';
 import { useLayout } from '@/lib/layout';
+import { useProximity } from '@/lib/alerts';
 import { refreshMyBattery, refreshMyLocation } from '@/lib/live';
 import { describeDifference, formatLocalTime, isStale, relativeTime, zoneDifferenceHours } from '@/lib/time';
 import { backend } from '@/services/backend';
@@ -26,6 +27,7 @@ export default function MapTab() {
   const setUnit = usePrefs((s) => s.setDistanceUnit);
   const [busy, setBusy] = useState(false);
   const { heroHeight } = useLayout();
+  const proximityOn = useProximity((s) => s.enabled);
   const [locState, setLocState] = useState<'idle' | 'denied' | 'unavailable' | 'error'>('idle');
 
   if (!me) return null;
@@ -64,6 +66,10 @@ export default function MapTab() {
     <Screen edges={['top']}>
       <View style={{ gap: spacing.lg }}>
         <Txt variant="title">Map</Txt>
+        <View style={{ flexDirection: 'row', gap: spacing.sm }}>
+          <Button title="Place alerts" icon="location" variant="secondary" size="sm" full={false} onPress={() => router.push('/alerts/places')} />
+          <Button title={proximityOn ? 'Proximity · on' : 'Proximity'} icon="notifications" variant="secondary" size="sm" full={false} onPress={() => router.push('/alerts/proximity')} />
+        </View>
         <MapCanvas height={heroHeight} a={{ profile: me, lat: myLive?.lat ?? null, lon: myLive?.lon ?? null, city: myLive?.city ?? null }} b={partner ? { profile: partner, lat: theirLive?.lat ?? null, lon: theirLive?.lon ?? null, city: theirLive?.city ?? null } : { profile: me, lat: null, lon: null, city: null }} />
 
         <Card style={{ gap: spacing.xs }}>

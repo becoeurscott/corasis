@@ -121,6 +121,9 @@ import Foundation
         for e in db.checkups ?? [] where e.coupleID == couple.id {
             add(item("checkup", e.id, ["round": e.round, "userId": e.user, "ratings": e.ratings, "guess": e.guess, "submittedAt": iso(e.submitted)]))
         }
+        for p in db.places ?? [] where p.coupleID == couple.id {
+            add(item("place", p.id, ["owner": p.owner, "addedBy": p.addedBy, "name": p.name, "emoji": p.emoji, "lat": p.latitude, "lon": p.longitude, "radius": p.radius, "alerts": p.alerts]))
+        }
         add(item("couple", "settings", ["start": opt(couple.start), "stage": couple.stage, "distance": couple.distance, "goals": couple.goals, "timezone": couple.timezone]))
         if let note = db.widgetMessages[couple.id], !note.isEmpty { add(item("widget", "note", ["text": note, "by": "", "at": iso(nil)])) }
         return out
@@ -166,6 +169,7 @@ import Foundation
             case "memory": store.db.memories.removeAll { $0.id == id }
             case "event": store.db.events.removeAll { $0.id == id }
             case "life": store.db.lifeGames?.removeAll { $0.id == id }
+            case "place": store.db.places?.removeAll { $0.id == id }; PlaceMonitor.shared.refresh(store)
             case "checkup": store.db.checkups?.removeAll { $0.id == id }
             default: break
             }
@@ -207,6 +211,11 @@ import Foundation
         case "life":
             guard let g = life(id: id, couple: couple, d) else { return true }
             var all = store.db.lifeGames ?? []; if let i = all.firstIndex(where: { $0.id == id }) { all[i] = g } else { all.insert(g, at: 0) }; store.db.lifeGames = all
+        case "place":
+            guard let owner = str(d["owner"]), let name = str(d["name"]), let lat = d["lat"] as? Double, let lon = d["lon"] as? Double else { return true }
+            let v = Place(id: id, coupleID: couple.id, owner: owner, addedBy: str(d["addedBy"]) ?? "", name: name, emoji: str(d["emoji"]) ?? "📍", latitude: lat, longitude: lon, radius: d["radius"] as? Double ?? 150, alerts: d["alerts"] as? Bool ?? true)
+            var all = store.db.places ?? []; all.removeAll { $0.id == id }; all.append(v); store.db.places = all
+            PlaceMonitor.shared.refresh(store)
         case "checkup":
             guard let round = str(d["round"]), let user = str(d["userId"]), let ratings = d["ratings"] as? [Int] else { return true }
             let e = CheckupEntry(coupleID: couple.id, round: round, user: user, ratings: ratings, guess: d["guess"] as? Int ?? 0, submitted: date(d["submittedAt"]) ?? Date())

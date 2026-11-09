@@ -1,8 +1,9 @@
 import { router } from 'expo-router';
 import React, { useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
-import { Banner, Card, Chip, Input, Screen, SectionTitle, Txt } from '@/components/ui';
+import { useProximity } from '@/lib/alerts';
+import { Banner, Card, Gradient, Chip, Input, Screen, SectionTitle, Txt } from '@/components/ui';
 import { categoryMeta, dailyQuestionFor, decks } from '@/data/questions';
 import { todayKey } from '@/lib/time';
 import { DeckCategory } from '@/services/backend';
@@ -12,6 +13,24 @@ import { spacing } from '@/theme/tokens';
 
 const categories = Object.keys(categoryMeta) as DeckCategory[];
 
+/** A square shortcut in the Together grid (mirrors TogetherTile in Activities.swift). */
+function Tile({ emoji, title, subtitle, colors, badge, onPress }: { emoji: string; title: string; subtitle: string; colors: [string, string]; badge?: string; onPress: () => void }) {
+  return (
+    <Pressable accessibilityRole="button" accessibilityLabel={`${title}. ${subtitle}`} onPress={onPress} style={styles.tileWrap}>
+      <Gradient colors={colors} style={styles.tile}>
+        <Txt style={styles.tileBg} importantForAccessibility="no">{emoji}</Txt>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Txt style={{ fontSize: 24 }}>{emoji}</Txt>
+          {badge ? <View style={styles.tileBadge}><Txt variant="caption" style={{ color: '#FFFFFF', fontWeight: '700' }}>{badge}</Txt></View> : null}
+        </View>
+        <View style={{ flex: 1 }} />
+        <Txt variant="heading" style={{ color: '#FFFFFF' }} numberOfLines={1}>{title}</Txt>
+        <Txt variant="caption" style={{ color: 'rgba(255,255,255,0.85)' }} numberOfLines={1}>{subtitle}</Txt>
+      </Gradient>
+    </Pressable>
+  );
+}
+
 export default function TogetherTab() {
   const { colors } = useTheme();
   const me = useMe();
@@ -20,6 +39,7 @@ export default function TogetherTab() {
   const sessions = useSessions();
   const messages = useMessages();
   const ent = useEntitlements();
+  const proximityOn = useProximity((s) => s.enabled);
   const [q, setQ] = useState('');
   const [cat, setCat] = useState<DeckCategory | null>(null);
 
@@ -38,41 +58,12 @@ export default function TogetherTab() {
         <Txt variant="title">Together</Txt>
         {!couple ? <Banner kind="info" body="You can browse every activity now. Answering together needs a connected partner." actionTitle="Invite partner" onAction={() => router.push('/settings/partner')} /> : null}
 
-        <Card onPress={() => router.push('/messages')} accessibilityLabel="Messages" style={styles.rowCard}>
-          <View style={[styles.emojiBox, { backgroundColor: colors.primarySoft }]}>
-            <Txt style={{ fontSize: 22 }}>💌</Txt>
-          </View>
-          <View style={{ flex: 1 }}>
-            <Txt variant="heading">Messages & affection</Txt>
-            <Txt variant="caption" tone="secondary">
-              {unread ? `${unread} unread` : 'Kisses, hugs, notes and voice notes'}
-            </Txt>
-          </View>
-          {unread ? (
-            <View style={[styles.badge, { backgroundColor: colors.primary }]}>
-              <Txt variant="caption" style={{ color: colors.onPrimary, fontWeight: '700' }}>
-                {unread}
-              </Txt>
-            </View>
-          ) : null}
-        </Card>
-
-        <Card onPress={() => router.push('/games')} accessibilityLabel="Games" style={[styles.rowCard, styles.gamesCard]}>
-          <View style={[styles.emojiBox, { backgroundColor: 'rgba(255,255,255,0.12)' }]}>
-            <Txt style={{ fontSize: 22 }}>🎮</Txt>
-          </View>
-          <View style={{ flex: 1 }}>
-            <Txt variant="heading" style={{ color: '#FFFFFF' }}>
-              Games for two
-            </Txt>
-            <Txt variant="caption" style={{ color: 'rgba(255,255,255,0.7)' }}>
-              Draw, puzzle and duel, one turn at a time
-            </Txt>
-          </View>
-          <Txt variant="label" style={{ color: '#FFFFFF' }}>
-            NEW
-          </Txt>
-        </Card>
+        <View style={styles.grid}>
+          <Tile emoji="💌" title="Messages" subtitle={unread ? `${unread} unread` : 'Kisses, notes, voice'} colors={['#F7A8C4', '#C2477A']} badge={unread ? String(unread) : undefined} onPress={() => router.push('/messages')} />
+          <Tile emoji="🎮" title="Games for two" subtitle="Play together" colors={['#3A2B45', '#15101A']} badge="NEW" onPress={() => router.push('/games')} />
+          <Tile emoji="🔔" title="Proximity alert" subtitle={proximityOn ? 'On' : "Know when you're close"} colors={['#D6A8FF', '#8B5CF6']} onPress={() => router.push('/alerts/proximity')} />
+          <Tile emoji="📍" title="Place alerts" subtitle="Arrive and leave" colors={['#8FD3FF', '#4C6FE0']} onPress={() => router.push('/alerts/places')} />
+        </View>
 
         <Card onPress={() => router.push('/activity/daily')} tint style={{ gap: 4 }}>
           <Txt variant="label" tone="primary">
@@ -142,6 +133,11 @@ export default function TogetherTab() {
 }
 
 const styles = StyleSheet.create({
+  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
+  tileWrap: { width: '48%', flexGrow: 1 },
+  tile: { height: 130, borderRadius: 22, padding: 14, overflow: 'hidden' },
+  tileBg: { position: 'absolute', right: -6, bottom: -10, fontSize: 64, opacity: 0.3, transform: [{ rotate: '-12deg' }] },
+  tileBadge: { backgroundColor: 'rgba(255,255,255,0.25)', borderRadius: 999, paddingHorizontal: 7, paddingVertical: 2 },
   rowCard: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   emojiBox: { width: 48, height: 48, borderRadius: 16, alignItems: 'center', justifyContent: 'center' },
   badge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 999 },

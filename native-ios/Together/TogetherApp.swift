@@ -9,7 +9,7 @@ import LocalAuthentication
         WindowGroup {
             RootView().environmentObject(store)
                 .preferredColorScheme(store.db.prefs.appearance == "system" ? nil : store.db.prefs.appearance == "dark" ? .dark : .light)
-                .onAppear { appDelegate.store = store }
+                .onAppear { appDelegate.store = store; PlaceMonitor.shared.refresh(store) }
                 // Foreground: look for new affection every few seconds while connected.
                 .task(id: "\(store.couple?.id ?? "")-\(phase == .active)") {
                     guard store.couple != nil, phase == .active else { return }

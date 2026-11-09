@@ -8,6 +8,7 @@ import { Button, Input, Screen, Txt } from '@/components/ui';
 import { useLock } from '@/store/lock';
 import { usePrefs } from '@/store/prefs';
 import { spacing } from '@/theme/tokens';
+import { askPermission } from '@/lib/permissions';
 
 export default function LockScreen() {
   const pin = usePrefs((s) => s.appLockPin);
@@ -32,6 +33,7 @@ export default function LockScreen() {
 
   const tryBiometrics = async () => {
     try {
+      if (!(await askPermission('faceID'))) return;
       const res = await LocalAuthentication.authenticateAsync({ promptMessage: 'Unlock Together' });
       if (res.success) unlock();
       else setError('Biometric check did not succeed. Use your PIN instead.');

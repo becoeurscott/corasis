@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		05E71DB9C4B7465D3421CE8B /* Permissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE0ADA21D93860BFB1BE1DD3 /* Permissions.swift */; };
 		07EE2F974C0D5D2EAD74F2B5 /* product.json in Resources */ = {isa = PBXBuildFile; fileRef = 654BA9BCD9E11F334B88664C /* product.json */; };
 		091843D13A0F1329736D8186 /* Activities.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD87675C1987608A07C5BB21 /* Activities.swift */; };
 		0DE704B8C4D4951219A4768E /* bubble.wav in Resources */ = {isa = PBXBuildFile; fileRef = C76194405955AFEBFCFBA584 /* bubble.wav */; };
@@ -32,6 +33,7 @@
 		75FF4F0F821F1C346D325877 /* LifeSound.swift in Sources */ = {isa = PBXBuildFile; fileRef = F53224176484FE008B0FDE5B /* LifeSound.swift */; };
 		765A466D37524B4544EF45E9 /* giggle1.wav in Resources */ = {isa = PBXBuildFile; fileRef = EA56AB40A83716867C581598 /* giggle1.wav */; };
 		78E7E841AAD49600B4D5C252 /* chew1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 838F6D02E2BED4375131B341 /* chew1.wav */; };
+		7A894744F8AA6010A3F2F86A /* Places.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13ECDD93D16F7DA16CC5EB3B /* Places.swift */; };
 		7CFCABC2D3E9A6BFA78B3097 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CCE482EBC32981CF24316C2 /* Models.swift */; };
 		8695F5F91A8DDDC4333559EF /* Affection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002F24C0C38D926B6F4BBA26 /* Affection.swift */; };
 		884A47B63CFF48A4863C4C4A /* chew2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 69340CAC6F951BB663F3CC92 /* chew2.wav */; };
@@ -64,6 +66,7 @@
 		002F24C0C38D926B6F4BBA26 /* Affection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Affection.swift; sourceTree = "<group>"; };
 		00664D2FDEEFB578E8004E14 /* TogetherTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TogetherTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CCE482EBC32981CF24316C2 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		13ECDD93D16F7DA16CC5EB3B /* Places.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Places.swift; sourceTree = "<group>"; };
 		22661BB3D7FF40F6B3CE517F /* Motion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Motion.swift; sourceTree = "<group>"; };
 		28973FB019367B16765F4D95 /* InsForge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsForge.swift; sourceTree = "<group>"; };
 		2EC506522BF73D81C85086ED /* MediaServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaServices.swift; sourceTree = "<group>"; };
@@ -100,6 +103,7 @@
 		C76194405955AFEBFCFBA584 /* bubble.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = bubble.wav; sourceTree = "<group>"; };
 		C7F2F52E4608803CC9152FAC /* Messages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Messages.swift; sourceTree = "<group>"; };
 		DB47858C64C340AEA47E8E1D /* land.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = land.wav; sourceTree = "<group>"; };
+		DE0ADA21D93860BFB1BE1DD3 /* Permissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Permissions.swift; sourceTree = "<group>"; };
 		E367E54B32C0850004A99BD9 /* music_day.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = music_day.wav; sourceTree = "<group>"; };
 		E3BDF324C5CF97B426840FAB /* pickup.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pickup.wav; sourceTree = "<group>"; };
 		E77C8FF37585AE26C7E26CC2 /* music_night.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = music_night.wav; sourceTree = "<group>"; };
@@ -131,6 +135,8 @@
 				0CCE482EBC32981CF24316C2 /* Models.swift */,
 				22661BB3D7FF40F6B3CE517F /* Motion.swift */,
 				7928BE4AB6C447BF25530BBC /* Onboarding.swift */,
+				DE0ADA21D93860BFB1BE1DD3 /* Permissions.swift */,
+				13ECDD93D16F7DA16CC5EB3B /* Places.swift */,
 				8A9777331EC3F7C949EA5850 /* Settings.swift */,
 				B451E9736AA39AF88B256125 /* Store.swift */,
 				56D4F5D6E4F48C39F8557F4C /* Together.entitlements */,
@@ -331,6 +337,8 @@
 				7CFCABC2D3E9A6BFA78B3097 /* Models.swift in Sources */,
 				139953211267530D7C7BD7B6 /* Motion.swift in Sources */,
 				A8AE084B0F9266336555A60A /* Onboarding.swift in Sources */,
+				05E71DB9C4B7465D3421CE8B /* Permissions.swift in Sources */,
+				7A894744F8AA6010A3F2F86A /* Places.swift in Sources */,
 				E292052FBEACC426743E7563 /* Settings.swift in Sources */,
 				E7ACF03A6B51DC788CBA7E60 /* Store.swift in Sources */,
 				4D41DDD72DE36BD4CFCE77F4 /* TogetherApp.swift in Sources */,

@@ -3,6 +3,7 @@ import { Platform } from 'react-native';
 
 import { uid } from '@/lib/ids';
 import type { MediaAsset } from '@/services/backend';
+import { askPermission } from '@/lib/permissions';
 
 export const MAX_VIDEO_SECONDS = 30;
 export const MAX_FILE_BYTES = 60 * 1024 * 1024;
@@ -23,6 +24,7 @@ function validate(asset: MediaAsset): string | null {
 /** Requests camera permission only when the user actually taps "Take photo". */
 export async function captureFromCamera(allowVideo = true): Promise<PickResult> {
   if (Platform.OS === 'web') return { error: 'The camera is not available in the browser preview. Choose from your files instead.' };
+  if (!(await askPermission('camera'))) return null;
   const perm = await ImagePicker.requestCameraPermissionsAsync();
   if (!perm.granted) return { error: 'Camera access is off. You can enable it in system Settings, or pick from your library instead.' };
   const res = await ImagePicker.launchCameraAsync({ mediaTypes: allowVideo ? ['images', 'videos'] : ['images'], quality: 0.85, videoMaxDuration: MAX_VIDEO_SECONDS, allowsEditing: false });
@@ -33,6 +35,7 @@ export async function captureFromCamera(allowVideo = true): Promise<PickResult> 
 }
 
 export async function pickFromLibrary(opts: { allowVideo?: boolean; square?: boolean } = {}): Promise<PickResult> {
+  if (Platform.OS !== 'web' && !(await askPermission('photos'))) return null;
   const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
   if (!perm.granted && Platform.OS !== 'web') return { error: 'Photo library access is off. Enable it in system Settings to pick a photo.' };
   const res = await ImagePicker.launchImageLibraryAsync({ mediaTypes: opts.allowVideo ? ['images', 'videos'] : ['images'], quality: 0.85, allowsEditing: !!opts.square, aspect: opts.square ? [1, 1] : undefined, videoMaxDuration: MAX_VIDEO_SECONDS });

@@ -7,8 +7,12 @@ struct ActivitiesView: View {
     @State private var category = ""
     var filtered: [Deck] { Product.shared.decks.filter { (category.isEmpty || $0.category == category) && (search.isEmpty || ($0.title + $0.description).localizedCaseInsensitiveContains(search)) } }
     var body: some View { Page {
-        Card { RowLink(title: "Messages & affection", icon: "envelope", detail: "Kisses, hugs, notes and voice notes") { MessagesView() } }
-        NavigationLink { GamesView() } label: { HStack(spacing: 14) { Text("🎮").font(.title2).frame(width: 48, height: 48).background(.white.opacity(0.12), in: RoundedRectangle(cornerRadius: 16)); VStack(alignment: .leading, spacing: 3) { Text("Games for two").font(.headline); Text("Draw, puzzle and duel, one turn at a time").font(.caption).opacity(0.7) }; Spacer(); Text("NEW").font(.caption.bold()) }.foregroundStyle(.white).padding(16).frame(maxWidth: .infinity).background(Color(hex: "#15101A"), in: RoundedRectangle(cornerRadius: 24)) }.buttonStyle(.smooth).accessibilityLabel("Games")
+        LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)], spacing: 12) {
+            NavigationLink { MessagesView() } label: { TogetherTile(emoji: "💌", title: "Messages", subtitle: "Kisses, notes, voice", colors: ["#F7A8C4", "#C2477A"]) }
+            NavigationLink { GamesView() } label: { TogetherTile(emoji: "🎮", title: "Games for two", subtitle: "Play together", colors: ["#3A2B45", "#15101A"], badge: "NEW") }
+            NavigationLink { ProximityAlertView() } label: { TogetherTile(emoji: "🔔", title: "Proximity alert", subtitle: Proximity.enabled ? "On" : "Know when you're close", colors: ["#D6A8FF", "#8B5CF6"]) }
+            NavigationLink { PlaceAlertsView() } label: { TogetherTile(emoji: "📍", title: "Place alerts", subtitle: "Arrive and leave", colors: ["#8FD3FF", "#4C6FE0"]) }
+        }
         NavigationLink { DailyQuestionView() } label: { Card { Text("DAILY QUESTION").font(.caption.bold()).foregroundStyle(.tint); Text(Product.shared.daily(store.today).text).font(.title3.bold()); Text("Answer separately. Reveal together.").font(.caption).foregroundStyle(.secondary) } }.buttonStyle(.smooth)
         HStack { SectionHeading(title: "Conversation decks"); Spacer(); NavigationLink("History") { ActivityHistoryView() } }
         TextField("Search decks", text: $search).textFieldStyle(.soft)
@@ -197,4 +201,23 @@ struct GamesView: View {
     @State private var openLife = false
     @State private var openCheckup = false
     func open(_ game: Game) { if game.status == "coming_soon" { notice = "\(game.title) is coming soon" } else if game.id == "our_little_one" { openLife = true } else if game.id == "marriage_checkup" { openCheckup = true } }
+}
+
+/// A square shortcut in the Together tab grid.
+struct TogetherTile: View {
+    var emoji: String; var title: String; var subtitle: String; var colors: [String]; var badge: String? = nil
+    var body: some View {
+        ZStack(alignment: .topLeading) {
+            LinearGradient(colors: colors.map { Color(hex: $0) }, startPoint: .topLeading, endPoint: .bottomTrailing)
+            Text(emoji).font(.system(size: 64)).opacity(0.3).rotationEffect(.degrees(-12)).frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing).offset(x: 10, y: 8).accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 4) {
+                HStack { Text(emoji).font(.title2); Spacer(); if let badge { Text(badge).font(.caption2.bold()).padding(.horizontal, 7).padding(.vertical, 3).background(.white.opacity(0.25), in: Capsule()) } }
+                Spacer()
+                Text(title).font(.headline).lineLimit(1).minimumScaleFactor(0.8)
+                Text(subtitle).font(.caption).opacity(0.85).lineLimit(1)
+            }.padding(14)
+        }
+        .foregroundStyle(.white).frame(height: 130).clipShape(RoundedRectangle(cornerRadius: 22))
+        .accessibilityElement(children: .combine)
+    }
 }

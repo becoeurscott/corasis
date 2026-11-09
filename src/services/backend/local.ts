@@ -23,6 +23,7 @@ import { remote, remoteConfig, type RemoteCouple, type RemoteUser } from './remo
 import {
   ActivitySession,
   CheckupEntry,
+  Place,
   AffectionKind,
   AuthSession,
   BackendError,
@@ -90,6 +91,7 @@ export interface DataState {
   widgetMessage: Record<ID, WidgetMessage>; // coupleId -> message
   lifeGames: LifeGame[];
   checkups: CheckupEntry[];
+  places: Place[];
   entitlements: Entitlements;
   hydrated: boolean;
 }
@@ -130,6 +132,7 @@ const emptyState: Omit<DataState, 'hydrated'> = {
   widgetMessage: {},
   lifeGames: [],
   checkups: [],
+  places: [],
   entitlements: { premium: false, source: 'none' },
 };
 
@@ -681,6 +684,20 @@ export const backend = {
     }));
   },
 
+  // ---------- place & proximity alerts (migrations/*partner-alerts.sql) ----------
+  savePlace(p: Place): void {
+    set((st) => ({ places: [...(st.places ?? []).filter((x) => x.id !== p.id), p] }));
+  },
+  deletePlace(id: string): void {
+    set((st) => ({ places: (st.places ?? []).filter((x) => x.id !== id) }));
+  },
+  /** Push an arrive/leave/near alert to the partner (both, for "near"). */
+  async sendPartnerAlert(kind: 'arrive' | 'leave' | 'near', place: string | null): Promise<void> {
+    if (!isRemoteSession()) return;
+    const id = await remote.sendPartnerAlert(kind, place);
+    if (id) await remote.pushPartnerAlert(id);
+  },
+
   // ---------- affection ----------
   /** Saves the emoji and pushes it to the partner. The simulated partner sends one back. */
   async sendAffection(emoji: string): Promise<{ simulatedReply: boolean }> {
@@ -728,6 +745,7 @@ export const backend = {
         events: st.events.filter((e) => e.coupleId !== c.id),
         lifeGames: st.lifeGames.filter((g) => g.coupleId !== c.id),
         checkups: (st.checkups ?? []).filter((e) => e.coupleId !== c.id),
+        places: (st.places ?? []).filter((p) => p.coupleId !== c.id),
         live: Object.fromEntries(Object.entries(st.live).filter(([id]) => c.memberIds.indexOf(id) === -1 || id === s.userId)),
       };
     });

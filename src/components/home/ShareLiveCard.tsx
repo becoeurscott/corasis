@@ -6,6 +6,7 @@ import { View } from 'react-native';
 import { Button, Card, Txt } from '@/components/ui';
 import { backend, useData } from '@/services/backend';
 import { useSession } from '@/store/hooks';
+import { askPermission } from '@/lib/permissions';
 
 const KEY = 'share-live-asked';
 
@@ -19,7 +20,7 @@ export function ShareLiveCard({ partnerName }: { partnerName: string }) {
   const close = () => { setAsked(true); AsyncStorage.setItem(KEY, '1').catch(() => undefined); };
   const share = async () => {
     close();
-    await Location.requestForegroundPermissionsAsync().catch(() => undefined);
+    if (await askPermission('location')) await Location.requestForegroundPermissionsAsync().catch(() => undefined);
     await backend.setSharing({ location: true, battery: true });
   };
   return (

@@ -137,6 +137,12 @@ actor InsForge {
     func receivedAffections(since: String) async throws -> [ReceivedAffection] { try JSONDecoder().decode([ReceivedAffection].self, from: try await rpc("received_affections", ["p_since": since])) }
     func savePushToken(_ token: String, environment: String) async throws { _ = try await rpc("save_push_token", ["p_token": token, "p_platform": "ios", "p_environment": environment]) }
     func removePushToken(_ token: String) async { _ = try? await rpc("remove_push_token", ["p_token": token]) }
+    /// Place / proximity alert; returns nil when the server dropped a duplicate.
+    func sendPartnerAlert(kind: String, place: String?) async throws -> String? {
+        let data = try await rpc("send_partner_alert", ["p_kind": kind, "p_place": place as Any? ?? NSNull()])
+        return try? JSONDecoder().decode(String.self, from: data)
+    }
+    func pushPartnerAlert(id: String) async { _ = try? await request("POST", "/functions/partner-alert-push", json: ["alert_id": id], auth: true) }
     /// Asks the affection-push function to notify the partner's phones (best effort).
     func pushAffection(id: String) async {
         _ = try? await request("POST", "/functions/affection-push", json: ["affection_id": id], auth: true)

@@ -52,7 +52,7 @@ struct MediaChooser: View {
     var body: some View { VStack(spacing: 14) {
         if let media { MediaPreview(media: media).frame(maxHeight: 300) }
         PhotosPicker(selection: $item, matching: photosOnly ? .images : .any(of: [.images, .videos])) { Label(busy ? "Loading…" : media == nil ? (photosOnly ? "Choose photo" : "Choose photo or video") : "Change media", systemImage: "photo.on.rectangle") }.disabled(busy)
-        if UIImagePickerController.isSourceTypeAvailable(.camera) { Button("Take a photo") { camera = true } }
+        if UIImagePickerController.isSourceTypeAvailable(.camera) { Button("Take a photo") { Task { if await PermissionGate.shared.ask(.camera) { camera = true } } } }
         else { Text("Camera capture is available on a physical iPhone. Add photos to the simulator to choose from its library.").font(.caption).foregroundStyle(.secondary) }
     }.onChange(of: item) { _, value in guard let value else { return }; busy = true; Task { do { media = try await MediaFiles.load(value) } catch { store.error = error.localizedDescription }; busy = false } }
         .sheet(isPresented: $camera) { CameraCapture { result in switch result { case .success(let value): media = value; case .failure(let error): store.error = error.localizedDescription }; camera = false } }
@@ -76,6 +76,7 @@ struct CameraCapture: UIViewControllerRepresentable {
     @Published var recording = false
     private var recorder: AVAudioRecorder?
     func start() async throws {
+        guard await PermissionGate.shared.ask(.microphone) else { return }
         let permission = await AVAudioApplication.requestRecordPermission()
         guard permission else { throw AppError(message: "Allow microphone access in Settings to record voice notes.") }
         let session = AVAudioSession.sharedInstance(); try session.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker]); try session.setActive(true)
@@ -91,7 +92,7 @@ struct CameraCapture: UIViewControllerRepresentable {
     private let manager = CLLocationManager()
     weak var store: Store?
     override init() { super.init(); manager.delegate = self; manager.desiredAccuracy = kCLLocationAccuracyKilometer }
-    func request(store: Store) { self.store = store; if manager.authorizationStatus == .notDetermined { manager.requestWhenInUseAuthorization() } else if manager.authorizationStatus == .authorizedWhenInUse || manager.authorizationStatus == .authorizedAlways { manager.requestLocation() } else { store.setSharing(location: false); store.error = "Location permission is off. You can enable it in iOS Settings." } }
+    func request(store: Store) { self.store = store; if manager.authorizationStatus == .notDetermined { Task { if await PermissionGate.shared.ask(.location) { manager.requestWhenInUseAuthorization() } } } else if manager.authorizationStatus == .authorizedWhenInUse || manager.authorizationStatus == .authorizedAlways { manager.requestLocation() } else { store.setSharing(location: false); store.error = "Location permission is off. You can enable it in iOS Settings." } }
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) { if manager.authorizationStatus == .authorizedWhenInUse || manager.authorizationStatus == .authorizedAlways { manager.requestLocation() } else if manager.authorizationStatus == .denied || manager.authorizationStatus == .restricted { store?.setSharing(location: false) } }
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) { guard let store, let id = store.db.currentUser, store.db.sharing[id]?.location == true, let location = locations.last else { return }; store.db.sharing[id]?.latitude = location.coordinate.latitude; store.db.sharing[id]?.longitude = location.coordinate.longitude; store.db.sharing[id]?.updated = location.timestamp
         CLGeocoder().reverseGeocodeLocation(location) { [weak store] places, _ in Task { @MainActor in guard let store, let place = places?.first, store.db.sharing[id]?.location == true else { return }; store.db.sharing[id]?.country = place.country; store.db.sharing[id]?.countryCode = place.isoCountryCode } } }
@@ -102,6 +103,7 @@ enum Reminders {
         let center = UNUserNotificationCenter.current(); center.removePendingNotificationRequests(withIdentifiers: ["together-daily"])
         if !prefs.notifications { center.removeAllPendingNotificationRequests(); return }
         guard prefs.dailyReminder else { return }
+        guard await PermissionGate.shared.ask(.notifications) else { return }
         guard try await center.requestAuthorization(options: [.alert, .sound, .badge]) else { throw AppError(message: "Notifications are disabled in iOS Settings.") }
         let parts = prefs.reminderTime.split(separator: ":").compactMap { Int($0) }
         guard parts.count == 2 else { return }
@@ -120,6 +122,7 @@ extension Reminders {
     static func schedule(event: Event, zone: String, prefs: Preferences) async throws {
         let center = UNUserNotificationCenter.current(); center.removePendingNotificationRequests(withIdentifiers: ["event-" + event.id])
         guard prefs.notifications && prefs.meetingAlerts && event.reminderDays >= 0 else { return }
+        guard await PermissionGate.shared.ask(.notifications) else { return }
         guard try await center.requestAuthorization(options: [.alert, .sound]) else { throw AppError(message: "Notification permission is off.") }
         let content = UNMutableNotificationContent(); content.title = event.title; content.body = event.destination.isEmpty ? "A little time together is coming." : event.destination; if prefs.sound { content.sound = .default }
         let day = Day.add(event.day, -event.reminderDays); let parts = (event.allDay ? prefs.reminderTime : event.time).split(separator: ":").compactMap { Int($0) }
