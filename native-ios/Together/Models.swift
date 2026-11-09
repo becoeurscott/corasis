@@ -4,6 +4,19 @@ import SwiftUI
 struct Question: Codable, Identifiable { var id: String; var type: String; var category: String; var text: String; var options: [String]?; var aboutPartner: Bool? }
 struct Deck: Codable, Identifiable { var id: String; var title: String; var category: String; var description: String; var type: String; var questionIds: [String]; var premium: Bool; var emoji: String }
 struct Game: Codable, Identifiable { var id: String; var title: String; var tagline: String; var description: String; var tags: [String]; var players: String; var pace: String; var emoji: String; var colors: [String]; var status: String }
+struct CheckupItem: Codable, Identifiable { var id: String; var emoji: String; var text: String }
+struct CheckupBand: Codable { var min: Int; var title: String; var text: String }
+struct CheckupContent: Codable {
+    var scale: [String]; var items: [CheckupItem]; var bands: [CheckupBand]; var disclaimer: String
+    func band(_ score: Int) -> CheckupBand { bands.first { score >= $0.min } ?? bands.last! }
+}
+/// One spouse's answers for one month's Marriage Check-up. Synced as kind "checkup", id "<round>_<user>".
+struct CheckupEntry: Codable, Identifiable {
+    var id: String { "\(round)_\(user)" }
+    var coupleID: String; var round: String; var user: String; var ratings: [Int]; var guess: Int; var submitted = Date()
+    /// 25 ratings from 1 to 5 → 0…100 %.
+    var score: Int { max(0, min(100, ratings.reduce(0, +) - ratings.count)) }
+}
 struct Category: Codable { var label: String; var emoji: String; var blurb: String }
 struct Palette: Codable { var label: String; var tagline: String; var light: [String:String]; var dark: [String:String] }
 struct OnboardingTransition: Codable { var title: String; var message: String; var durationMs: Int }
@@ -25,6 +38,7 @@ struct Product: Codable {
     var simulatedAnswers: [String:String]
     var games: [Game]
     var lifeGame: LifeContent
+    var checkup: CheckupContent
     static let shared: Product = {
         guard let url = Bundle.main.url(forResource: "product", withExtension: "json"),
               let data = try? Data(contentsOf: url), let product = try? JSONDecoder().decode(Product.self, from: data) else {
@@ -70,6 +84,7 @@ struct Database: Codable {
     var version = 1; var currentUser: String?; var demo = false; var onboarded = false; var partnerStepDone: Bool?; var prefs = Preferences(); var people: [Person] = []; var accounts: [Account] = []; var couples: [Couple] = []; var invites: [Invite] = []; var moments: [Moment] = []; var activities: [Activity] = []; var messages: [Note] = []; var memories: [Memory] = []; var events: [Event] = []; var favorites: [String:[String]] = [:]; var sharing: [String:Sharing] = [:]; var widgetMessages: [String:String] = [:]
     /// Our Little One games. Optional so state saved before the game existed still loads.
     var lifeGames: [LifeGame]?
+    var checkups: [CheckupEntry]?
 }
 enum Day {
     static func formatter(_ zone: String) -> DateFormatter { let f = DateFormatter(); f.locale = Locale(identifier: "en_US_POSIX"); f.calendar = Calendar(identifier: .gregorian); f.timeZone = TimeZone(identifier: zone) ?? .gmt; f.dateFormat = "yyyy-MM-dd"; return f }

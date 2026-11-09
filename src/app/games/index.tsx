@@ -21,6 +21,7 @@ function openGame(game: Game) {
   haptic('light');
   if (game.status === 'coming_soon') toast(`${game.title} is coming soon`);
   else if (game.id === 'our_little_one') router.push('/games/life');
+  else if (game.id === 'marriage_checkup') router.push('/games/checkup');
 }
 
 function Tag({ label, light }: { label: string; light?: boolean }) {

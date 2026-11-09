@@ -222,6 +222,19 @@ export interface LifeLogEntry {
   at: ISODate;
 }
 
+/** One spouse's answers for one month's Marriage Check-up. Synced as kind "checkup", id "<round>_<userId>". */
+export interface CheckupEntry {
+  coupleId: ID;
+  /** Month, "YYYY-MM". */
+  round: string;
+  userId: ID;
+  /** 25 ratings, 1–5. */
+  ratings: number[];
+  /** Guess of the partner's score, 0–100. */
+  guess: number;
+  submittedAt: ISODate;
+}
+
 export interface LifeMilestone {
   id: ID;
   kind: 'proposed' | 'born' | 'grew' | 'choice' | 'wedding' | 'ended';

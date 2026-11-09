@@ -45,6 +45,7 @@
 		DC68CB396285A6F258B6B684 /* Widgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B8C27B45B0B76C4B84DA928 /* Widgets.swift */; };
 		E292052FBEACC426743E7563 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9777331EC3F7C949EA5850 /* Settings.swift */; };
 		E7ACF03A6B51DC788CBA7E60 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = B451E9736AA39AF88B256125 /* Store.swift */; };
+		F92E6CBC209587DFEE39051C /* Checkup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C5CF10AE414388E68925D8F /* Checkup.swift */; };
 		FAFF12A30EF8EEE2788D4F42 /* boing.wav in Resources */ = {isa = PBXBuildFile; fileRef = 578239949AF9C71F87AD75B8 /* boing.wav */; };
 		FE13F8CC4A85CF57E2E6516F /* music_night.wav in Resources */ = {isa = PBXBuildFile; fileRef = E77C8FF37585AE26C7E26CC2 /* music_night.wav */; };
 /* End PBXBuildFile section */
@@ -80,6 +81,7 @@
 		654BA9BCD9E11F334B88664C /* product.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = product.json; sourceTree = "<group>"; };
 		69340CAC6F951BB663F3CC92 /* chew2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = chew2.wav; sourceTree = "<group>"; };
 		6A8F0690E183F7D82E059BB9 /* pop.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pop.wav; sourceTree = "<group>"; };
+		6C5CF10AE414388E68925D8F /* Checkup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checkup.swift; sourceTree = "<group>"; };
 		7928BE4AB6C447BF25530BBC /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
 		81CBFFE15D681CEB5B499883 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		838F6D02E2BED4375131B341 /* chew1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = chew1.wav; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 				002F24C0C38D926B6F4BBA26 /* Affection.swift */,
 				89F42E58149A4624D55F8126 /* Assets.xcassets */,
 				3F31C83652FA2A8DC11F21AE /* Calendar.swift */,
+				6C5CF10AE414388E68925D8F /* Checkup.swift */,
 				33A5A73C340681AE3E70D800 /* ConnectionPreferences.swift */,
 				58EDE065F639FE85E93F48B3 /* CoupleSync.swift */,
 				E9CDC935B84833155DC32D3B /* FlameCelebration.swift */,
@@ -314,6 +317,7 @@
 				091843D13A0F1329736D8186 /* Activities.swift in Sources */,
 				8695F5F91A8DDDC4333559EF /* Affection.swift in Sources */,
 				5C1EE7D604534AEC1B007161 /* Calendar.swift in Sources */,
+				F92E6CBC209587DFEE39051C /* Checkup.swift in Sources */,
 				15540DD739227986D28D7B32 /* ConnectionPreferences.swift in Sources */,
 				9026B79635F9BEE85C2B229A /* CoupleSync.swift in Sources */,
 				74127963209A4AB9694F2906 /* FlameCelebration.swift in Sources */,

@@ -18,9 +18,11 @@ import { computeStreak } from '@/lib/streak';
 import { addDays, todayKey } from '@/lib/time';
 import { actionDef, applyAction, applyDecision, castVote, currentVote, evaluate, fastForward, gameNow, life, newLifeGame, openVote, redactLifeGame, stageDef } from '@/lib/lifeGame';
 import { syncCouple as runCoupleSync } from './coupleSync';
+import { checkupItemCount, checkupScore } from '@/data/checkup';
 import { remote, remoteConfig, type RemoteCouple, type RemoteUser } from './remote';
 import {
   ActivitySession,
+  CheckupEntry,
   AffectionKind,
   AuthSession,
   BackendError,
@@ -87,6 +89,7 @@ export interface DataState {
   events: CalendarEvent[];
   widgetMessage: Record<ID, WidgetMessage>; // coupleId -> message
   lifeGames: LifeGame[];
+  checkups: CheckupEntry[];
   entitlements: Entitlements;
   hydrated: boolean;
 }
@@ -126,6 +129,7 @@ const emptyState: Omit<DataState, 'hydrated'> = {
   events: [],
   widgetMessage: {},
   lifeGames: [],
+  checkups: [],
   entitlements: { premium: false, source: 'none' },
 };
 
@@ -723,6 +727,7 @@ export const backend = {
         memories: st.memories.filter((m) => m.coupleId !== c.id),
         events: st.events.filter((e) => e.coupleId !== c.id),
         lifeGames: st.lifeGames.filter((g) => g.coupleId !== c.id),
+        checkups: (st.checkups ?? []).filter((e) => e.coupleId !== c.id),
         live: Object.fromEntries(Object.entries(st.live).filter(([id]) => c.memberIds.indexOf(id) === -1 || id === s.userId)),
       };
     });
@@ -1127,6 +1132,27 @@ export const backend = {
   },
 
   /** One parent proposes; the baby only arrives once the other parent accepts. */
+  /** Saves my answers for this month's Marriage Check-up. The demo spouse answers close to mine. */
+  async submitCheckup(ratings: number[], guess: number): Promise<void> {
+    const s = requireSession();
+    const c = requireCouple(s.userId);
+    if (c.memberIds.length < 2) throw new BackendError('not_paired', 'Connect your spouse first.');
+    if (ratings.length !== checkupItemCount || ratings.some((r) => r < 1 || r > 5)) throw new BackendError('invalid', 'Rate every item first.');
+    const round = todayKey(c.coupleTimezone).slice(0, 7);
+    const entry: CheckupEntry = { coupleId: c.id, round, userId: s.userId, ratings, guess: Math.max(0, Math.min(100, Math.round(guess))), submittedAt: now() };
+    const others = (get().checkups ?? []).filter((e) => !(e.coupleId === c.id && e.round === round && e.userId === s.userId));
+    set(() => ({ checkups: [...others, entry] }));
+    const partnerId = c.memberIds.find((id) => id !== s.userId);
+    if (partnerId === SIMULATED_PARTNER_ID && !others.some((e) => e.coupleId === c.id && e.round === round && e.userId === partnerId)) {
+      later(() => {
+        const theirs = ratings.map((r) => Math.max(1, Math.min(5, r + [-1, 0, 0, 1][Math.floor(Math.random() * 4)])));
+        const myScore = checkupScore(ratings);
+        const sim: CheckupEntry = { coupleId: c.id, round, userId: partnerId, ratings: theirs, guess: Math.max(0, Math.min(100, myScore + Math.round(Math.random() * 24 - 12))), submittedAt: now() };
+        set((st) => ({ checkups: [...(st.checkups ?? []), sim] }));
+      }, 2000);
+    }
+  },
+
   async proposeBaby(): Promise<LifeGame> {
     const s = requireSession();
     const c = requireCouple(s.userId);

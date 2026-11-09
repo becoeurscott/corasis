@@ -1382,6 +1382,25 @@
       "status": "available"
     },
     {
+      "id": "marriage_checkup",
+      "title": "Marriage Check-up",
+      "tagline": "Rate your marriage, then compare",
+      "description": "Once a month, each of you rates 25 parts of your marriage in secret and guesses your spouse's score. Then reveal together: where you're in tune, what's going great and what to talk about.",
+      "tags": [
+        "Married",
+        "Monthly",
+        "Honest"
+      ],
+      "players": "2 spouses",
+      "pace": "10 minutes a month",
+      "emoji": "💍",
+      "colors": [
+        "#F7A8C4",
+        "#C2477A"
+      ],
+      "status": "available"
+    },
+    {
       "id": "draw_guess",
       "title": "Draw & Guess",
       "tagline": "Sketch it, they guess it",
@@ -2136,5 +2155,164 @@
     "resent": "New code sent",
     "change": "Use a different email",
     "demo": "No email service in this build. Your code is {code}."
+  },
+  "checkup": {
+    "scale": [
+      "Not happy",
+      "A little happy",
+      "Happy",
+      "Quite happy",
+      "Very happy"
+    ],
+    "items": [
+      {
+        "id": "trust",
+        "emoji": "🤝",
+        "text": "Our trust and respect for each other"
+      },
+      {
+        "id": "space",
+        "emoji": "🏡",
+        "text": "How my space and habits are respected"
+      },
+      {
+        "id": "admire",
+        "emoji": "✨",
+        "text": "How much I admire my spouse"
+      },
+      {
+        "id": "admired",
+        "emoji": "🌟",
+        "text": "Feeling admired by my spouse"
+      },
+      {
+        "id": "team",
+        "emoji": "👯",
+        "text": "Feeling like a team, in it together"
+      },
+      {
+        "id": "plans",
+        "emoji": "🗺️",
+        "text": "Agreeing on our plans, now and for the years ahead"
+      },
+      {
+        "id": "talk",
+        "emoji": "💬",
+        "text": "Talking openly about our feelings"
+      },
+      {
+        "id": "intimacy_often",
+        "emoji": "🔥",
+        "text": "How often we're intimate"
+      },
+      {
+        "id": "intimacy_quality",
+        "emoji": "💞",
+        "text": "The quality of our intimacy"
+      },
+      {
+        "id": "tenderness",
+        "emoji": "🫶",
+        "text": "Tender moments outside the bedroom"
+      },
+      {
+        "id": "children",
+        "emoji": "🧸",
+        "text": "How we raise (or plan to raise) our children"
+      },
+      {
+        "id": "money",
+        "emoji": "💰",
+        "text": "How we handle money together"
+      },
+      {
+        "id": "chores",
+        "emoji": "🧺",
+        "text": "How we share the housework"
+      },
+      {
+        "id": "inlaws",
+        "emoji": "👵",
+        "text": "My relationship with my in-laws"
+      },
+      {
+        "id": "leisure",
+        "emoji": "🎨",
+        "text": "Our hobbies and free time"
+      },
+      {
+        "id": "everyday",
+        "emoji": "☕",
+        "text": "Everyday life together"
+      },
+      {
+        "id": "decisions",
+        "emoji": "⚖️",
+        "text": "How we make decisions"
+      },
+      {
+        "id": "conflicts",
+        "emoji": "🕊️",
+        "text": "How we work through disagreements"
+      },
+      {
+        "id": "time_amount",
+        "emoji": "⏳",
+        "text": "How much time we spend together"
+      },
+      {
+        "id": "time_quality",
+        "emoji": "🌅",
+        "text": "The quality of our time together"
+      },
+      {
+        "id": "support",
+        "emoji": "🛟",
+        "text": "The support I get in hard times"
+      },
+      {
+        "id": "friends",
+        "emoji": "🥂",
+        "text": "Our friendships with other couples"
+      },
+      {
+        "id": "getaways",
+        "emoji": "✈️",
+        "text": "Getaways just for the two of us"
+      },
+      {
+        "id": "commitment",
+        "emoji": "💍",
+        "text": "Our commitment and how we share decisions and power"
+      },
+      {
+        "id": "freedom",
+        "emoji": "🦋",
+        "text": "Feeling free within our marriage"
+      }
+    ],
+    "bands": [
+      {
+        "min": 76,
+        "title": "Thriving",
+        "text": "You're both deeply happy together. Keep doing what works, and celebrate it."
+      },
+      {
+        "min": 51,
+        "title": "Strong, with ups and downs",
+        "text": "A good marriage with a few soft spots. Pick one topic below and talk about it this week."
+      },
+      {
+        "min": 26,
+        "title": "Going through a rough patch",
+        "text": "Some important things feel off right now. Talk calmly about the biggest gaps, one at a time."
+      },
+      {
+        "min": 0,
+        "title": "Needs care now",
+        "text": "Things feel hard right now. Be gentle with each other, and consider talking with a couples counsellor."
+      }
+    ],
+    "disclaimer": "Just for fun and conversation. This isn't a clinical test."
   }
 }

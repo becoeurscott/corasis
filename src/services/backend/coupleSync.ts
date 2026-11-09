@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as FileSystem from 'expo-file-system/legacy';
 
 import { insforge } from './remote';
-import type { ActivitySession, CalendarEvent, Couple, LifeGame, MediaAsset, Memory, Message, Moment } from './types';
+import type { ActivitySession, CalendarEvent, CheckupEntry, Couple, LifeGame, MediaAsset, Memory, Message, Moment } from './types';
 
 type Json = Record<string, unknown>;
 type Item = { kind: string; id: string; data: Json; hash: string };
@@ -19,7 +19,7 @@ export type SyncStore = {
     session: { userId: string } | null;
     couples: Record<string, Couple>;
     moments: Moment[]; messages: Message[]; sessions: ActivitySession[]; memories: Memory[]; events: CalendarEvent[];
-    lifeGames: LifeGame[]; widgetMessage: Record<string, { text: string; authorId: string; updatedAt: string }>;
+    lifeGames: LifeGame[]; checkups: CheckupEntry[]; widgetMessage: Record<string, { text: string; authorId: string; updatedAt: string }>;
   };
   set: (fn: (s: ReturnType<SyncStore['get']>) => Partial<ReturnType<SyncStore['get']>>) => void;
 };
@@ -121,6 +121,9 @@ async function sharedItems(store: SyncStore, couple: Couple, st: State): Promise
     const { id, coupleId: _c, ...rest } = g;
     add(item('life', id, { ...rest, votes: g.votes.map(({ status, decidedBy, ...v }) => ({ ...v, decided: status === 'decided', coin: decidedBy === 'coin' })), keepsakeSaved: g.keepsakeSaved ?? false } as Json));
   }
+  for (const e of (s.checkups ?? []).filter((x) => x.coupleId === couple.id)) {
+    add(item('checkup', `${e.round}_${e.userId}`, { round: e.round, userId: e.userId, ratings: e.ratings, guess: e.guess, submittedAt: e.submittedAt }));
+  }
   add(item('couple', 'settings', { start: couple.relationshipStart, stage: couple.relationshipStage, distance: couple.distanceMode, goals: couple.goals ?? [], timezone: couple.coupleTimezone }));
   const w = s.widgetMessage[couple.id];
   if (w?.text) add(item('widget', 'note', { text: w.text, by: '', at: null }));
@@ -134,7 +137,7 @@ async function apply(store: SyncStore, couple: Couple, me: string, kind: string,
   const key = `${kind}:${id}`;
   if (deleted) {
     const drop = <T extends { id: string }>(l: T[]) => l.filter((x) => x.id !== id);
-    store.set((s) => ({ moments: kind === 'moment' ? drop(s.moments) : s.moments, messages: kind === 'message' ? drop(s.messages) : s.messages, sessions: kind === 'session' ? drop(s.sessions) : s.sessions, memories: kind === 'memory' ? drop(s.memories) : s.memories, events: kind === 'event' ? drop(s.events) : s.events, lifeGames: kind === 'life' ? drop(s.lifeGames) : s.lifeGames }));
+    store.set((s) => ({ moments: kind === 'moment' ? drop(s.moments) : s.moments, messages: kind === 'message' ? drop(s.messages) : s.messages, sessions: kind === 'session' ? drop(s.sessions) : s.sessions, memories: kind === 'memory' ? drop(s.memories) : s.memories, events: kind === 'event' ? drop(s.events) : s.events, lifeGames: kind === 'life' ? drop(s.lifeGames) : s.lifeGames, checkups: kind === 'checkup' ? (s.checkups ?? []).filter((e) => `${e.round}_${e.userId}` !== id) : s.checkups ?? [] }));
     delete st.hashes[key];
     return true;
   }
@@ -176,6 +179,12 @@ async function apply(store: SyncStore, couple: Couple, me: string, kind: string,
       const votes = ((d.votes as Json[]) ?? []).map(({ decided, coin, ...v }) => ({ ...v, previousPicks: v.previousPicks ?? null, result: v.result ?? null, status: decided ? 'decided' : 'open', decidedBy: decided ? (coin ? 'coin' : 'match') : null }));
       const v = { ...(d as unknown as LifeGame), votes, id, coupleId: couple.id } as LifeGame;
       store.set((s) => ({ lifeGames: upsert(s.lifeGames, v) })); break;
+    }
+    case 'checkup': {
+      const round = str(d.round); const userId = str(d.userId); const ratings = d.ratings as number[] | undefined;
+      if (!round || !userId || !Array.isArray(ratings)) return true;
+      const v: CheckupEntry = { coupleId: couple.id, round, userId, ratings, guess: typeof d.guess === 'number' ? d.guess : 0, submittedAt: str(d.submittedAt) ?? new Date().toISOString() };
+      store.set((s) => ({ checkups: [...(s.checkups ?? []).filter((e) => !(e.round === round && e.userId === userId && e.coupleId === couple.id)), v] })); break;
     }
     case 'couple': {
       store.set((s) => {

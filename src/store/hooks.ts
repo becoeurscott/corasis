@@ -10,7 +10,7 @@ import { dailyQuestionFor } from '@/data/questions';
 import { redactLifeGame } from '@/lib/lifeGame';
 import { computeStreak } from '@/lib/streak';
 import { todayKey } from '@/lib/time';
-import { ActivitySession, LifeGame, LiveInfo, redactSession, useData } from '@/services/backend';
+import { ActivitySession, CheckupEntry, LifeGame, LiveInfo, redactSession, useData } from '@/services/backend';
 
 export function useSession() {
   return useData((s) => s.session);
@@ -159,4 +159,11 @@ export function useLifeGame(): LifeGame | null {
     const g = games.find((x) => x.coupleId === couple.id);
     return g ? redactLifeGame(g, session.userId) : null;
   }, [session, couple, games]);
+}
+
+/** This couple's Marriage Check-up answers, all months. */
+export function useCheckups(): CheckupEntry[] {
+  const couple = useCouple();
+  const all = useData((s) => s.checkups);
+  return useMemo(() => (couple ? (all ?? []).filter((e) => e.coupleId === couple.id) : []), [couple, all]);
 }
