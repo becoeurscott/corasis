@@ -119,6 +119,7 @@ struct GamesView: View {
         .toolbarBackground(gamesHeroBackground, for: .navigationBar).toolbarColorScheme(.dark, for: .navigationBar)
         .navigationDestination(isPresented: $openLife) { LifeGameView() }
         .navigationDestination(isPresented: $openCheckup) { CheckupGameView() }
+        .navigationDestination(isPresented: $openTruths) { TruthsGameView() }
         .alert(notice ?? "", isPresented: Binding(get: { notice != nil }, set: { if !$0 { notice = nil } })) { Button("OK") { notice = nil } }
     }
     var hero: some View {
@@ -200,7 +201,8 @@ struct GamesView: View {
     func gradient(_ game: Game) -> LinearGradient { LinearGradient(colors: game.colors.map { Color(hex: $0) }, startPoint: .topLeading, endPoint: .bottomTrailing) }
     @State private var openLife = false
     @State private var openCheckup = false
-    func open(_ game: Game) { if game.status == "coming_soon" { notice = "\(game.title) is coming soon" } else if game.id == "our_little_one" { openLife = true } else if game.id == "marriage_checkup" { openCheckup = true } }
+    @State private var openTruths = false
+    func open(_ game: Game) { if game.status == "coming_soon" { notice = "\(game.title) is coming soon" } else if game.id == "our_little_one" { openLife = true } else if game.id == "marriage_checkup" { openCheckup = true } else if game.id == "five_truths" { openTruths = true } }
 }
 
 /// A square shortcut in the Together tab grid.

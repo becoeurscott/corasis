@@ -19,6 +19,7 @@ import { addDays, todayKey } from '@/lib/time';
 import { actionDef, applyAction, applyDecision, castVote, currentVote, evaluate, fastForward, gameNow, life, newLifeGame, openVote, redactLifeGame, stageDef } from '@/lib/lifeGame';
 import { syncCouple as runCoupleSync } from './coupleSync';
 import { checkupItemCount, checkupScore } from '@/data/checkup';
+import { truthsItemCount } from '@/data/truths';
 import { remote, remoteConfig, type RemoteCouple, type RemoteUser } from './remote';
 import {
   ActivitySession,
@@ -42,6 +43,7 @@ import {
   SharingPermission,
   StreakState,
   Submission,
+  TruthsEntry,
   WidgetMessage,
 } from './types';
 
@@ -91,6 +93,7 @@ export interface DataState {
   widgetMessage: Record<ID, WidgetMessage>; // coupleId -> message
   lifeGames: LifeGame[];
   checkups: CheckupEntry[];
+  truths: TruthsEntry[];
   places: Place[];
   entitlements: Entitlements;
   hydrated: boolean;
@@ -132,6 +135,7 @@ const emptyState: Omit<DataState, 'hydrated'> = {
   widgetMessage: {},
   lifeGames: [],
   checkups: [],
+  truths: [],
   places: [],
   entitlements: { premium: false, source: 'none' },
 };
@@ -745,6 +749,7 @@ export const backend = {
         events: st.events.filter((e) => e.coupleId !== c.id),
         lifeGames: st.lifeGames.filter((g) => g.coupleId !== c.id),
         checkups: (st.checkups ?? []).filter((e) => e.coupleId !== c.id),
+        truths: (st.truths ?? []).filter((e) => e.coupleId !== c.id),
         places: (st.places ?? []).filter((p) => p.coupleId !== c.id),
         live: Object.fromEntries(Object.entries(st.live).filter(([id]) => c.memberIds.indexOf(id) === -1 || id === s.userId)),
       };
@@ -1167,6 +1172,27 @@ export const backend = {
         const myScore = checkupScore(ratings);
         const sim: CheckupEntry = { coupleId: c.id, round, userId: partnerId, ratings: theirs, guess: Math.max(0, Math.min(100, myScore + Math.round(Math.random() * 24 - 12))), submittedAt: now() };
         set((st) => ({ checkups: [...(st.checkups ?? []), sim] }));
+      }, 2000);
+    }
+  },
+
+  /** Saves my answers for this month's Five Truths. The demo partner answers close to mine. */
+  async submitTruths(answers: number[], guesses: number[]): Promise<void> {
+    const s = requireSession();
+    const c = requireCouple(s.userId);
+    if (c.memberIds.length < 2) throw new BackendError('not_paired', 'Connect your partner first.');
+    const n = truthsItemCount;
+    if (answers.length !== n || guesses.length !== n || [...answers, ...guesses].some((v) => v < 0 || v > 2)) throw new BackendError('invalid', 'Answer every question first.');
+    const round = todayKey(c.coupleTimezone).slice(0, 7);
+    const entry: TruthsEntry = { coupleId: c.id, round, userId: s.userId, answers, guesses, submittedAt: now() };
+    const others = (get().truths ?? []).filter((e) => !(e.coupleId === c.id && e.round === round && e.userId === s.userId));
+    set(() => ({ truths: [...others, entry] }));
+    const partnerId = c.memberIds.find((id) => id !== s.userId);
+    if (partnerId === SIMULATED_PARTNER_ID && !others.some((e) => e.coupleId === c.id && e.round === round && e.userId === partnerId)) {
+      later(() => {
+        const near = (v: number) => Math.floor(Math.random() * 3) === 0 ? Math.floor(Math.random() * 3) : v;
+        const sim: TruthsEntry = { coupleId: c.id, round, userId: partnerId, answers: guesses.map(near), guesses: answers.map(near), submittedAt: now() };
+        set((st) => ({ truths: [...(st.truths ?? []), sim] }));
       }, 2000);
     }
   },

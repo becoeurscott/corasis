@@ -15,6 +15,7 @@
 		0E99168DD88437C80D0EB117 /* hover.wav in Resources */ = {isa = PBXBuildFile; fileRef = B068E14A1AC9360E8B06B6DE /* hover.wav */; };
 		139953211267530D7C7BD7B6 /* Motion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22661BB3D7FF40F6B3CE517F /* Motion.swift */; };
 		15540DD739227986D28D7B32 /* ConnectionPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A5A73C340681AE3E70D800 /* ConnectionPreferences.swift */; };
+		157AC8741BA02734D60316FE /* Truths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2C85614F88013E5AF4C40E /* Truths.swift */; };
 		19E7EA653228462FFB84D1C6 /* fanfare.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8FC09C427814CD219B08C17 /* fanfare.wav */; };
 		1C852ABA5AF60B66DD42EACB /* giggle2.wav in Resources */ = {isa = PBXBuildFile; fileRef = C48447A153900AA320A5E7E9 /* giggle2.wav */; };
 		36FF1BA1BEDE4610EF4B272C /* pop.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6A8F0690E183F7D82E059BB9 /* pop.wav */; };
@@ -69,6 +70,7 @@
 		13ECDD93D16F7DA16CC5EB3B /* Places.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Places.swift; sourceTree = "<group>"; };
 		22661BB3D7FF40F6B3CE517F /* Motion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Motion.swift; sourceTree = "<group>"; };
 		28973FB019367B16765F4D95 /* InsForge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsForge.swift; sourceTree = "<group>"; };
+		2B2C85614F88013E5AF4C40E /* Truths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Truths.swift; sourceTree = "<group>"; };
 		2EC506522BF73D81C85086ED /* MediaServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaServices.swift; sourceTree = "<group>"; };
 		2EFB469C3CC65A333FB65824 /* Memories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Memories.swift; sourceTree = "<group>"; };
 		33A5A73C340681AE3E70D800 /* ConnectionPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionPreferences.swift; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 				B451E9736AA39AF88B256125 /* Store.swift */,
 				56D4F5D6E4F48C39F8557F4C /* Together.entitlements */,
 				3C5641FF3BA1E33FB7F7CE4D /* TogetherApp.swift */,
+				2B2C85614F88013E5AF4C40E /* Truths.swift */,
 				5B8C27B45B0B76C4B84DA928 /* Widgets.swift */,
 			);
 			path = Together;
@@ -342,6 +345,7 @@
 				E292052FBEACC426743E7563 /* Settings.swift in Sources */,
 				E7ACF03A6B51DC788CBA7E60 /* Store.swift in Sources */,
 				4D41DDD72DE36BD4CFCE77F4 /* TogetherApp.swift in Sources */,
+				157AC8741BA02734D60316FE /* Truths.swift in Sources */,
 				DC68CB396285A6F258B6B684 /* Widgets.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

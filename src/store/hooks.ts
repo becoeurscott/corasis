@@ -10,7 +10,7 @@ import { dailyQuestionFor } from '@/data/questions';
 import { redactLifeGame } from '@/lib/lifeGame';
 import { computeStreak } from '@/lib/streak';
 import { todayKey } from '@/lib/time';
-import { ActivitySession, CheckupEntry, LifeGame, LiveInfo, Place, redactSession, useData } from '@/services/backend';
+import { ActivitySession, CheckupEntry, LifeGame, LiveInfo, Place, TruthsEntry, redactSession, useData } from '@/services/backend';
 
 export function useSession() {
   return useData((s) => s.session);
@@ -165,6 +165,13 @@ export function useLifeGame(): LifeGame | null {
 export function useCheckups(): CheckupEntry[] {
   const couple = useCouple();
   const all = useData((s) => s.checkups);
+  return useMemo(() => (couple ? (all ?? []).filter((e) => e.coupleId === couple.id) : []), [couple, all]);
+}
+
+/** This couple's Five Truths answers, all months. */
+export function useTruths(): TruthsEntry[] {
+  const couple = useCouple();
+  const all = useData((s) => s.truths);
   return useMemo(() => (couple ? (all ?? []).filter((e) => e.coupleId === couple.id) : []), [couple, all]);
 }
 

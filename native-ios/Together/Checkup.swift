@@ -33,6 +33,9 @@ struct CheckupGameView: View {
     @Environment(\.appPalette) var p
     private let content = Product.shared.checkup
     @State private var ratings: [Int] = []
+    @State private var forward = true
+    @State private var emojiPop = false
+    @State private var buttonsIn = false
     @State private var index = 0
     @State private var guess = 60.0
     @State private var phase = Phase.intro
@@ -97,27 +100,46 @@ struct CheckupGameView: View {
 
     var rating: some View {
         let item = content.items[index]
-        return VStack(spacing: 24) {
+        return VStack(spacing: 16) {
             ProgressView(value: Double(index + 1), total: Double(content.items.count)).tint(p.primary)
             Text("\(index + 1) of \(content.items.count)").font(.caption.bold()).foregroundStyle(p.secondary)
-            Spacer()
-            Text(item.emoji).font(.system(size: 80)).id("e\(index)").transition(.scale.combined(with: .opacity))
-            Text(item.text).font(.title2.bold()).multilineTextAlignment(.center).id("t\(index)").transition(.opacity)
-            Text("How happy are you with this?").font(.subheadline).foregroundStyle(p.secondary)
-            Spacer()
+            ZStack {
+                VStack(spacing: 14) {
+                    Text(item.emoji).font(.system(size: 64)).scaleEffect(emojiPop ? 1 : 0.4).rotationEffect(.degrees(emojiPop ? 0 : -18))
+                    Text(item.text).font(.title3.bold()).multilineTextAlignment(.center).fixedSize(horizontal: false, vertical: true).minimumScaleFactor(0.8)
+                    Text("How happy are you with this?").font(.subheadline).foregroundStyle(p.secondary)
+                }
+                .padding(22).frame(maxWidth: .infinity)
+                .background(p.surface, in: RoundedRectangle(cornerRadius: 26))
+                .shadow(color: p.primary.opacity(0.12), radius: 16, y: 8)
+                .id(index)
+                .transition(.asymmetric(insertion: .move(edge: forward ? .trailing : .leading).combined(with: .opacity), removal: .move(edge: forward ? .leading : .trailing).combined(with: .opacity)))
+            }
+            .frame(maxHeight: .infinity)
+            .onAppear { popEmoji() }
+            .onChange(of: index) { _, _ in popEmoji() }
             VStack(spacing: 10) {
                 ForEach((1...5).reversed(), id: \.self) { value in
                     Button { pick(value) } label: {
                         HStack { Text(String(repeating: "♥", count: value)).foregroundStyle(p.primary).frame(width: 90, alignment: .leading); Text(content.scale[value - 1]).font(.headline); Spacer() }
-                            .padding(.horizontal, 18).padding(.vertical, 13)
+                            .padding(.horizontal, 18).padding(.vertical, 11)
                             .background(ratings[index] == value ? p.soft : p.surface, in: RoundedRectangle(cornerRadius: 16))
                             .overlay(RoundedRectangle(cornerRadius: 16).stroke(ratings[index] == value ? p.primary : p.color("border"), lineWidth: ratings[index] == value ? 2 : 1))
-                    }.buttonStyle(.smooth).accessibilityLabel("\(value) of 5, \(content.scale[value - 1])")
+                    }.buttonStyle(.smooth)
+                    .scaleEffect(ratings[index] == value ? 1.04 : 1).animation(.spring(response: 0.3, dampingFraction: 0.55), value: ratings[index])
+                    .opacity(buttonsIn ? 1 : 0).offset(y: buttonsIn ? 0 : 24)
+                    .animation(.spring(response: 0.45, dampingFraction: 0.8).delay(Double(5 - value) * 0.05), value: buttonsIn)
+                    .accessibilityLabel("\(value) of 5, \(content.scale[value - 1])")
                 }
             }
-            Button("Back") { withAnimation { if index == 0 { phase = .intro } else { index -= 1 } } }.foregroundStyle(p.secondary)
+            Button("Back") { forward = false; withAnimation(.spring(response: 0.45, dampingFraction: 0.85)) { if index == 0 { phase = .intro } else { index -= 1 } } }.foregroundStyle(p.secondary)
         }
         .padding(20).frame(maxWidth: 680).frame(maxWidth: .infinity).background(p.background).foregroundStyle(p.text)
+    }
+    func popEmoji() {
+        emojiPop = false; buttonsIn = false
+        withAnimation(.spring(response: 0.5, dampingFraction: 0.5).delay(0.1)) { emojiPop = true }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { buttonsIn = true }
     }
     func pick(_ value: Int) {
         guard !advancing else { return }
@@ -125,7 +147,8 @@ struct CheckupGameView: View {
         ratings[index] = value
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.18) {
-            withAnimation(.easeOut(duration: 0.25)) { if index + 1 < content.items.count { index += 1 } else { phase = .guessing } }
+            forward = true
+            withAnimation(.spring(response: 0.45, dampingFraction: 0.85)) { if index + 1 < content.items.count { index += 1 } else { phase = .guessing } }
             advancing = false
         }
     }
@@ -135,7 +158,7 @@ struct CheckupGameView: View {
             Text("🔮").font(.system(size: 64)).frame(maxWidth: .infinity)
             Text("Guess \(partnerName)'s score").font(.title.bold()).frame(maxWidth: .infinity)
             Text("How happy do you think \(partnerName) is with your marriage this month, out of 100?").multilineTextAlignment(.center).foregroundStyle(p.secondary).frame(maxWidth: .infinity)
-            Text("\(Int(guess))%").font(.system(size: 64, weight: .heavy, design: .rounded)).foregroundStyle(p.primary).frame(maxWidth: .infinity).contentTransition(.numericText())
+            Text(verbatim: "\(Int(guess))%").font(.system(size: 64, weight: .heavy, design: .rounded)).foregroundStyle(p.primary).frame(maxWidth: .infinity).contentTransition(.numericText())
             Slider(value: $guess, in: 0...100, step: 1).tint(p.primary)
             PrimaryButton(title: "Lock in my answers") {
                 if let gap = ratings.firstIndex(of: 0) { withAnimation { index = gap; phase = .rating }; return }
@@ -162,7 +185,7 @@ struct CheckupGameView: View {
             Card {
                 ForEach(past, id: \.key) { round, entries in
                     let avg = entries.map(\.score).reduce(0, +) / 2
-                    HStack { Text(round).font(.subheadline.monospacedDigit()); Spacer(); Text(content.band(avg).title).font(.caption).foregroundStyle(p.secondary); Text("\(avg)%").font(.headline).foregroundStyle(p.primary) }
+                    HStack { Text(round).font(.subheadline.monospacedDigit()); Spacer(); Text(content.band(avg).title).font(.caption).foregroundStyle(p.secondary); Text(verbatim: "\(avg)%").font(.headline).foregroundStyle(p.primary) }
                 }
             }
         }
@@ -190,7 +213,7 @@ struct CheckupReveal: View {
                 LinearGradient(colors: [Color(hex: "#F7A8C4"), Color(hex: "#C2477A")], startPoint: .topLeading, endPoint: .bottomTrailing)
                 VStack(spacing: 14) {
                     HStack(spacing: 28) { scoreBubble(store.me, mine.score, "You"); scoreBubble(store.partner, theirs.score, partnerName) }
-                    Text("\(shown ? average : 0)%").font(.system(size: 64, weight: .heavy, design: .rounded)).contentTransition(.numericText())
+                    Text(verbatim: "\(shown ? average : 0)%").font(.system(size: 64, weight: .heavy, design: .rounded)).fixedSize().scaleEffect(shown ? 1 : 0.6).contentTransition(.numericText())
                     Text(content.band(average).title).font(.title3.bold())
                     Text(content.band(average).text).font(.subheadline).multilineTextAlignment(.center).opacity(0.9)
                 }.foregroundStyle(.white).padding(24)
@@ -202,8 +225,8 @@ struct CheckupReveal: View {
             }
             Card {
                 Text("🔮 Guesses").font(.headline)
-                Text("You guessed \(mine.guess)%, \(partnerName) gave \(theirs.score)%.").font(.subheadline)
-                Text("\(partnerName) guessed \(theirs.guess)%, you gave \(mine.score)%.").font(.subheadline)
+                Text(verbatim: "You guessed \(mine.guess)%, \(partnerName) gave \(theirs.score)%.").font(.subheadline)
+                Text(verbatim: "\(partnerName) guessed \(theirs.guess)%, you gave \(mine.score)%.").font(.subheadline)
             }
             if !strengths.isEmpty { list("💪 Going great", strengths) }
             if !talkAbout.isEmpty { list("💬 Worth talking about", talkAbout) }
@@ -214,7 +237,7 @@ struct CheckupReveal: View {
         .onAppear { withAnimation(.easeOut(duration: 1.2).delay(0.2)) { shown = true } }
     }
     func scoreBubble(_ person: Person?, _ score: Int, _ label: String) -> some View {
-        VStack(spacing: 6) { if let person { Avatar(person: person, size: 52).overlay(Circle().stroke(.white, lineWidth: 2)) }; Text("\(shown ? score : 0)%").font(.headline).contentTransition(.numericText()); Text(label).font(.caption).opacity(0.85).lineLimit(1) }
+        VStack(spacing: 6) { if let person { Avatar(person: person, size: 52).overlay(Circle().stroke(.white, lineWidth: 2)) }; Text(verbatim: "\(shown ? score : 0)%").font(.headline).contentTransition(.numericText()); Text(label).font(.caption).opacity(0.85).lineLimit(1) }
     }
     func stat(_ value: String, _ label: String) -> some View {
         VStack(spacing: 4) { Text(value).font(.title3.bold()).foregroundStyle(p.primary); Text(label).font(.caption).foregroundStyle(p.secondary).lineLimit(1).minimumScaleFactor(0.8) }

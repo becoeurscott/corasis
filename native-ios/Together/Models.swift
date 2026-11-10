@@ -17,6 +17,14 @@ struct CheckupEntry: Codable, Identifiable {
     /// 25 ratings from 1 to 5 → 0…100 %.
     var score: Int { max(0, min(100, ratings.reduce(0, +) - ratings.count)) }
 }
+struct TruthItem: Codable, Identifiable { var id: String; var emoji: String; var text: String; var options: [String] }
+struct TruthsContent: Codable { var intro: String; var items: [TruthItem]; var talk: String }
+/// One partner's Five Truths answers for a month. Synced as kind "truths", id "<round>_<user>".
+/// answers/guesses hold option indexes (0 = warmest); guesses are what they think the partner chose.
+struct TruthsEntry: Codable, Identifiable {
+    var id: String { "\(round)_\(user)" }
+    var coupleID: String; var round: String; var user: String; var answers: [Int]; var guesses: [Int]; var submitted = Date()
+}
 struct Category: Codable { var label: String; var emoji: String; var blurb: String }
 struct Palette: Codable { var label: String; var tagline: String; var light: [String:String]; var dark: [String:String] }
 struct OnboardingTransition: Codable { var title: String; var message: String; var durationMs: Int }
@@ -39,6 +47,7 @@ struct Product: Codable {
     var games: [Game]
     var lifeGame: LifeContent
     var checkup: CheckupContent
+    var truths: TruthsContent
     static let shared: Product = {
         guard let url = Bundle.main.url(forResource: "product", withExtension: "json"),
               let data = try? Data(contentsOf: url), let product = try? JSONDecoder().decode(Product.self, from: data) else {
@@ -85,6 +94,7 @@ struct Database: Codable {
     /// Our Little One games. Optional so state saved before the game existed still loads.
     var lifeGames: [LifeGame]?
     var checkups: [CheckupEntry]?
+    var truths: [TruthsEntry]?
     var places: [Place]?
 }
 enum Day {

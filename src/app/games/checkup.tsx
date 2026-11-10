@@ -51,6 +51,32 @@ function Locked() {
   );
 }
 
+/** The question slides in from the side it came from; its emoji pops. */
+function QuestionCard({ item, forward }: { item: CheckupItem; forward: boolean }) {
+  const { colors } = useTheme();
+  const [slide] = useState(() => new Animated.Value(0));
+  const [pop] = useState(() => new Animated.Value(0));
+  useEffect(() => {
+    Animated.parallel([
+      Animated.spring(slide, { toValue: 1, useNativeDriver: true, damping: 18, stiffness: 160 }),
+      Animated.spring(pop, { toValue: 1, useNativeDriver: true, damping: 7, stiffness: 140, delay: 100 }),
+    ]).start();
+  }, [slide, pop]);
+  return (
+    <Animated.View style={[styles.questionCard, { backgroundColor: colors.surface, shadowColor: colors.primary, opacity: slide, transform: [{ translateX: slide.interpolate({ inputRange: [0, 1], outputRange: [forward ? 60 : -60, 0] }) }] }]}>
+      <Animated.Text style={[styles.cardEmoji, { transform: [{ scale: pop.interpolate({ inputRange: [0, 1], outputRange: [0.4, 1] }) }, { rotate: pop.interpolate({ inputRange: [0, 1], outputRange: ['-18deg', '0deg'] }) }] }]}>{item.emoji}</Animated.Text>
+      <Txt variant="title" center>{item.text}</Txt>
+      <Txt tone="secondary" center>How happy are you with this?</Txt>
+    </Animated.View>
+  );
+}
+
+function RiseIn({ delay, children }: { delay: number; children: React.ReactNode }) {
+  const [v] = useState(() => new Animated.Value(0));
+  useEffect(() => { Animated.spring(v, { toValue: 1, useNativeDriver: true, damping: 16, stiffness: 170, delay }).start(); }, [v, delay]);
+  return <Animated.View style={{ opacity: v, transform: [{ translateY: v.interpolate({ inputRange: [0, 1], outputRange: [24, 0] }) }] }}>{children}</Animated.View>;
+}
+
 function monthTitle(round: string) {
   const [y, m] = round.split('-').map(Number);
   return new Date(y, m - 1, 1).toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
@@ -64,6 +90,7 @@ function Play({ partnerName, entries, round }: { partnerName: string; entries: C
   const [guess, setGuess] = useState(60);
   const [busy, setBusy] = useState(false);
   const advancing = useRef(false);
+  const [forward, setForward] = useState(true);
 
   const pick = (value: number) => {
     if (advancing.current) return; // a fast double tap must not skip a question
@@ -71,6 +98,7 @@ function Play({ partnerName, entries, round }: { partnerName: string; entries: C
     haptic('light');
     setRatings((r) => r.map((x, i) => (i === index ? value : x)));
     setTimeout(() => {
+      setForward(true);
       if (index + 1 < checkupItemCount) setIndex(index + 1);
       else setPhase('guessing');
       advancing.current = false;
@@ -96,22 +124,22 @@ function Play({ partnerName, entries, round }: { partnerName: string; entries: C
     return (
       <View style={{ gap: spacing.lg }}>
         <ProgressBar value={(index + 1) / checkupItemCount} label={`${index + 1} of ${checkupItemCount}`} />
-        <Txt style={styles.bigEmoji} center>{item.emoji}</Txt>
-        <Txt variant="title" center>{item.text}</Txt>
-        <Txt tone="secondary" center>How happy are you with this?</Txt>
+        <QuestionCard key={`q${index}`} item={item} forward={forward} />
         <View style={{ gap: spacing.sm }}>
-          {[5, 4, 3, 2, 1].map((v) => {
+          {[5, 4, 3, 2, 1].map((v, i) => {
             const on = ratings[index] === v;
             return (
-              <Pressable key={v} accessibilityRole="button" accessibilityLabel={`${v} of 5, ${checkup.scale[v - 1]}`} onPress={() => pick(v)}
-                style={[styles.option, { backgroundColor: on ? colors.primarySoft : colors.surface, borderColor: on ? colors.primary : colors.border, borderWidth: on ? 2 : 1 }]}>
-                <Txt style={{ color: colors.primary, width: 90 }}>{'♥'.repeat(v)}</Txt>
-                <Txt variant="bodyStrong">{checkup.scale[v - 1]}</Txt>
-              </Pressable>
+              <RiseIn key={`${index}-${v}`} delay={80 + i * 50}>
+                <Pressable accessibilityRole="button" accessibilityLabel={`${v} of 5, ${checkup.scale[v - 1]}`} onPress={() => pick(v)}
+                  style={({ pressed }) => [styles.option, { backgroundColor: on ? colors.primarySoft : colors.surface, borderColor: on ? colors.primary : colors.border, borderWidth: on ? 2 : 1, transform: [{ scale: pressed || on ? 1.03 : 1 }] }]}>
+                  <Txt style={{ color: colors.primary, width: 90 }}>{'♥'.repeat(v)}</Txt>
+                  <Txt variant="bodyStrong">{checkup.scale[v - 1]}</Txt>
+                </Pressable>
+              </RiseIn>
             );
           })}
         </View>
-        <Button title="Back" variant="ghost" onPress={() => (index === 0 ? setPhase('intro') : setIndex(index - 1))} />
+        <Button title="Back" variant="ghost" onPress={() => { setForward(false); if (index === 0) setPhase('intro'); else setIndex(index - 1); }} />
       </View>
     );
   }
@@ -297,6 +325,8 @@ function RowList({ title, rows, partnerName }: { title: string; rows: Row[]; par
 }
 
 const styles = StyleSheet.create({
+  questionCard: { borderRadius: 26, padding: 22, gap: 12, alignItems: 'center', shadowOpacity: 0.12, shadowRadius: 16, shadowOffset: { width: 0, height: 8 }, elevation: 3 },
+  cardEmoji: { fontSize: 60, lineHeight: 72, textAlign: 'center' },
   bigEmoji: { fontSize: 64, lineHeight: 76 },
   hero: { borderRadius: 28, padding: spacing.xl, alignItems: 'center', gap: spacing.sm },
   option: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 18, paddingVertical: 13, borderRadius: 16 },

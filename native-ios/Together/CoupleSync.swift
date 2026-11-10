@@ -121,6 +121,9 @@ import Foundation
         for e in db.checkups ?? [] where e.coupleID == couple.id {
             add(item("checkup", e.id, ["round": e.round, "userId": e.user, "ratings": e.ratings, "guess": e.guess, "submittedAt": iso(e.submitted)]))
         }
+        for e in db.truths ?? [] where e.coupleID == couple.id {
+            add(item("truths", e.id, ["round": e.round, "userId": e.user, "answers": e.answers, "guesses": e.guesses, "submittedAt": iso(e.submitted)]))
+        }
         for p in db.places ?? [] where p.coupleID == couple.id {
             add(item("place", p.id, ["owner": p.owner, "addedBy": p.addedBy, "name": p.name, "emoji": p.emoji, "lat": p.latitude, "lon": p.longitude, "radius": p.radius, "alerts": p.alerts]))
         }
@@ -171,6 +174,7 @@ import Foundation
             case "life": store.db.lifeGames?.removeAll { $0.id == id }
             case "place": store.db.places?.removeAll { $0.id == id }; PlaceMonitor.shared.refresh(store)
             case "checkup": store.db.checkups?.removeAll { $0.id == id }
+            case "truths": store.db.truths?.removeAll { $0.id == id }
             default: break
             }
             state.hashes[key] = nil
@@ -220,6 +224,10 @@ import Foundation
             guard let round = str(d["round"]), let user = str(d["userId"]), let ratings = d["ratings"] as? [Int] else { return true }
             let e = CheckupEntry(coupleID: couple.id, round: round, user: user, ratings: ratings, guess: d["guess"] as? Int ?? 0, submitted: date(d["submittedAt"]) ?? Date())
             var all = store.db.checkups ?? []; all.removeAll { $0.id == e.id }; all.append(e); store.db.checkups = all
+        case "truths":
+            guard let round = str(d["round"]), let user = str(d["userId"]), let answers = d["answers"] as? [Int] else { return true }
+            let e = TruthsEntry(coupleID: couple.id, round: round, user: user, answers: answers, guesses: d["guesses"] as? [Int] ?? [], submitted: date(d["submittedAt"]) ?? Date())
+            var all = store.db.truths ?? []; all.removeAll { $0.id == e.id }; all.append(e); store.db.truths = all
         case "couple":
             if let i = store.db.couples.firstIndex(where: { $0.id == couple.id }) {
                 store.db.couples[i].start = str(d["start"]); store.db.couples[i].stage = str(d["stage"]) ?? store.db.couples[i].stage

@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as FileSystem from 'expo-file-system/legacy';
 
 import { insforge } from './remote';
-import type { ActivitySession, CalendarEvent, CheckupEntry, Couple, Place, LifeGame, MediaAsset, Memory, Message, Moment } from './types';
+import type { ActivitySession, CalendarEvent, CheckupEntry, Couple, Place, LifeGame, MediaAsset, Memory, Message, Moment, TruthsEntry } from './types';
 
 type Json = Record<string, unknown>;
 type Item = { kind: string; id: string; data: Json; hash: string };
@@ -19,7 +19,7 @@ export type SyncStore = {
     session: { userId: string } | null;
     couples: Record<string, Couple>;
     moments: Moment[]; messages: Message[]; sessions: ActivitySession[]; memories: Memory[]; events: CalendarEvent[];
-    lifeGames: LifeGame[]; checkups: CheckupEntry[]; places: Place[]; widgetMessage: Record<string, { text: string; authorId: string; updatedAt: string }>;
+    lifeGames: LifeGame[]; checkups: CheckupEntry[]; truths: TruthsEntry[]; places: Place[]; widgetMessage: Record<string, { text: string; authorId: string; updatedAt: string }>;
   };
   set: (fn: (s: ReturnType<SyncStore['get']>) => Partial<ReturnType<SyncStore['get']>>) => void;
 };
@@ -124,6 +124,9 @@ async function sharedItems(store: SyncStore, couple: Couple, st: State): Promise
   for (const e of (s.checkups ?? []).filter((x) => x.coupleId === couple.id)) {
     add(item('checkup', `${e.round}_${e.userId}`, { round: e.round, userId: e.userId, ratings: e.ratings, guess: e.guess, submittedAt: e.submittedAt }));
   }
+  for (const e of (s.truths ?? []).filter((x) => x.coupleId === couple.id)) {
+    add(item('truths', `${e.round}_${e.userId}`, { round: e.round, userId: e.userId, answers: e.answers, guesses: e.guesses, submittedAt: e.submittedAt }));
+  }
   for (const p of (s.places ?? []).filter((x) => x.coupleId === couple.id)) {
     add(item('place', p.id, { owner: p.ownerId, addedBy: p.addedBy, name: p.name, emoji: p.emoji, lat: p.lat, lon: p.lon, radius: p.radius, alerts: p.alerts }));
   }
@@ -140,7 +143,7 @@ async function apply(store: SyncStore, couple: Couple, me: string, kind: string,
   const key = `${kind}:${id}`;
   if (deleted) {
     const drop = <T extends { id: string }>(l: T[]) => l.filter((x) => x.id !== id);
-    store.set((s) => ({ moments: kind === 'moment' ? drop(s.moments) : s.moments, messages: kind === 'message' ? drop(s.messages) : s.messages, sessions: kind === 'session' ? drop(s.sessions) : s.sessions, memories: kind === 'memory' ? drop(s.memories) : s.memories, events: kind === 'event' ? drop(s.events) : s.events, lifeGames: kind === 'life' ? drop(s.lifeGames) : s.lifeGames, checkups: kind === 'checkup' ? (s.checkups ?? []).filter((e) => `${e.round}_${e.userId}` !== id) : s.checkups ?? [], places: kind === 'place' ? (s.places ?? []).filter((p) => p.id !== id) : s.places ?? [] }));
+    store.set((s) => ({ moments: kind === 'moment' ? drop(s.moments) : s.moments, messages: kind === 'message' ? drop(s.messages) : s.messages, sessions: kind === 'session' ? drop(s.sessions) : s.sessions, memories: kind === 'memory' ? drop(s.memories) : s.memories, events: kind === 'event' ? drop(s.events) : s.events, lifeGames: kind === 'life' ? drop(s.lifeGames) : s.lifeGames, checkups: kind === 'checkup' ? (s.checkups ?? []).filter((e) => `${e.round}_${e.userId}` !== id) : s.checkups ?? [], truths: kind === 'truths' ? (s.truths ?? []).filter((e) => `${e.round}_${e.userId}` !== id) : s.truths ?? [], places: kind === 'place' ? (s.places ?? []).filter((p) => p.id !== id) : s.places ?? [] }));
     delete st.hashes[key];
     return true;
   }
@@ -188,6 +191,12 @@ async function apply(store: SyncStore, couple: Couple, me: string, kind: string,
       if (!round || !userId || !Array.isArray(ratings)) return true;
       const v: CheckupEntry = { coupleId: couple.id, round, userId, ratings, guess: typeof d.guess === 'number' ? d.guess : 0, submittedAt: str(d.submittedAt) ?? new Date().toISOString() };
       store.set((s) => ({ checkups: [...(s.checkups ?? []).filter((e) => !(e.round === round && e.userId === userId && e.coupleId === couple.id)), v] })); break;
+    }
+    case 'truths': {
+      const round = str(d.round); const userId = str(d.userId); const answers = d.answers as number[] | undefined; const guesses = d.guesses as number[] | undefined;
+      if (!round || !userId || !Array.isArray(answers) || !Array.isArray(guesses)) return true;
+      const v: TruthsEntry = { coupleId: couple.id, round, userId, answers, guesses, submittedAt: str(d.submittedAt) ?? new Date().toISOString() };
+      store.set((s) => ({ truths: [...(s.truths ?? []).filter((e) => !(e.round === round && e.userId === userId && e.coupleId === couple.id)), v] })); break;
     }
     case 'place': {
       const owner = str(d.owner); const name = str(d.name);

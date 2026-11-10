@@ -1401,6 +1401,24 @@
       "status": "available"
     },
     {
+      "id": "five_truths",
+      "title": "Five Truths",
+      "tagline": "5 questions for life",
+      "description": "Five honest questions about your relationship. Answer each one in secret, guess what your partner said, then reveal together and talk about where you differ.",
+      "players": "2 partners",
+      "pace": "5 minutes a month",
+      "emoji": "🗝️",
+      "status": "available",
+      "tags": [
+        "Deep talk",
+        "Couples"
+      ],
+      "colors": [
+        "#B9A4FF",
+        "#7C5CFF"
+      ]
+    },
+    {
       "id": "draw_guess",
       "title": "Draw & Guess",
       "tagline": "Sketch it, they guess it",
@@ -2314,5 +2332,61 @@
       }
     ],
     "disclaimer": "Just for fun and conversation. This isn't a clinical test."
+  },
+  "truths": {
+    "intro": "Five questions that get to the heart of a relationship. Be honest: your partner only sees your answers once you've both finished.",
+    "items": [
+      {
+        "id": "compliment",
+        "emoji": "🪞",
+        "text": "If someone said you were just like your partner, would you take it as a compliment?",
+        "options": [
+          "Yes, I'd be proud",
+          "Partly",
+          "Not really"
+        ]
+      },
+      {
+        "id": "fulfilled",
+        "emoji": "🌕",
+        "text": "Does your partner make you feel truly fulfilled, or just less alone?",
+        "options": [
+          "Truly fulfilled",
+          "A bit of both",
+          "Mostly less alone"
+        ]
+      },
+      {
+        "id": "now",
+        "emoji": "🌱",
+        "text": "Are you in love with who your partner is today, or with who they could become?",
+        "options": [
+          "Who they are today",
+          "Both",
+          "Who they could become"
+        ]
+      },
+      {
+        "id": "yourself",
+        "emoji": "🦋",
+        "text": "Can you fully be yourself, or do you hide parts of you to keep your partner comfortable?",
+        "options": [
+          "I'm fully myself",
+          "I hold back a little",
+          "I hide a lot"
+        ]
+      },
+      {
+        "id": "child",
+        "emoji": "👧",
+        "text": "If your child brought home someone just like your partner, would you be happy for them or tell them to run?",
+        "options": [
+          "Happy for them",
+          "I'd have doubts",
+          "Tell them to run"
+        ]
+      }
+    ],
+    "talk": "Where your answers differ, ask each other “what makes you feel that way?” and just listen."
   }
 }

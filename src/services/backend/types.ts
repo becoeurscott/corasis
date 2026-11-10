@@ -235,6 +235,19 @@ export interface CheckupEntry {
   submittedAt: ISODate;
 }
 
+/** One partner's answers for one month's Five Truths game. Synced as kind "truths", id "<round>_<userId>". */
+export interface TruthsEntry {
+  coupleId: ID;
+  /** Month, "YYYY-MM". */
+  round: string;
+  userId: ID;
+  /** 5 answer indices (0–2). */
+  answers: number[];
+  /** 5 guess indices (0–2). */
+  guesses: number[];
+  submittedAt: ISODate;
+}
+
 export interface LifeMilestone {
   id: ID;
   kind: 'proposed' | 'born' | 'grew' | 'choice' | 'wedding' | 'ended';
