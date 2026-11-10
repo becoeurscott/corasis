@@ -2,6 +2,7 @@ import SwiftUI
 import CryptoKit
 import Security
 import UserNotifications
+import WidgetKit
 
 struct AppError: LocalizedError { var message: String; var errorDescription: String? { message } }
 @MainActor final class Store: ObservableObject {
@@ -29,6 +30,16 @@ struct AppError: LocalizedError { var message: String; var errorDescription: Str
     func persist() {
         do { try FileManager.default.createDirectory(at: file.deletingLastPathComponent(), withIntermediateDirectories: true); try JSONEncoder().encode(db).write(to: file, options: [.atomic, .completeFileProtectionUnlessOpen]) }
         catch { self.error = "Could not save your changes: \(error.localizedDescription)" }
+        syncWidgetData()
+    }
+    private func syncWidgetData() {
+        let s = streak; let tz = couple?.timezone ?? me?.timezone ?? TimeZone.current.identifier
+        let evt = events.first { $0.day >= today && ($0.kind == "meeting" || $0.kind == "visit") }
+        WidgetData(streakCurrent: s.current, streakLongest: s.longest, todayComplete: s.days.contains(today), timezone: tz, partnerMessage: db.widgetMessages[couple?.id ?? ""] ?? "A little closer, every day 💕", myName: me?.name ?? "You", partnerName: partner?.name ?? "Partner", nextEventTitle: evt.map { $0.destination.isEmpty ? $0.title : $0.destination }, nextEventDay: evt?.day, daysToEvent: evt.map { Day.distance(today, $0.day) }, updatedAt: Date()).save()
+        reloadWidgets()
+    }
+    private func reloadWidgets() {
+        WidgetCenter.shared.reloadAllTimelines()
     }
     var me: Person? { db.people.first { $0.id == db.currentUser } }
     var couple: Couple? { guard let id = db.currentUser else { return nil }; return db.couples.first { $0.members.contains(id) } }
@@ -290,6 +301,13 @@ struct AppError: LocalizedError { var message: String; var errorDescription: Str
             store.db.moments.append(reply)
             store.db.memories.append(Memory(coupleID: c.id, owner: "demo-partner", title: reply.caption, body: "", day: moment.day, media: media, momentID: reply.id))
         } }
+    }
+    func restoreStreak() throws {
+        let c = try requireCouple(); guard db.prefs.premium else { throw AppError(message: "Restore flame requires Together Plus.") }
+        let yesterday = Day.add(today, -1)
+        for member in c.members where !db.moments.contains(where: { $0.coupleID == c.id && $0.author == member && $0.day == yesterday }) {
+            db.moments.append(Moment(coupleID: c.id, author: member, day: yesterday, media: Media(path: "flame-restore", kind: "system"), caption: "🔥 Flame restored"))
+        }
     }
     func startActivity(question: Question, deck: Deck, daily: Bool = false) throws -> String {
         let c = try requireCouple()

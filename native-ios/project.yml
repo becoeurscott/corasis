@@ -16,14 +16,19 @@ targets:
     platform: iOS
     sources:
       - path: Together
+      - path: Shared
       - path: ../shared/product.json
         buildPhase: resources
       - path: ../shared/sounds
         buildPhase: resources
+    dependencies:
+      - target: TogetherWidgetExtension
     entitlements:
       path: Together/Together.entitlements
       properties:
         aps-environment: development
+        com.apple.security.application-groups:
+          - group.com.ebenezer.corasis
     info:
       path: Together/Info.plist
       properties:
@@ -49,6 +54,31 @@ targets:
         MARKETING_VERSION: '1.0.0'
         CURRENT_PROJECT_VERSION: 1
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+  TogetherWidgetExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: TogetherWidget
+      - path: Shared
+    entitlements:
+      path: TogetherWidget/TogetherWidget.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.ebenezer.corasis
+    info:
+      path: TogetherWidget/Info.plist
+      properties:
+        CFBundleDisplayName: Together Widgets
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.ebenezer.corasis.widgets
+        MARKETING_VERSION: '1.0.0'
+        CURRENT_PROJECT_VERSION: 1
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Together Widgets
+        INFOPLIST_KEY_NSHumanReadableCopyright: ''
   TogetherTests:
     type: bundle.unit-test
     platform: iOS

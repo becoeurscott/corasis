@@ -5,6 +5,15 @@ struct HomeView: View {
     @EnvironmentObject var store: Store
     @Environment(\.appPalette) var p
     @State private var capture = false
+    @State private var now = Date()
+    private let timer = Timer.publish(every: 60, on: .main, in: .common).autoconnect()
+    private var minutesLeft: Int {
+        let tz = TimeZone(identifier: store.couple?.timezone ?? store.me?.timezone ?? TimeZone.current.identifier) ?? .current
+        var cal = Calendar.current; cal.timeZone = tz
+        guard let end = cal.date(bySettingHour: 0, minute: 0, second: 0, of: cal.date(byAdding: .day, value: 1, to: now)!) else { return 0 }
+        return max(0, Int(end.timeIntervalSince(now) / 60))
+    }
+    private var lostStreak: Bool { store.streak.current == 0 && store.streak.longest > 0 }
     var body: some View {
         Page {
             HStack { VStack(alignment: .leading, spacing: 4) { Text("OUR LITTLE WORLD").font(.caption.weight(.bold)).tracking(2).foregroundStyle(p.primary); Text("Closer, together.").font(.system(size: 30, weight: .bold, design: .rounded)) }; Spacer(); NavigationLink { MessagesView() } label: { Image(systemName: "envelope").font(.title2).padding(12).background(p.soft, in: Circle()) } }
@@ -14,11 +23,31 @@ struct HomeView: View {
             if store.partner?.simulated == true { InfoBanner(text: "Alex is a simulated partner. Replies are generated on this device and never reach a real person.", icon: "testtube.2") }
             if store.partner == nil { Card { Text("Your shared space starts here").font(.title2.bold()); Text("Invite your partner or explore with a simulated partner.").foregroundStyle(.secondary); NavigationLink("Partner connection") { PartnerSettings() } } }
             Card {
-                HStack(spacing: 16) { Text("🔥").font(.system(size: 36)).padding(16).background(p.soft, in: RoundedRectangle(cornerRadius: 18)); VStack(alignment: .leading) { Text(store.streak.current == 1 ? "1 day" : "\(store.streak.current) days").font(.system(size: 30, weight: .bold)); Text(store.streak.days.contains(store.today) ? "Today is complete. Nice." : store.streak.current > 0 ? "Keep it going: send today’s moment" : "Send a moment to start your flame").font(.subheadline).foregroundStyle(.secondary) } }
+                HStack(spacing: 16) { Text(lostStreak ? "💔" : "🔥").font(.system(size: 36)).padding(16).background(p.soft, in: RoundedRectangle(cornerRadius: 18)); VStack(alignment: .leading) {
+                    if lostStreak {
+                        Text("Flame lost").font(.system(size: 26, weight: .bold))
+                        Text("Your \(store.streak.longest)-day flame ended. Start fresh or restore it.").font(.subheadline).foregroundStyle(.secondary)
+                    } else {
+                        Text(store.streak.current == 1 ? "1 day" : "\(store.streak.current) days").font(.system(size: 30, weight: .bold))
+                        if store.streak.days.contains(store.today) {
+                            Text("Today is complete. Nice.").font(.subheadline).foregroundStyle(.secondary)
+                        } else if store.streak.current > 0 {
+                            let h = minutesLeft / 60; let m = minutesLeft % 60
+                            Text("Keep it going · \(h)h \(m)m left").font(.subheadline).foregroundStyle(.secondary)
+                        } else {
+                            Text("Send a moment to start your flame").font(.subheadline).foregroundStyle(.secondary)
+                        }
+                    }
+                } }
+                if lostStreak {
+                    Button { if store.db.prefs.premium { store.perform { try store.restoreStreak() } } } label: {
+                        HStack { Image(systemName: store.db.prefs.premium ? "flame.fill" : "lock.fill"); Text(store.db.prefs.premium ? "Restore my flame" : "Together Plus: Restore flame") }.font(.subheadline.bold()).foregroundStyle(.white).frame(maxWidth: .infinity).padding(14).background(store.db.prefs.premium ? p.primary : Color.gray, in: RoundedRectangle(cornerRadius: 16))
+                    }
+                }
                 HStack { status(store.me); Spacer(); status(store.partner) }
                 PrimaryButton(title: "Send my moment") { capture = true }
                 NavigationLink { FlameView() } label: { Text("Flame details & history").font(.subheadline.bold()).frame(maxWidth: .infinity).padding(.top, 4) }
-            }
+            }.onReceive(timer) { now = $0 }
             if let suggestion = store.connectionPreferences?.suggestion {
                 NavigationLink { DeckView(deck: suggestion.deck) } label: {
                     Card { Text("A STARTING POINT FOR YOU").font(.caption.bold()).tracking(1).foregroundStyle(p.primary); Text("\(suggestion.deck.emoji) \(suggestion.deck.title)").font(.title3.bold()); Text(suggestion.body).foregroundStyle(.secondary); Text(suggestion.duration).font(.caption).foregroundStyle(.secondary) }
