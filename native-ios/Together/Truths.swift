@@ -43,7 +43,7 @@ struct TruthsGameView: View {
     @State private var error: String?
 
     var me: String { store.db.currentUser ?? "" }
-    var partnerName: String { store.partner?.name ?? "your partner" }
+    var partnerName: String { store.partner?.name ?? tr("your partner") }
     var round: String { store.checkupRound }
     var mine: TruthsEntry? { store.truthsEntries(round: round).first { $0.user == me } }
     var theirs: TruthsEntry? { store.truthsEntries(round: round).first { $0.user != me } }
@@ -71,7 +71,7 @@ struct TruthsGameView: View {
             }.clipShape(RoundedRectangle(cornerRadius: 28))
             .onAppear { withAnimation(.spring(response: 0.6, dampingFraction: 0.5).delay(0.15)) { pop = true } }
             Card { Text(content.intro).font(.body) }
-            PrimaryButton(title: "Start") {
+            PrimaryButton(title: tr("Start")) {
                 answers = Array(repeating: -1, count: content.items.count); guesses = answers; index = 0; guessing = false; forward = true
                 withAnimation(.spring(response: 0.45, dampingFraction: 0.85)) { playing = true }
             }
@@ -201,7 +201,7 @@ struct TruthsReveal: View {
         }
     }
 
-    func stat(verbatim value: String, _ label: String) -> some View {
+    func stat(verbatim value: String, _ label: LocalizedStringKey) -> some View {
         VStack(spacing: 4) { Text(verbatim: value).font(.title3.bold()).foregroundStyle(p.primary); Text(label).font(.caption).foregroundStyle(p.secondary).lineLimit(1).minimumScaleFactor(0.7) }
             .frame(maxWidth: .infinity).padding(.vertical, 14).background(p.surface, in: RoundedRectangle(cornerRadius: 18))
     }

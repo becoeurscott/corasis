@@ -6,10 +6,10 @@ struct WidgetsView: View {
     @Environment(\.appPalette) var p
     @State private var message = ""
     var body: some View { Page {
-        InfoBanner(text: "These are in-app widget previews. Home Screen and Lock Screen installation requires a WidgetKit extension and App Group, which are not configured in this preview.")
-        Card { Text("PARTNER MESSAGE").font(.caption.bold()).foregroundStyle(p.primary); Text(store.db.widgetMessages[store.couple?.id ?? ""] ?? "A little closer, every day 💕").font(.title2.bold()); Text(store.me?.name ?? "You").font(.caption).foregroundStyle(.secondary) }
+        InfoBanner(text: tr("These are in-app widget previews. Home Screen and Lock Screen installation requires a WidgetKit extension and App Group, which are not configured in this preview."))
+        Card { Text("PARTNER MESSAGE").font(.caption.bold()).foregroundStyle(p.primary); Text(store.db.widgetMessages[store.couple?.id ?? ""] ?? tr("A little closer, every day 💕")).font(.title2.bold()); Text(store.me?.name ?? "You").font(.caption).foregroundStyle(.secondary) }
         Card { HStack { VStack(alignment: .leading) { Text("🔥 Daily flame").font(.headline); Text("\(store.streak.current) days").font(.largeTitle.bold()) }; Spacer(); if let event = store.nextEvent { VStack { Text("\(Day.distance(store.today, event.day))").font(.largeTitle.bold()); Text("days to go").font(.caption) } } } }
-        Card { Text("A note for your shared space").font(.headline); TextField("A little message (120 characters)", text: $message, axis: .vertical).lineLimit(2...4).textFieldStyle(.soft); PrimaryButton(title: "Save widget message") { store.perform { let c = try store.requireCouple(); guard message.count <= 120, !message.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { throw AppError(message: "Write a message of 1–120 characters.") }; store.db.widgetMessages[c.id] = message } } }
+        Card { Text("A note for your shared space").font(.headline); TextField("A little message (120 characters)", text: $message, axis: .vertical).lineLimit(2...4).textFieldStyle(.soft); PrimaryButton(title: tr("Save widget message")) { store.perform { let c = try store.requireCouple(); guard message.count <= 120, !message.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { throw AppError(message: "Write a message of 1–120 characters.") }; store.db.widgetMessages[c.id] = message } } }
         Card { RowLink(title: "Create a wallpaper", icon: "photo.artframe", detail: "Your names, your colors, your little world") { WallpaperView() } }
     }.navigationTitle("Widgets & wallpaper").navigationBarTitleDisplayMode(.inline).onAppear { message = store.db.widgetMessages[store.couple?.id ?? ""] ?? "" } }
 }
@@ -32,7 +32,7 @@ struct WallpaperView: View {
             Toggle("Show names", isOn: $names); Toggle("Show relationship date", isOn: $date)
             TextField("Quote (up to 80 characters)", text: $quote).textFieldStyle(.soft).onChange(of: quote) { _, value in if value.count > 80 { quote = String(value.prefix(80)) } }
         }
-        PrimaryButton(title: "Export wallpaper") { export() }
+        PrimaryButton(title: tr("Export wallpaper")) { export() }
         if let exported { ShareLink(item: exported) { Label("Share image", systemImage: "square.and.arrow.up") }; Button("Save to Photos") { saveToPhotos(exported) } }
         if !notice.isEmpty { InfoBanner(text: notice) }
         Text("After saving, choose the image in iOS Settings → Wallpaper. Apps cannot set your wallpaper directly.").font(.caption).foregroundStyle(.secondary)
@@ -50,6 +50,6 @@ struct WallpaperView: View {
             }
         }.foregroundStyle(style == "Minimal" ? p.text : .white).clipped()
     }
-    func export() { store.perform { let renderer = ImageRenderer(content: wallpaper.frame(width: 390, height: 844)); renderer.scale = 3; guard let image = renderer.uiImage, let data = image.pngData() else { throw AppError(message: "The wallpaper could not be rendered.") }; let url = FileManager.default.temporaryDirectory.appendingPathComponent("together-wallpaper.png"); try data.write(to: url); exported = url; notice = "Your wallpaper is ready to share or save." } }
-    func saveToPhotos(_ url: URL) { Task { guard await PermissionGate.shared.ask(.photos) else { return }; let permission = await PHPhotoLibrary.requestAuthorization(for: .addOnly); guard permission == .authorized || permission == .limited else { store.error = "Photo library access is disabled. Use Share image to save another way."; return }; do { try await PHPhotoLibrary.shared().performChanges { PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url) }; notice = "Saved to Photos. Choose it in Settings → Wallpaper." } catch { store.error = error.localizedDescription } } }
+    func export() { store.perform { let renderer = ImageRenderer(content: wallpaper.frame(width: 390, height: 844)); renderer.scale = 3; guard let image = renderer.uiImage, let data = image.pngData() else { throw AppError(message: "The wallpaper could not be rendered.") }; let url = FileManager.default.temporaryDirectory.appendingPathComponent("together-wallpaper.png"); try data.write(to: url); exported = url; notice = tr("Your wallpaper is ready to share or save.") } }
+    func saveToPhotos(_ url: URL) { Task { guard await PermissionGate.shared.ask(.photos) else { return }; let permission = await PHPhotoLibrary.requestAuthorization(for: .addOnly); guard permission == .authorized || permission == .limited else { store.error = tr("Photo library access is disabled. Use Share image to save another way."); return }; do { try await PHPhotoLibrary.shared().performChanges { PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url) }; notice = tr("Saved to Photos. Choose it in Settings → Wallpaper.") } catch { store.error = error.localizedDescription } } }
 }

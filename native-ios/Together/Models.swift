@@ -48,13 +48,18 @@ struct Product: Codable {
     var lifeGame: LifeContent
     var checkup: CheckupContent
     var truths: TruthsContent
-    static let shared: Product = {
-        guard let url = Bundle.main.url(forResource: "product", withExtension: "json"),
-              let data = try? Data(contentsOf: url), let product = try? JSONDecoder().decode(Product.self, from: data) else {
-            fatalError("The shared product.json resource is missing or invalid.")
-        }
-        return product
-    }()
+    /// Content in the app's current language (product.fr.json, …), falling back to English.
+    static var shared: Product {
+        let lang = AppLanguage.current
+        if let p = cache[lang] { return p }
+        let p = load("product.\(lang)") ?? load("product") ?? { fatalError("The shared product.json resource is missing or invalid.") }()
+        cache[lang] = p; return p
+    }
+    nonisolated(unsafe) private static var cache: [String: Product] = [:]
+    private static func load(_ name: String) -> Product? {
+        guard let url = Bundle.main.url(forResource: name, withExtension: "json"), let data = try? Data(contentsOf: url) else { return nil }
+        return try? JSONDecoder().decode(Product.self, from: data)
+    }
     func question(_ id: String) -> Question? { questions.first { $0.id == id } }
     func daily(_ day: String) -> Question {
         let pool = decks.first { $0.id == "deck_daily" }!.questionIds
@@ -96,6 +101,7 @@ struct Database: Codable {
     var checkups: [CheckupEntry]?
     var truths: [TruthsEntry]?
     var places: [Place]?
+    var repairs: [RepairEntry]?
 }
 enum Day {
     static func formatter(_ zone: String) -> DateFormatter { let f = DateFormatter(); f.locale = Locale(identifier: "en_US_POSIX"); f.calendar = Calendar(identifier: .gregorian); f.timeZone = TimeZone(identifier: zone) ?? .gmt; f.dateFormat = "yyyy-MM-dd"; return f }
@@ -122,4 +128,26 @@ extension Color {
 enum AppLanguage {
     static var device: String { Locale.preferredLanguages.first.map { Locale(identifier: $0).language.languageCode?.identifier ?? "en" } == "fr" ? "fr" : "en" }
     static func resolve(_ pref: String) -> String { pref == "auto" ? device : pref }
+    /// The language the app is showing right now. Set by RootView from the user's preference.
+    nonisolated(unsafe) static var current = device { didSet { bundle = Self.bundle(for: current) } }
+    nonisolated(unsafe) static var bundle = bundle(for: device)
+    static func bundle(for lang: String) -> Bundle {
+        Bundle.main.path(forResource: lang, ofType: "lproj").flatMap(Bundle.init(path:)) ?? .main
+    }
+}
+/// Translates text that isn't shown through a SwiftUI literal (errors, String parameters, interpolations).
+func tr(_ value: String.LocalizationValue) -> String { String(localized: value, bundle: AppLanguage.bundle) }
+/// Looks up an already-built English string (e.g. a `title: String` parameter).
+func tr(key: String) -> String { AppLanguage.bundle.localizedString(forKey: key, value: key, table: nil) }
+
+/// One partner's side of a "Mend the Heart" repair. Each person only ever edits their own entry.
+struct RepairEntry: Codable, Identifiable {
+    var id: String { "\(repair)_\(user)" }
+    var coupleID: String; var repair: String; var user: String
+    var starter = false; var topic = ""; var response = ""
+    var emotions: [String] = []; var story = ""; var listened = false
+    var reformulation = ""; var approved = ""; var clarify = ""
+    var need = ""; var proposal = ""; var agreed = ""; var gesture = ""
+    var paused = false; var followUp = ""; var followNote = ""
+    var created = Date(); var updated = Date()
 }

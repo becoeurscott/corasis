@@ -8,34 +8,35 @@ struct ActivitiesView: View {
     var filtered: [Deck] { Product.shared.decks.filter { (category.isEmpty || $0.category == category) && (search.isEmpty || ($0.title + $0.description).localizedCaseInsensitiveContains(search)) } }
     var body: some View { Page {
         LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)], spacing: 12) {
+            NavigationLink { RepairHomeView() } label: { TogetherTile(emoji: "❤️‍🩹", title: "Mend the Heart", subtitle: store.repairWaiting > 0 ? "\(store.repairWaiting) waiting for you" : "Work through a hurt", colors: ["#FF9A8B", "#D6336C"], badge: store.repairWaiting > 0 ? "NEW" : nil) }
             NavigationLink { MessagesView() } label: { TogetherTile(emoji: "💌", title: "Messages", subtitle: "Kisses, notes, voice", colors: ["#F7A8C4", "#C2477A"]) }
             NavigationLink { GamesView() } label: { TogetherTile(emoji: "🎮", title: "Games for two", subtitle: "Play together", colors: ["#3A2B45", "#15101A"], badge: "NEW") }
             NavigationLink { ProximityAlertView() } label: { TogetherTile(emoji: "🔔", title: "Proximity alert", subtitle: Proximity.enabled ? "On" : "Know when you're close", colors: ["#D6A8FF", "#8B5CF6"]) }
             NavigationLink { PlaceAlertsView() } label: { TogetherTile(emoji: "📍", title: "Place alerts", subtitle: "Arrive and leave", colors: ["#8FD3FF", "#4C6FE0"]) }
         }
         NavigationLink { DailyQuestionView() } label: { Card { Text("DAILY QUESTION").font(.caption.bold()).foregroundStyle(.tint); Text(Product.shared.daily(store.today).text).font(.title3.bold()); Text("Answer separately. Reveal together.").font(.caption).foregroundStyle(.secondary) } }.buttonStyle(.smooth)
-        HStack { SectionHeading(title: "Conversation decks"); Spacer(); NavigationLink("History") { ActivityHistoryView() } }
+        HStack { SectionHeading(title: tr("Conversation decks")); Spacer(); NavigationLink("History") { ActivityHistoryView() } }
         TextField("Search decks", text: $search).textFieldStyle(.soft)
         ScrollView(.horizontal, showsIndicators: false) { HStack { categoryButton("", label: "All"); ForEach(Product.shared.categoryMeta.keys.sorted(), id: \.self) { key in let c = Product.shared.categoryMeta[key]!; categoryButton(key, label: "\(c.emoji) \(c.label)") } } }
         ForEach(filtered) { deck in NavigationLink { DeckView(deck: deck) } label: { Card { HStack(spacing: 14) { Text(deck.emoji).font(.largeTitle); VStack(alignment: .leading, spacing: 5) { Text(deck.title).font(.headline); Text(deck.description).font(.subheadline).foregroundStyle(.secondary); Text("\(deck.questionIds.count) prompts\(deck.premium ? " · Plus" : "")").font(.caption).foregroundStyle(.tint) }; Spacer() } } }.buttonStyle(.smooth) }
         if filtered.isEmpty { ContentUnavailableView.search(text: search) }
         NavigationLink("Favorite questions") { FavoriteQuestionsView() }
     }.navigationTitle("Together") }
-    func categoryButton(_ value: String, label: String) -> some View { Button(label) { category = value }.buttonStyle(.bordered).tint(category == value ? p.primary : .secondary) }
+    func categoryButton(_ value: String, label: LocalizedStringKey) -> some View { Button(label) { category = value }.buttonStyle(.bordered).tint(category == value ? p.primary : .secondary) }
 }
 struct DeckView: View {
     @EnvironmentObject var store: Store
     var deck: Deck
     @State private var session: String?
     var body: some View { Page { Text(deck.emoji).font(.system(size: 60)); Text(deck.description).font(.title3).foregroundStyle(.secondary)
-        if deck.premium && !store.db.prefs.premium { InfoBanner(text: "Enable the Together Plus demo switch in Profile to try this deck. There is no purchase or subscription.") }
+        if deck.premium && !store.db.prefs.premium { InfoBanner(text: tr("This deck is part of Together Plus. Subscribe from Profile → Together Plus.")) }
         ForEach(deck.questionIds, id: \.self) { id in if let q = Product.shared.question(id) { Card { Text(q.text).font(.headline); HStack { Button("Answer together") { store.perform { session = try store.startActivity(question: q, deck: deck) } }; Spacer(); Button { store.favoriteQuestion(id) } label: { Image(systemName: (store.db.favorites[store.db.currentUser ?? ""] ?? []).contains(id) ? "heart.fill" : "heart") }.accessibilityLabel("Favorite question") } } } }
     }.navigationTitle(deck.title).navigationBarTitleDisplayMode(.inline).navigationDestination(item: $session) { SessionView(id: $0) } }
 }
 struct DailyQuestionView: View {
     @EnvironmentObject var store: Store
     @State private var session: String?
-    var body: some View { Group { if let session { SessionView(id: session) } else { Page { Text(Product.shared.daily(store.today).text).font(.title.bold()); Text("Both answers stay hidden until you each submit.").foregroundStyle(.secondary); PrimaryButton(title: "Start today's question") { start() } } } }.navigationTitle("Daily question").navigationBarTitleDisplayMode(.inline).onAppear { if store.partner != nil { start() } } }
+    var body: some View { Group { if let session { SessionView(id: session) } else { Page { Text(Product.shared.daily(store.today).text).font(.title.bold()); Text("Both answers stay hidden until you each submit.").foregroundStyle(.secondary); PrimaryButton(title: tr("Start today's question")) { start() } } } }.navigationTitle("Daily question").navigationBarTitleDisplayMode(.inline).onAppear { if store.partner != nil { start() } } }
     func start() { store.perform { session = try store.startActivity(question: Product.shared.daily(store.today), deck: Product.shared.decks.first { $0.id == "deck_daily" }!, daily: true) } }
 }
 struct SessionView: View {
@@ -52,11 +53,11 @@ struct SessionView: View {
     var body: some View { Page {
         if let activity, let q = question {
             Text(q.text).font(.system(size: 28, weight: .bold, design: .rounded))
-            if q.aboutPartner == true { InfoBanner(text: "Guess your partner’s answer. Quiz scores are just for fun.") }
+            if q.aboutPartner == true { InfoBanner(text: tr("Guess your partner’s answer. Quiz scores are just for fun.")) }
             if activity.revealed(members: store.couple?.members ?? []) {
-                InfoBanner(text: "Both answers are in. Your answers are now locked.", icon: "lock.open")
+                InfoBanner(text: tr("Both answers are in. Your answers are now locked."), icon: "lock.open")
                 ForEach(activity.visibleAnswers(viewer: store.db.currentUser ?? "", members: store.couple?.members ?? []), id: \.userID) { submission in Card {
-                    Text(store.db.people.first { $0.id == submission.userID }.map { $0.name + ($0.simulated ? " · simulated" : "") } ?? "Partner").font(.headline)
+                    Text(store.db.people.first { $0.id == submission.userID }.map { $0.name + ($0.simulated ? tr(" · simulated") : "") } ?? "Partner").font(.headline)
                     if submission.skipped { Text("Skipped this question").foregroundStyle(.secondary) }
                     else if submission.text.hasPrefix("media:"), let media = decodeMedia(submission.text) { MediaPreview(media: media) }
                     else { Text(submission.text).font(.title3) }
@@ -66,14 +67,14 @@ struct SessionView: View {
                 HStack { ForEach(["❤️", "🥰", "😂", "✨"], id: \.self) { emoji in Button(emoji) { store.reactActivity(id, emoji: emoji) }.font(.title).padding(8) } }
                 if !activity.reactions.isEmpty { Text(activity.reactions.values.sorted().joined(separator: " ")).font(.title) }
             } else if ownAnswer != nil {
-                Card { Image(systemName: "lock.fill").font(.largeTitle).foregroundStyle(.tint); Text("Waiting for \(store.partner?.name ?? "your partner")").font(.title2.bold()); Text("Your answer is saved. Their answer stays hidden until you have both submitted.").foregroundStyle(.secondary); Text(ownAnswer?.skipped == true ? "You skipped this question" : ownAnswer?.text.hasPrefix("media:") == true ? "Photo answer saved" : ownAnswer?.text ?? "").font(.subheadline) }
+                Card { Image(systemName: "lock.fill").font(.largeTitle).foregroundStyle(.tint); Text("Waiting for \(store.partner?.name ?? "your partner")").font(.title2.bold()); Text("Your answer is saved. Their answer stays hidden until you have both submitted.").foregroundStyle(.secondary); Text(ownAnswer?.skipped == true ? tr("You skipped this question") : ownAnswer?.text.hasPrefix("media:") == true ? tr("Photo answer saved") : ownAnswer?.text ?? "").font(.subheadline) }
             } else {
                 Card {
                     if q.type == "photo_challenge" { MediaChooser(media: $photo) }
                     else if let options = q.options { ForEach(options, id: \.self) { option in Button { answer = option } label: { HStack { Text(option); Spacer(); Image(systemName: answer == option ? "checkmark.circle.fill" : "circle") }.padding(12) }.buttonStyle(.bordered) } }
                     else { TextField("Your answer", text: $answer, axis: .vertical).lineLimit(4...12).textFieldStyle(.soft) }
                     TextField("A little context (optional)", text: $comment, axis: .vertical).textFieldStyle(.soft)
-                    PrimaryButton(title: "Submit & wait for reveal") { store.perform { var text = answer; if q.type == "photo_challenge" { guard let photo else { throw AppError(message: "Choose a photo or video first.") }; text = "media:" + String(data: try JSONEncoder().encode(photo), encoding: .utf8)! }; try store.submit(id, text: text, comment: comment) } }
+                    PrimaryButton(title: tr("Submit & wait for reveal")) { store.perform { var text = answer; if q.type == "photo_challenge" { guard let photo else { throw AppError(message: "Choose a photo or video first.") }; text = "media:" + String(data: try JSONEncoder().encode(photo), encoding: .utf8)! }; try store.submit(id, text: text, comment: comment) } }
                     Button("Skip this question") { store.perform { try store.submit(id, text: "", skipped: true) } }
                 }
             }
@@ -88,7 +89,7 @@ struct SessionView: View {
 }
 struct ActivityHistoryView: View {
     @EnvironmentObject var store: Store
-    var body: some View { Page { if store.activities.isEmpty { ContentUnavailableView("Your conversations live here", systemImage: "bubble.left.and.bubble.right", description: Text("Start a question together to see it here.")) }; ForEach(store.activities) { a in NavigationLink { SessionView(id: a.id) } label: { Card { Text(Product.shared.question(a.questionID)?.text ?? "Question").font(.headline); Text(a.revealed(members: store.couple?.members ?? []) ? "Revealed" : a.answers.isEmpty ? "In progress" : "Waiting for both answers").font(.caption).foregroundStyle(.secondary) } }.buttonStyle(.smooth) } }.navigationTitle("Activity history") }
+    var body: some View { Page { if store.activities.isEmpty { ContentUnavailableView("Your conversations live here", systemImage: "bubble.left.and.bubble.right", description: Text("Start a question together to see it here.")) }; ForEach(store.activities) { a in NavigationLink { SessionView(id: a.id) } label: { Card { Text(Product.shared.question(a.questionID)?.text ?? tr("Question")).font(.headline); Text(a.revealed(members: store.couple?.members ?? []) ? "Revealed" : a.answers.isEmpty ? "In progress" : "Waiting for both answers").font(.caption).foregroundStyle(.secondary) } }.buttonStyle(.smooth) } }.navigationTitle("Activity history") }
 }
 struct FavoriteQuestionsView: View {
     @EnvironmentObject var store: Store
@@ -106,7 +107,7 @@ struct GamesView: View {
     @State private var notice: String?
     var tags: [String] { var seen: [String] = []; for tag in Product.shared.games.flatMap(\.tags) where !seen.contains(tag) { seen.append(tag) }; return seen }
     var filtered: [Game] { Product.shared.games.filter { game in (selected.isEmpty || !selected.isDisjoint(with: game.tags)) && (search.isEmpty || (game.title + " " + game.tagline + " " + game.tags.joined(separator: " ")).localizedCaseInsensitiveContains(search)) } }
-    var partnerName: String { store.partner?.name ?? "your partner" }
+    var partnerName: String { store.partner?.name ?? tr("your partner") }
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
@@ -177,9 +178,9 @@ struct GamesView: View {
             if filtered.isEmpty { Text("No games match that search.").foregroundStyle(p.color("textMuted")).frame(maxWidth: .infinity) }
             Text("Scoreboard").font(.headline)
             HStack {
-                scorePlayer(store.me, name: store.me?.name ?? "You", ring: Product.shared.games.first?.colors.last ?? "#E0306A", note: "0 wins")
+                scorePlayer(store.me, name: store.me?.name ?? "You", ring: Product.shared.games.first?.colors.last ?? "#E0306A", note: tr("0 wins"))
                 Text("vs").font(.title.bold()).foregroundStyle(p.color("textMuted"))
-                scorePlayer(store.partner, name: store.partner?.name ?? "Partner", ring: Product.shared.games.last?.colors.last ?? "#4A39D6", note: store.partner?.simulated == true ? "Simulated · 0 wins" : "0 wins")
+                scorePlayer(store.partner, name: store.partner?.name ?? "Partner", ring: Product.shared.games.last?.colors.last ?? "#4A39D6", note: store.partner?.simulated == true ? tr("Simulated · 0 wins") : tr("0 wins"))
             }.padding(16).background(p.color("backgroundAlt"), in: RoundedRectangle(cornerRadius: 22))
         }
         .padding(20).padding(.top, 4).padding(.bottom, 24)
@@ -192,28 +193,28 @@ struct GamesView: View {
     }
     func lifeStatus(_ life: LifeGame) -> String {
         let me = store.db.currentUser ?? ""
-        if life.status == "proposed" { return life.proposedBy == me ? "Waiting for \(partnerName) to say yes" : "\(partnerName) wants a baby with you 💞" }
-        if let v = life.votes.first(where: { !$0.decided }), v.picks[me] == nil { return "Your vote: \(Life.choice(v.choice).title.lowercased())" }
-        if life.status == "naming" { return "Waiting for \(partnerName) to pick a name" }
+        if life.status == "proposed" { return life.proposedBy == me ? tr("Waiting for \(partnerName) to say yes") : tr("\(partnerName) wants a baby with you 💞") }
+        if let v = life.votes.first(where: { !$0.decided }), v.picks[me] == nil { return tr("Your vote: \(Life.choice(v.choice).title.lowercased())") }
+        if life.status == "naming" { return tr("Waiting for \(partnerName) to pick a name") }
         let mood = Life.mood(Life.decayed(life, at: Life.now(life)))
-        return mood == "happy" ? "Happy and growing" : mood == "sad" ? "Needs you now: needs are low" : "Needs care: \(mood)"
+        return mood == "happy" ? tr("Happy and growing") : mood == "sad" ? tr("Needs you now: needs are low") : tr("Needs care: \(mood)")
     }
     func gradient(_ game: Game) -> LinearGradient { LinearGradient(colors: game.colors.map { Color(hex: $0) }, startPoint: .topLeading, endPoint: .bottomTrailing) }
     @State private var openLife = false
     @State private var openCheckup = false
     @State private var openTruths = false
-    func open(_ game: Game) { if game.status == "coming_soon" { notice = "\(game.title) is coming soon" } else if game.id == "our_little_one" { openLife = true } else if game.id == "marriage_checkup" { openCheckup = true } else if game.id == "five_truths" { openTruths = true } }
+    func open(_ game: Game) { if game.status == "coming_soon" { notice = tr("\(game.title) is coming soon") } else if game.id == "our_little_one" { openLife = true } else if game.id == "marriage_checkup" { openCheckup = true } else if game.id == "five_truths" { openTruths = true } }
 }
 
 /// A square shortcut in the Together tab grid.
 struct TogetherTile: View {
-    var emoji: String; var title: String; var subtitle: String; var colors: [String]; var badge: String? = nil
+    var emoji: String; var title: LocalizedStringKey; var subtitle: LocalizedStringKey; var colors: [String]; var badge: String? = nil
     var body: some View {
         ZStack(alignment: .topLeading) {
             LinearGradient(colors: colors.map { Color(hex: $0) }, startPoint: .topLeading, endPoint: .bottomTrailing)
             Text(emoji).font(.system(size: 64)).opacity(0.3).rotationEffect(.degrees(-12)).frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing).offset(x: 10, y: 8).accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 4) {
-                HStack { Text(emoji).font(.title2); Spacer(); if let badge { Text(badge).font(.caption2.bold()).padding(.horizontal, 7).padding(.vertical, 3).background(.white.opacity(0.25), in: Capsule()) } }
+                HStack { Text(emoji).font(.title2); Spacer(); if let badge { Text(LocalizedStringKey(badge)).font(.caption2.bold()).padding(.horizontal, 7).padding(.vertical, 3).background(.white.opacity(0.25), in: Capsule()) } }
                 Spacer()
                 Text(title).font(.headline).lineLimit(1).minimumScaleFactor(0.8)
                 Text(subtitle).font(.caption).opacity(0.85).lineLimit(1)

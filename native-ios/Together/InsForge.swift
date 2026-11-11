@@ -37,7 +37,7 @@ actor InsForge {
         let status = (response as? HTTPURLResponse)?.statusCode ?? 0
         guard (200..<300).contains(status) else {
             let message = (try? JSONDecoder().decode(ErrorBody.self, from: data))?.message
-            throw AppError(message: message ?? "The server returned an error (\(status)).")
+            throw message.map { AppError(raw: $0) } ?? AppError(message: "The server returned an error (\(status)).")
         }
         return data
     }

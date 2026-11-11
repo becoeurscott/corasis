@@ -44,7 +44,7 @@ struct CheckupGameView: View {
     enum Phase { case intro, rating, guessing }
 
     var me: String { store.db.currentUser ?? "" }
-    var partnerName: String { store.partner?.name ?? "your spouse" }
+    var partnerName: String { store.partner?.name ?? tr("your spouse") }
     var round: [CheckupEntry] { store.checkupEntries(round: store.checkupRound) }
     var mine: CheckupEntry? { round.first { $0.user == me } }
     var theirs: CheckupEntry? { round.first { $0.user != me } }
@@ -86,11 +86,11 @@ struct CheckupGameView: View {
                 rule("3", "When you've both finished, reveal together: your scores, where you agree, and what to talk about.")
             }
             InfoBanner(text: content.disclaimer, icon: "heart.text.square")
-            PrimaryButton(title: "Start") { ratings = Array(repeating: 0, count: content.items.count); index = 0; withAnimation { phase = .rating } }
+            PrimaryButton(title: tr("Start")) { ratings = Array(repeating: 0, count: content.items.count); index = 0; withAnimation { phase = .rating } }
             history
         }
     }
-    func rule(_ n: String, _ text: String) -> some View {
+    func rule(_ n: String, _ text: LocalizedStringKey) -> some View {
         HStack(alignment: .top, spacing: 12) { Text(n).font(.headline).frame(width: 30, height: 30).background(p.soft, in: Circle()).foregroundStyle(p.primary); Text(text).font(.subheadline) }
     }
     var monthTitle: String {
@@ -160,7 +160,7 @@ struct CheckupGameView: View {
             Text("How happy do you think \(partnerName) is with your marriage this month, out of 100?").multilineTextAlignment(.center).foregroundStyle(p.secondary).frame(maxWidth: .infinity)
             Text(verbatim: "\(Int(guess))%").font(.system(size: 64, weight: .heavy, design: .rounded)).foregroundStyle(p.primary).frame(maxWidth: .infinity).contentTransition(.numericText())
             Slider(value: $guess, in: 0...100, step: 1).tint(p.primary)
-            PrimaryButton(title: "Lock in my answers") {
+            PrimaryButton(title: tr("Lock in my answers")) {
                 if let gap = ratings.firstIndex(of: 0) { withAnimation { index = gap; phase = .rating }; return }
                 do { try store.submitCheckup(ratings: ratings, guess: Int(guess)); UINotificationFeedbackGenerator().notificationOccurred(.success) } catch { self.error = (error as? AppError)?.message ?? error.localizedDescription }
             }
@@ -181,7 +181,7 @@ struct CheckupGameView: View {
     @ViewBuilder var history: some View {
         let past = Dictionary(grouping: store.checkupEntries().filter { $0.round != store.checkupRound }, by: \.round).filter { $0.value.count == 2 }.sorted { $0.key > $1.key }
         if !past.isEmpty {
-            SectionHeading(title: "Past months")
+            SectionHeading(title: tr("Past months"))
             Card {
                 ForEach(past, id: \.key) { round, entries in
                     let avg = entries.map(\.score).reduce(0, +) / 2
@@ -212,7 +212,7 @@ struct CheckupReveal: View {
             ZStack {
                 LinearGradient(colors: [Color(hex: "#F7A8C4"), Color(hex: "#C2477A")], startPoint: .topLeading, endPoint: .bottomTrailing)
                 VStack(spacing: 14) {
-                    HStack(spacing: 28) { scoreBubble(store.me, mine.score, "You"); scoreBubble(store.partner, theirs.score, partnerName) }
+                    HStack(spacing: 28) { scoreBubble(store.me, mine.score, "You"); scoreBubble(store.partner, theirs.score, "\(partnerName)") }
                     Text(verbatim: "\(shown ? average : 0)%").font(.system(size: 64, weight: .heavy, design: .rounded)).fixedSize().scaleEffect(shown ? 1 : 0.6).contentTransition(.numericText())
                     Text(content.band(average).title).font(.title3.bold())
                     Text(content.band(average).text).font(.subheadline).multilineTextAlignment(.center).opacity(0.9)
@@ -225,8 +225,8 @@ struct CheckupReveal: View {
             }
             Card {
                 Text("🔮 Guesses").font(.headline)
-                Text(verbatim: "You guessed \(mine.guess)%, \(partnerName) gave \(theirs.score)%.").font(.subheadline)
-                Text(verbatim: "\(partnerName) guessed \(theirs.guess)%, you gave \(mine.score)%.").font(.subheadline)
+                Text(verbatim: tr("You guessed \(mine.guess)%, \(partnerName) gave \(theirs.score)%.")).font(.subheadline)
+                Text(verbatim: tr("\(partnerName) guessed \(theirs.guess)%, you gave \(mine.score)%.")).font(.subheadline)
             }
             if !strengths.isEmpty { list("💪 Going great", strengths) }
             if !talkAbout.isEmpty { list("💬 Worth talking about", talkAbout) }
@@ -236,14 +236,14 @@ struct CheckupReveal: View {
         }
         .onAppear { withAnimation(.easeOut(duration: 1.2).delay(0.2)) { shown = true } }
     }
-    func scoreBubble(_ person: Person?, _ score: Int, _ label: String) -> some View {
+    func scoreBubble(_ person: Person?, _ score: Int, _ label: LocalizedStringKey) -> some View {
         VStack(spacing: 6) { if let person { Avatar(person: person, size: 52).overlay(Circle().stroke(.white, lineWidth: 2)) }; Text(verbatim: "\(shown ? score : 0)%").font(.headline).contentTransition(.numericText()); Text(label).font(.caption).opacity(0.85).lineLimit(1) }
     }
-    func stat(_ value: String, _ label: String) -> some View {
+    func stat(_ value: String, _ label: LocalizedStringKey) -> some View {
         VStack(spacing: 4) { Text(value).font(.title3.bold()).foregroundStyle(p.primary); Text(label).font(.caption).foregroundStyle(p.secondary).lineLimit(1).minimumScaleFactor(0.8) }
             .frame(maxWidth: .infinity).padding(.vertical, 14).background(p.surface, in: RoundedRectangle(cornerRadius: 18))
     }
-    func list(_ title: String, _ rows: [(item: CheckupItem, me: Int, them: Int)]) -> some View {
+    func list(_ title: LocalizedStringKey, _ rows: [(item: CheckupItem, me: Int, them: Int)]) -> some View {
         Card {
             Text(title).font(.headline)
             ForEach(rows, id: \.item.id) { row in

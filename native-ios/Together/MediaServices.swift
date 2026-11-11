@@ -92,11 +92,11 @@ struct CameraCapture: UIViewControllerRepresentable {
     private let manager = CLLocationManager()
     weak var store: Store?
     override init() { super.init(); manager.delegate = self; manager.desiredAccuracy = kCLLocationAccuracyKilometer }
-    func request(store: Store) { self.store = store; if manager.authorizationStatus == .notDetermined { Task { if await PermissionGate.shared.ask(.location) { manager.requestWhenInUseAuthorization() } } } else if manager.authorizationStatus == .authorizedWhenInUse || manager.authorizationStatus == .authorizedAlways { manager.requestLocation() } else { store.setSharing(location: false); store.error = "Location permission is off. You can enable it in iOS Settings." } }
+    func request(store: Store) { self.store = store; if manager.authorizationStatus == .notDetermined { Task { if await PermissionGate.shared.ask(.location) { manager.requestWhenInUseAuthorization() } } } else if manager.authorizationStatus == .authorizedWhenInUse || manager.authorizationStatus == .authorizedAlways { manager.requestLocation() } else { store.setSharing(location: false); store.error = tr("Location permission is off. You can enable it in iOS Settings.") } }
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) { if manager.authorizationStatus == .authorizedWhenInUse || manager.authorizationStatus == .authorizedAlways { manager.requestLocation() } else if manager.authorizationStatus == .denied || manager.authorizationStatus == .restricted { store?.setSharing(location: false) } }
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) { guard let store, let id = store.db.currentUser, store.db.sharing[id]?.location == true, let location = locations.last else { return }; store.db.sharing[id]?.latitude = location.coordinate.latitude; store.db.sharing[id]?.longitude = location.coordinate.longitude; store.db.sharing[id]?.updated = location.timestamp
         CLGeocoder().reverseGeocodeLocation(location) { [weak store] places, _ in Task { @MainActor in guard let store, let place = places?.first, store.db.sharing[id]?.location == true else { return }; store.db.sharing[id]?.country = place.country; store.db.sharing[id]?.countryCode = place.isoCountryCode } } }
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) { store?.error = "Could not get your current location: \(error.localizedDescription)" }
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) { store?.error = tr("Could not get your current location: \(error.localizedDescription)") }
 }
 enum Reminders {
     static func update(prefs: Preferences) async throws {
@@ -112,7 +112,7 @@ enum Reminders {
         let start = minute(prefs.quietStart), end = minute(prefs.quietEnd)
         let quiet = start == end ? false : start < end ? minutes >= start && minutes < end : minutes >= start || minutes < end
         guard !quiet else { return }
-        let content = UNMutableNotificationContent(); content.title = "A little closer, every day"; content.body = "Share your daily moment in Together."; if prefs.sound { content.sound = .default }
+        let content = UNMutableNotificationContent(); content.title = tr("A little closer, every day"); content.body = tr("Share your daily moment in Together."); if prefs.sound { content.sound = .default }
         let trigger = UNCalendarNotificationTrigger(dateMatching: DateComponents(hour: parts[0], minute: parts[1]), repeats: true)
         try await center.add(UNNotificationRequest(identifier: "together-daily", content: content, trigger: trigger))
     }
@@ -124,7 +124,7 @@ extension Reminders {
         guard prefs.notifications && prefs.meetingAlerts && event.reminderDays >= 0 else { return }
         guard await PermissionGate.shared.ask(.notifications) else { return }
         guard try await center.requestAuthorization(options: [.alert, .sound]) else { throw AppError(message: "Notification permission is off.") }
-        let content = UNMutableNotificationContent(); content.title = event.title; content.body = event.destination.isEmpty ? "A little time together is coming." : event.destination; if prefs.sound { content.sound = .default }
+        let content = UNMutableNotificationContent(); content.title = event.title; content.body = event.destination.isEmpty ? tr("A little time together is coming.") : event.destination; if prefs.sound { content.sound = .default }
         let day = Day.add(event.day, -event.reminderDays); let parts = (event.allDay ? prefs.reminderTime : event.time).split(separator: ":").compactMap { Int($0) }
         var calendar = Calendar(identifier: .gregorian); calendar.timeZone = TimeZone(identifier: zone) ?? .gmt
         var components = calendar.dateComponents([.year, .month, .day], from: Day.date(day, zone: zone)); components.timeZone = calendar.timeZone; components.hour = parts.first ?? 9; components.minute = parts.last ?? 0

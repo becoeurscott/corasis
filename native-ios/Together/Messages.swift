@@ -110,14 +110,14 @@ struct MessagesView: View {
     @State private var text = ""
     @State private var voice: Media?
 
-    private var partnerName: String { store.partner?.name ?? "Partner" }
+    private var partnerName: String { store.partner?.name ?? tr("Partner") }
 
     var body: some View {
         ScrollViewReader { proxy in
             ScrollView {
                 LazyVStack(spacing: 0) {
                     if store.partner?.simulated == true {
-                        InfoBanner(text: "Alex is simulated. No message reaches a real person.")
+                        InfoBanner(text: tr("Alex is simulated. No message reaches a real person."))
                             .padding(.horizontal, 16).padding(.top, 8)
                     }
                     if store.messages.isEmpty {
@@ -156,7 +156,7 @@ struct MessagesView: View {
             }
         }
         .safeAreaInset(edge: .bottom) { inputBar }
-        .navigationTitle(partnerName + (store.partner?.simulated == true ? " · simulated" : ""))
+        .navigationTitle(partnerName + (store.partner?.simulated == true ? tr(" · simulated") : ""))
         .navigationBarTitleDisplayMode(.inline)
         .onDisappear { if recorder.recording { recorder.cancel() } }
     }

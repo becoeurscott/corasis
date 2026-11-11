@@ -10,6 +10,7 @@
 		05E71DB9C4B7465D3421CE8B /* Permissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE0ADA21D93860BFB1BE1DD3 /* Permissions.swift */; };
 		07EE2F974C0D5D2EAD74F2B5 /* product.json in Resources */ = {isa = PBXBuildFile; fileRef = 654BA9BCD9E11F334B88664C /* product.json */; };
 		091843D13A0F1329736D8186 /* Activities.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD87675C1987608A07C5BB21 /* Activities.swift */; };
+		0CC69A4EBB2C9078EF8E8804 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 2608F3F8EB6FF8FF6747CC2A /* InfoPlist.xcstrings */; };
 		0DE704B8C4D4951219A4768E /* bubble.wav in Resources */ = {isa = PBXBuildFile; fileRef = C76194405955AFEBFCFBA584 /* bubble.wav */; };
 		0E37FBABFF1D9AE758B402AB /* InsForge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28973FB019367B16765F4D95 /* InsForge.swift */; };
 		0E99168DD88437C80D0EB117 /* hover.wav in Resources */ = {isa = PBXBuildFile; fileRef = B068E14A1AC9360E8B06B6DE /* hover.wav */; };
@@ -18,6 +19,7 @@
 		157AC8741BA02734D60316FE /* Truths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2C85614F88013E5AF4C40E /* Truths.swift */; };
 		19E7EA653228462FFB84D1C6 /* fanfare.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8FC09C427814CD219B08C17 /* fanfare.wav */; };
 		1C852ABA5AF60B66DD42EACB /* giggle2.wav in Resources */ = {isa = PBXBuildFile; fileRef = C48447A153900AA320A5E7E9 /* giggle2.wav */; };
+		2F13414EC2B6568442C6B8E4 /* product.fr.json in Resources */ = {isa = PBXBuildFile; fileRef = B7C806A2596D158CB685153B /* product.fr.json */; };
 		36FF1BA1BEDE4610EF4B272C /* pop.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6A8F0690E183F7D82E059BB9 /* pop.wav */; };
 		39F54DEADF3C81D7EA3FAB20 /* music_day.wav in Resources */ = {isa = PBXBuildFile; fileRef = E367E54B32C0850004A99BD9 /* music_day.wav */; };
 		3D4E654071095CBB74A1F1CF /* TogetherWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB8F05A5146883222BD996B6 /* TogetherWidgetBundle.swift */; };
@@ -31,8 +33,10 @@
 		5C1EE7D604534AEC1B007161 /* Calendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F31C83652FA2A8DC11F21AE /* Calendar.swift */; };
 		5DB0DF638C0909325A169843 /* ComboWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7063802779F37D44A248BF6A /* ComboWidget.swift */; };
 		5E3CEBC2697D2DDD6BE17DB5 /* splash.wav in Resources */ = {isa = PBXBuildFile; fileRef = 63A9308B31CFDC9661DEE1F5 /* splash.wav */; };
+		611B2C8D31BE94FFA8A6E515 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = E2DC7269D00BFD2530A31392 /* Localizable.xcstrings */; };
 		646D622370D621B98C3381A0 /* pickup.wav in Resources */ = {isa = PBXBuildFile; fileRef = E3BDF324C5CF97B426840FAB /* pickup.wav */; };
 		6C0F43267C72760A40F7FD79 /* LifeGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F12120B21DE5A191D14C210 /* LifeGame.swift */; };
+		6E498B045287EAD8A01CA991 /* Plus.storekit in Resources */ = {isa = PBXBuildFile; fileRef = EFCAB574CB2D10603A7F7EE7 /* Plus.storekit */; };
 		704D07530EED45A4A025EC0C /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = AC794FCE5E67CFA6DA09FD33 /* click.wav */; };
 		74127963209A4AB9694F2906 /* FlameCelebration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9CDC935B84833155DC32D3B /* FlameCelebration.swift */; };
 		75FF4F0F821F1C346D325877 /* LifeSound.swift in Sources */ = {isa = PBXBuildFile; fileRef = F53224176484FE008B0FDE5B /* LifeSound.swift */; };
@@ -47,11 +51,15 @@
 		A6420F813613AE7CA5ADC11A /* FlameWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4822BB2D14FDD19ADB361DAB /* FlameWidget.swift */; };
 		A8AE084B0F9266336555A60A /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7928BE4AB6C447BF25530BBC /* Onboarding.swift */; };
 		B23BF69CDC1FDDE2A8AA744F /* TogetherWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 5436A348FA2D61C16B9CEEF7 /* TogetherWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		B4A0F7C83A4EA708C12287EB /* Repair.swift in Sources */ = {isa = PBXBuildFile; fileRef = B74BF7835D4943002003CC00 /* Repair.swift */; };
 		B9541B1DF9D909A1BF1BF616 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A4A36B24EDD62276A977B0 /* Home.swift */; };
+		B9D340903FB4D3D3DD098B02 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 213BA94C57CFA21AFB71877A /* InfoPlist.xcstrings */; };
 		C1DB3ABD1CBDE59B913EE3EF /* ding.wav in Resources */ = {isa = PBXBuildFile; fileRef = A5988B5FA1FC7EEA3147EE3E /* ding.wav */; };
 		D285D0A80A791F281B2C2323 /* Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F2F52E4608803CC9152FAC /* Messages.swift */; };
 		D38643A31A71B66C9718C4E7 /* TogetherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435566A993641D136F1205B7 /* TogetherTests.swift */; };
+		D66AB2A530BFFA0F5D9E0A62 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 4599593EBEF83A779A6772C8 /* Localizable.xcstrings */; };
 		DC68CB396285A6F258B6B684 /* Widgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B8C27B45B0B76C4B84DA928 /* Widgets.swift */; };
+		DF176A5750DA7C69846900B6 /* Purchases.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9C2F4E65E5E4148290FAFC /* Purchases.swift */; };
 		DF5297F6C2FA8395550B4856 /* WidgetData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEAC9DFD644806607EED9F6 /* WidgetData.swift */; };
 		E292052FBEACC426743E7563 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9777331EC3F7C949EA5850 /* Settings.swift */; };
 		E7ACF03A6B51DC788CBA7E60 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = B451E9736AA39AF88B256125 /* Store.swift */; };
@@ -96,8 +104,10 @@
 		00664D2FDEEFB578E8004E14 /* TogetherTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TogetherTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CCE482EBC32981CF24316C2 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		13ECDD93D16F7DA16CC5EB3B /* Places.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Places.swift; sourceTree = "<group>"; };
+		213BA94C57CFA21AFB71877A /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		22661BB3D7FF40F6B3CE517F /* Motion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Motion.swift; sourceTree = "<group>"; };
 		228D2D38CE12A0DBB8778E97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		2608F3F8EB6FF8FF6747CC2A /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		28973FB019367B16765F4D95 /* InsForge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsForge.swift; sourceTree = "<group>"; };
 		2B2C85614F88013E5AF4C40E /* Truths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Truths.swift; sourceTree = "<group>"; };
 		2EC506522BF73D81C85086ED /* MediaServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaServices.swift; sourceTree = "<group>"; };
@@ -106,6 +116,7 @@
 		3C5641FF3BA1E33FB7F7CE4D /* TogetherApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TogetherApp.swift; sourceTree = "<group>"; };
 		3F31C83652FA2A8DC11F21AE /* Calendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calendar.swift; sourceTree = "<group>"; };
 		435566A993641D136F1205B7 /* TogetherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TogetherTests.swift; sourceTree = "<group>"; };
+		4599593EBEF83A779A6772C8 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		4822BB2D14FDD19ADB361DAB /* FlameWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlameWidget.swift; sourceTree = "<group>"; };
 		4BB3BCF7EE456FD4C57E470F /* TogetherNative.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = TogetherNative.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EEAC9DFD644806607EED9F6 /* WidgetData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetData.swift; sourceTree = "<group>"; };
@@ -135,6 +146,9 @@
 		AD87675C1987608A07C5BB21 /* Activities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activities.swift; sourceTree = "<group>"; };
 		B068E14A1AC9360E8B06B6DE /* hover.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hover.wav; sourceTree = "<group>"; };
 		B451E9736AA39AF88B256125 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
+		B74BF7835D4943002003CC00 /* Repair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repair.swift; sourceTree = "<group>"; };
+		B7C806A2596D158CB685153B /* product.fr.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = product.fr.json; sourceTree = "<group>"; };
+		BC9C2F4E65E5E4148290FAFC /* Purchases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Purchases.swift; sourceTree = "<group>"; };
 		C2878EA9C4CD06EB98C0230B /* MessageWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageWidget.swift; sourceTree = "<group>"; };
 		C48447A153900AA320A5E7E9 /* giggle2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = giggle2.wav; sourceTree = "<group>"; };
 		C76194405955AFEBFCFBA584 /* bubble.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = bubble.wav; sourceTree = "<group>"; };
@@ -142,11 +156,13 @@
 		DB47858C64C340AEA47E8E1D /* land.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = land.wav; sourceTree = "<group>"; };
 		DB8F05A5146883222BD996B6 /* TogetherWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TogetherWidgetBundle.swift; sourceTree = "<group>"; };
 		DE0ADA21D93860BFB1BE1DD3 /* Permissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Permissions.swift; sourceTree = "<group>"; };
+		E2DC7269D00BFD2530A31392 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		E367E54B32C0850004A99BD9 /* music_day.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = music_day.wav; sourceTree = "<group>"; };
 		E3BDF324C5CF97B426840FAB /* pickup.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pickup.wav; sourceTree = "<group>"; };
 		E77C8FF37585AE26C7E26CC2 /* music_night.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = music_night.wav; sourceTree = "<group>"; };
 		E9CDC935B84833155DC32D3B /* FlameCelebration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlameCelebration.swift; sourceTree = "<group>"; };
 		EA56AB40A83716867C581598 /* giggle1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = giggle1.wav; sourceTree = "<group>"; };
+		EFCAB574CB2D10603A7F7EE7 /* Plus.storekit */ = {isa = PBXFileReference; path = Plus.storekit; sourceTree = "<group>"; };
 		F53224176484FE008B0FDE5B /* LifeSound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeSound.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -164,9 +180,11 @@
 				E9CDC935B84833155DC32D3B /* FlameCelebration.swift */,
 				89A4A36B24EDD62276A977B0 /* Home.swift */,
 				81CBFFE15D681CEB5B499883 /* Info.plist */,
+				213BA94C57CFA21AFB71877A /* InfoPlist.xcstrings */,
 				28973FB019367B16765F4D95 /* InsForge.swift */,
 				8F12120B21DE5A191D14C210 /* LifeGame.swift */,
 				F53224176484FE008B0FDE5B /* LifeSound.swift */,
+				E2DC7269D00BFD2530A31392 /* Localizable.xcstrings */,
 				2EC506522BF73D81C85086ED /* MediaServices.swift */,
 				2EFB469C3CC65A333FB65824 /* Memories.swift */,
 				C7F2F52E4608803CC9152FAC /* Messages.swift */,
@@ -175,6 +193,9 @@
 				7928BE4AB6C447BF25530BBC /* Onboarding.swift */,
 				DE0ADA21D93860BFB1BE1DD3 /* Permissions.swift */,
 				13ECDD93D16F7DA16CC5EB3B /* Places.swift */,
+				EFCAB574CB2D10603A7F7EE7 /* Plus.storekit */,
+				BC9C2F4E65E5E4148290FAFC /* Purchases.swift */,
+				B74BF7835D4943002003CC00 /* Repair.swift */,
 				8A9777331EC3F7C949EA5850 /* Settings.swift */,
 				B451E9736AA39AF88B256125 /* Store.swift */,
 				56D4F5D6E4F48C39F8557F4C /* Together.entitlements */,
@@ -188,6 +209,7 @@
 		24911F70854FCC14AC6A1344 /* shared */ = {
 			isa = PBXGroup;
 			children = (
+				B7C806A2596D158CB685153B /* product.fr.json */,
 				654BA9BCD9E11F334B88664C /* product.json */,
 			);
 			name = shared;
@@ -226,6 +248,8 @@
 				7063802779F37D44A248BF6A /* ComboWidget.swift */,
 				4822BB2D14FDD19ADB361DAB /* FlameWidget.swift */,
 				228D2D38CE12A0DBB8778E97 /* Info.plist */,
+				2608F3F8EB6FF8FF6747CC2A /* InfoPlist.xcstrings */,
+				4599593EBEF83A779A6772C8 /* Localizable.xcstrings */,
 				C2878EA9C4CD06EB98C0230B /* MessageWidget.swift */,
 				AADBA20157446BF5FDBF5F54 /* TogetherWidget.entitlements */,
 				DB8F05A5146883222BD996B6 /* TogetherWidgetBundle.swift */,
@@ -317,6 +341,7 @@
 			buildConfigurationList = FAEE07EAC928AF956C269D36 /* Build configuration list for PBXNativeTarget "TogetherWidgetExtension" */;
 			buildPhases = (
 				CD5D700656D1AD3996AB8E37 /* Sources */,
+				8B9C9AB62EA080214F318762 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -358,6 +383,7 @@
 			knownRegions = (
 				Base,
 				en,
+				fr,
 			);
 			mainGroup = AA108DF64EAC97ECE25219FD;
 			minimizedProjectReferenceProxies = 1;
@@ -379,6 +405,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				4017616DC5C9FF1B9D7F13C1 /* Assets.xcassets in Resources */,
+				B9D340903FB4D3D3DD098B02 /* InfoPlist.xcstrings in Resources */,
+				611B2C8D31BE94FFA8A6E515 /* Localizable.xcstrings in Resources */,
+				6E498B045287EAD8A01CA991 /* Plus.storekit in Resources */,
 				FAFF12A30EF8EEE2788D4F42 /* boing.wav in Resources */,
 				0DE704B8C4D4951219A4768E /* bubble.wav in Resources */,
 				78E7E841AAD49600B4D5C252 /* chew1.wav in Resources */,
@@ -394,9 +423,19 @@
 				FE13F8CC4A85CF57E2E6516F /* music_night.wav in Resources */,
 				646D622370D621B98C3381A0 /* pickup.wav in Resources */,
 				36FF1BA1BEDE4610EF4B272C /* pop.wav in Resources */,
+				2F13414EC2B6568442C6B8E4 /* product.fr.json in Resources */,
 				07EE2F974C0D5D2EAD74F2B5 /* product.json in Resources */,
 				590DB4DFCD0F6E42AC0F873D /* sparkle.wav in Resources */,
 				5E3CEBC2697D2DDD6BE17DB5 /* splash.wav in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8B9C9AB62EA080214F318762 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0CC69A4EBB2C9078EF8E8804 /* InfoPlist.xcstrings in Resources */,
+				D66AB2A530BFFA0F5D9E0A62 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -426,6 +465,8 @@
 				A8AE084B0F9266336555A60A /* Onboarding.swift in Sources */,
 				05E71DB9C4B7465D3421CE8B /* Permissions.swift in Sources */,
 				7A894744F8AA6010A3F2F86A /* Places.swift in Sources */,
+				DF176A5750DA7C69846900B6 /* Purchases.swift in Sources */,
+				B4A0F7C83A4EA708C12287EB /* Repair.swift in Sources */,
 				E292052FBEACC426743E7563 /* Settings.swift in Sources */,
 				E7ACF03A6B51DC788CBA7E60 /* Store.swift in Sources */,
 				4D41DDD72DE36BD4CFCE77F4 /* TogetherApp.swift in Sources */,
@@ -494,7 +535,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Together/Together.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				INFOPLIST_FILE = Together/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -511,7 +552,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = TogetherWidget/TogetherWidget.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TogetherWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Together Widgets";
@@ -532,7 +573,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = TogetherWidget/TogetherWidget.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TogetherWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Together Widgets";
@@ -598,11 +639,13 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -615,7 +658,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Together/Together.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				INFOPLIST_FILE = Together/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -700,12 +743,14 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

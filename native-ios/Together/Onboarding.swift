@@ -37,7 +37,7 @@ struct OnboardingView: View {
                             }
                         }
                     } else if step == 1 {
-                        heading("A little closer,\nevery day.", subtitle: "Small moments. More connection.", compact: compact)
+                        heading(LocalizedStringKey(tr("A little closer,\nevery day.")), subtitle: "Small moments. More connection.", compact: compact)
                         VStack(spacing: 12) {
                             intro("flame.fill", title: "Share your day", caption: "A photo. A little moment.")
                             intro("bubble.left.and.bubble.right", title: "Talk & play", caption: "Discover each other.")
@@ -83,7 +83,7 @@ struct OnboardingView: View {
                         }
                     } else if step == 4 {
                         ConnectionQuestionsView(initial: store.db.connectionDraft?.answers ?? [:], finishTitle: "Continue", fitScreen: true, onDraft: { answers in store.perform { try store.saveConnectionDraft(answers) } }, onPrevious: { step = 3 }) { answers in
-                            try store.saveConnectionDraft(answers, completed: true); authMode = "Sign up"; auth = true
+                            try store.saveConnectionDraft(answers, completed: true); authMode = tr("Sign up"); auth = true
                         }
                     } else {
                         heading("Ready, \(name.isEmpty ? "you" : name)?", subtitle: "Keep your preferences with an account.", compact: compact)
@@ -95,7 +95,7 @@ struct OnboardingView: View {
                     if step != 4 {
                         Spacer(minLength: 0)
                         VStack(spacing: 6) {
-                            Button { if step < 5 { next() } else { authMode = "Sign up"; auth = true } } label: {
+                            Button { if step < 5 { next() } else { authMode = tr("Sign up"); auth = true } } label: {
                                 Text(step < 5 ? "Continue" : "Continue with email").font(.headline).frame(maxWidth: .infinity, minHeight: compact ? 44 : 50).foregroundStyle(p.color("onPrimary")).background(p.primary, in: Capsule())
                             }.buttonStyle(.smooth)
                             if step == 5 { Button("Explore a demo") { exploreDemo() }.frame(maxWidth: .infinity, minHeight: 44) }
@@ -122,13 +122,13 @@ struct OnboardingView: View {
                 .onChange(of: photoItem) { _, item in guard let item else { return }; Task { do { photo = try await MediaFiles.load(item) } catch { store.error = error.localizedDescription } } }
         }
     }
-    func heading(_ title: String, subtitle: String, compact: Bool) -> some View {
-        VStack(alignment: .leading, spacing: 6) { Text(title).font(.system(size: compact ? 26 : 32, weight: .bold, design: .rounded)).fixedSize(horizontal: false, vertical: true); if !subtitle.isEmpty { Text(subtitle).font(.subheadline).foregroundStyle(.secondary) } }
+    func heading(_ title: LocalizedStringKey, subtitle: LocalizedStringKey?, compact: Bool) -> some View {
+        VStack(alignment: .leading, spacing: 6) { Text(title).font(.system(size: compact ? 26 : 32, weight: .bold, design: .rounded)).fixedSize(horizontal: false, vertical: true); if let subtitle { Text(subtitle).font(.subheadline).foregroundStyle(.secondary) } }
     }
-    func intro(_ icon: String, title: String, caption: String) -> some View {
+    func intro(_ icon: String, title: LocalizedStringKey, caption: LocalizedStringKey) -> some View {
         HStack(spacing: 14) { Image(systemName: icon).font(.title2).foregroundStyle(p.primary).frame(width: 40); VStack(alignment: .leading, spacing: 2) { Text(title).font(.headline); Text(caption).font(.caption).foregroundStyle(.secondary) }; Spacer() }.padding(14).background(p.surface, in: RoundedRectangle(cornerRadius: 18))
     }
-    func next() { guard step != 2 || !name.trimmingCharacters(in: .whitespaces).isEmpty else { store.error = "Enter your first name."; return }; editingName = false; guard !preparingQuestions else { return }; if step == 3 { preparingQuestions = true } else { step += 1 } }
+    func next() { guard step != 2 || !name.trimmingCharacters(in: .whitespaces).isEmpty else { store.error = tr("Enter your first name."); return }; editingName = false; guard !preparingQuestions else { return }; if step == 3 { preparingQuestions = true } else { step += 1 } }
     func exploreDemo() {
         store.demo(name: name)
         if let photo, let i = store.db.people.firstIndex(where: { $0.id == "demo-me" }) { store.db.people[i].avatar = photo.path }
@@ -297,5 +297,5 @@ struct PartnerStepView: View {
 struct VerificationView: View {
     @EnvironmentObject var store: Store
     @State private var code = ""
-    var body: some View { NavigationStack { Page { Text("Check your code").font(.largeTitle.bold()); InfoBanner(text: store.isRemoteAccount ? "We emailed a 6-digit code to \(store.db.accounts.first { $0.id == store.db.currentUser }?.email ?? "your address")." : "Local preview: no email is sent. Your verification code is \(store.db.accounts.first { $0.id == store.db.currentUser }?.code ?? "")."); TextField("Six digit code", text: $code).keyboardType(.numberPad).textFieldStyle(.soft); PrimaryButton(title: "Verify account") { Task { await store.performAsync { try await store.verifyAccount(code); store.db.onboarded = true } } }; Button(store.isRemoteAccount ? "Resend the code" : "Generate a new code") { Task { await store.performAsync { try await store.resendVerification() } } }; Button("Sign out") { store.signOut() } } } }
+    var body: some View { NavigationStack { Page { Text("Check your code").font(.largeTitle.bold()); InfoBanner(text: store.isRemoteAccount ? "We emailed a 6-digit code to \(store.db.accounts.first { $0.id == store.db.currentUser }?.email ?? "your address")." : "Local preview: no email is sent. Your verification code is \(store.db.accounts.first { $0.id == store.db.currentUser }?.code ?? "")."); TextField("Six digit code", text: $code).keyboardType(.numberPad).textFieldStyle(.soft); PrimaryButton(title: tr("Verify account")) { Task { await store.performAsync { try await store.verifyAccount(code); store.db.onboarded = true } } }; Button(store.isRemoteAccount ? "Resend the code" : "Generate a new code") { Task { await store.performAsync { try await store.resendVerification() } } }; Button("Sign out") { store.signOut() } } } }
 }

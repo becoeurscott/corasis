@@ -12,35 +12,35 @@ enum PermissionKind: String, Identifiable {
     var emoji: String { ["location": "📍", "locationAlways": "🏡", "notifications": "🔔", "microphone": "🎙️", "camera": "📸", "photos": "🖼️", "faceID": "🔒"][rawValue]! }
     var title: String {
         switch self {
-        case .location: "Share where you are"
-        case .locationAlways: "Alerts, even when closed"
-        case .notifications: "Never miss your partner"
-        case .microphone: "Send your voice"
-        case .camera: "Capture your moment"
-        case .photos: "Save to your Photos"
-        case .faceID: "Keep it just for you"
+        case .location: tr("Share where you are")
+        case .locationAlways: tr("Alerts, even when closed")
+        case .notifications: tr("Never miss your partner")
+        case .microphone: tr("Send your voice")
+        case .camera: tr("Capture your moment")
+        case .photos: tr("Save to your Photos")
+        case .faceID: tr("Keep it just for you")
         }
     }
     var subtitle: String {
         switch self {
-        case .location: "Your location shows on the map, the distance between you and your country flag. Only your partner sees it, and only while sharing is on."
-        case .locationAlways: "Place and proximity alerts need to know when you arrive or leave, even when Corasis is closed. Choose “Always allow” on the next screen."
-        case .notifications: "Get kisses, messages, place alerts and the “you’re close!” alert the moment they happen."
-        case .microphone: "Record little voice notes for your partner. We only listen while you hold record."
-        case .camera: "Take today’s moment and share it with your partner."
-        case .photos: "Save your wallpaper and memories to your photo library."
-        case .faceID: "Lock Corasis with Face ID so your private moments stay private."
+        case .location: tr("Your location shows on the map, the distance between you and your country flag. Only your partner sees it, and only while sharing is on.")
+        case .locationAlways: tr("Place and proximity alerts need to know when you arrive or leave, even when Corasis is closed. Choose “Always allow” on the next screen.")
+        case .notifications: tr("Get kisses, messages, place alerts and the “you’re close!” alert the moment they happen.")
+        case .microphone: tr("Record little voice notes for your partner. We only listen while you hold record.")
+        case .camera: tr("Take today’s moment and share it with your partner.")
+        case .photos: tr("Save your wallpaper and memories to your photo library.")
+        case .faceID: tr("Lock Corasis with Face ID so your private moments stay private.")
         }
     }
     var points: [(String, String)] {
         switch self {
-        case .location: [("heart.fill", "Only your partner can see it"), ("hand.raised.fill", "Turn sharing off any time")]
-        case .locationAlways: [("bell.fill", "Arrive and leave alerts"), ("location.fill", "Uses low-power location"), ("hand.raised.fill", "Turn alerts off any time")]
-        case .notifications: [("heart.fill", "Affection and messages"), ("mappin.and.ellipse", "Place and proximity alerts"), ("calendar", "Reminders before you meet")]
-        case .microphone: [("waveform", "Only while recording"), ("lock.fill", "Sent to your partner only")]
-        case .camera: [("camera.fill", "Only when you open the camera"), ("lock.fill", "Shared with your partner only")]
-        case .photos: [("square.and.arrow.down", "Add-only access"), ("eye.slash.fill", "We never read your library")]
-        case .faceID: [("faceid", "Stays on this phone"), ("lock.fill", "Nothing leaves your device")]
+        case .location: [("heart.fill", tr("Only your partner can see it")), ("hand.raised.fill", tr("Turn sharing off any time"))]
+        case .locationAlways: [("bell.fill", tr("Arrive and leave alerts")), ("location.fill", tr("Uses low-power location")), ("hand.raised.fill", tr("Turn alerts off any time"))]
+        case .notifications: [("heart.fill", tr("Affection and messages")), ("mappin.and.ellipse", tr("Place and proximity alerts")), ("calendar", tr("Reminders before you meet"))]
+        case .microphone: [("waveform", tr("Only while recording")), ("lock.fill", tr("Sent to your partner only"))]
+        case .camera: [("camera.fill", tr("Only when you open the camera")), ("lock.fill", tr("Shared with your partner only"))]
+        case .photos: [("square.and.arrow.down", tr("Add-only access")), ("eye.slash.fill", tr("We never read your library"))]
+        case .faceID: [("faceid", tr("Stays on this phone")), ("lock.fill", tr("Nothing leaves your device"))]
         }
     }
     var colors: [Color] {

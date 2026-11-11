@@ -4,7 +4,11 @@ import Security
 import UserNotifications
 import WidgetKit
 
-struct AppError: LocalizedError { var message: String; var errorDescription: String? { message } }
+struct AppError: LocalizedError {
+    var message: String; var errorDescription: String? { message }
+    init(message: String.LocalizationValue) { self.message = tr(message) }
+    init(raw: String) { message = raw }
+}
 @MainActor final class Store: ObservableObject {
     @Published var affectionBursts: [AffectionBurst] = []
     @Published var db: Database { didSet { persist() } }
@@ -21,7 +25,7 @@ struct AppError: LocalizedError { var message: String; var errorDescription: Str
             catch {
                 let backup = self.file.appendingPathExtension("unreadable-" + UUID().uuidString)
                 try? FileManager.default.copyItem(at: self.file, to: backup)
-                db = Database(); self.error = "Saved data could not be opened. A copy of the original file has been kept for recovery. \(error.localizedDescription)"
+                db = Database(); self.error = tr("Saved data could not be opened. A copy of the original file has been kept for recovery. \(error.localizedDescription)")
             }
         } else { db = Database() }
         locked = db.prefs.lock && db.currentUser != nil
@@ -29,13 +33,13 @@ struct AppError: LocalizedError { var message: String; var errorDescription: Str
     }
     func persist() {
         do { try FileManager.default.createDirectory(at: file.deletingLastPathComponent(), withIntermediateDirectories: true); try JSONEncoder().encode(db).write(to: file, options: [.atomic, .completeFileProtectionUnlessOpen]) }
-        catch { self.error = "Could not save your changes: \(error.localizedDescription)" }
+        catch { self.error = tr("Could not save your changes: \(error.localizedDescription)") }
         syncWidgetData()
     }
     private func syncWidgetData() {
         let s = streak; let tz = couple?.timezone ?? me?.timezone ?? TimeZone.current.identifier
         let evt = events.first { $0.day >= today && ($0.kind == "meeting" || $0.kind == "visit") }
-        WidgetData(streakCurrent: s.current, streakLongest: s.longest, todayComplete: s.days.contains(today), timezone: tz, partnerMessage: db.widgetMessages[couple?.id ?? ""] ?? "A little closer, every day 💕", myName: me?.name ?? "You", partnerName: partner?.name ?? "Partner", nextEventTitle: evt.map { $0.destination.isEmpty ? $0.title : $0.destination }, nextEventDay: evt?.day, daysToEvent: evt.map { Day.distance(today, $0.day) }, updatedAt: Date()).save()
+        WidgetData(streakCurrent: s.current, streakLongest: s.longest, todayComplete: s.days.contains(today), timezone: tz, partnerMessage: db.widgetMessages[couple?.id ?? ""] ?? tr("A little closer, every day 💕"), myName: me?.name ?? "You", partnerName: partner?.name ?? "Partner", nextEventTitle: evt.map { $0.destination.isEmpty ? $0.title : $0.destination }, nextEventDay: evt?.day, daysToEvent: evt.map { Day.distance(today, $0.day) }, updatedAt: Date()).save()
         reloadWidgets()
     }
     private func reloadWidgets() {
@@ -155,7 +159,7 @@ struct AppError: LocalizedError { var message: String; var errorDescription: Str
         let start = try await InsForge.shared.startOAuth(provider: key)
         guard let callback = try await OAuthSheet.shared.open(start.url) else { return false }
         let items = URLComponents(url: callback, resolvingAgainstBaseURL: false)?.queryItems ?? []
-        guard let code = items.first(where: { $0.name == "insforge_code" })?.value else { throw AppError(message: items.first(where: { $0.name == "error_description" })?.value ?? "Sign-in was not completed.") }
+        guard let code = items.first(where: { $0.name == "insforge_code" })?.value else { throw items.first(where: { $0.name == "error_description" })?.value.map { AppError(raw: $0) } ?? AppError(message: "Sign-in was not completed.") }
         try await finishLogIn(try await InsForge.shared.exchangeOAuth(code: code, verifier: start.verifier))
         return true
     }
@@ -214,7 +218,7 @@ struct AppError: LocalizedError { var message: String; var errorDescription: Str
             try await InsForge.shared.upsertProfile(RemoteProfile(id: p.id, first_name: p.name, pronouns: p.pronouns.isEmpty ? nil : p.pronouns, timezone: p.timezone, avatar_url: p.avatarURL, avatar_key: p.avatarKey))
             if let value = db.connectionPreferences?[p.id] { try await InsForge.shared.saveConnectionPreferences(userID: p.id, value: value) }
             if let i = db.people.firstIndex(where: { $0.id == p.id }) { db.people[i].avatarURL = p.avatarURL; db.people[i].avatarKey = p.avatarKey; db.people[i].avatarSource = p.avatarSource }
-        } catch { self.error = "Your profile is saved on this iPhone but did not sync: \(error.localizedDescription)" }
+        } catch { self.error = tr("Your profile is saved on this iPhone but did not sync: \(error.localizedDescription)") }
     }
     func signOut() { if isRemoteAccount { let token = UserDefaults.standard.string(forKey: "apns-token"); Task { if let token { await InsForge.shared.removePushToken(token) }; await InsForge.shared.signOut() } }; UNUserNotificationCenter.current().removeAllPendingNotificationRequests(); generation = UUID(); db.currentUser = nil; db.demo = false; db.connectionDraft = nil; locked = false }
     func demo(name: String = "Sam") {
@@ -228,9 +232,9 @@ struct AppError: LocalizedError { var message: String; var errorDescription: Str
         db.people += [me, partner]
         let c = Couple(members: [me.id, partner.id], start: Day.add(today, -420))
         db.couples.append(c); db.currentUser = me.id; db.demo = true; db.onboarded = true; adoptConnectionDraft(); seedDemoPartnerLive()
-        db.events.append(Event(coupleID: c.id, title: "Next visit", day: Day.add(today, 22), destination: "Montréal", notes: "Coffee and the long way home."))
-        db.memories.append(Memory(coupleID: c.id, owner: partner.id, title: "Before you land", body: "I keep thinking about the first hour at the airport. No plans, just coffee and the long way home. Travel safe. — Simulated partner letter", day: Day.add(today, -20)))
-        db.messages.append(Note(coupleID: c.id, sender: partner.id, text: "Thinking about our next trip 💜 (simulated)"))
+        db.events.append(Event(coupleID: c.id, title: tr("Next visit"), day: Day.add(today, 22), destination: "Montréal", notes: tr("Coffee and the long way home.")))
+        db.memories.append(Memory(coupleID: c.id, owner: partner.id, title: tr("Before you land"), body: tr("I keep thinking about the first hour at the airport. No plans, just coffee and the long way home. Travel safe. — Simulated partner letter"), day: Day.add(today, -20)))
+        db.messages.append(Note(coupleID: c.id, sender: partner.id, text: tr("Thinking about our next trip 💜 (simulated)")))
     }
     func updateProfile(name: String, pronouns: String, timezone: String, avatar: String? = nil) throws {
         guard !name.trimmingCharacters(in: .whitespaces).isEmpty, let i = db.people.firstIndex(where: { $0.id == db.currentUser }), TimeZone(identifier: timezone) != nil else { throw AppError(message: "Enter a name and a valid time zone.") }
@@ -297,7 +301,7 @@ struct AppError: LocalizedError { var message: String; var errorDescription: Str
         if partner?.simulated == true { later { store in
             guard store.couple?.id == c.id, !store.db.moments.contains(where: { $0.coupleID == c.id && $0.author == "demo-partner" && $0.day == moment.day }) else { return }
             // A simulated moment reuses the supplied media and is explicitly labeled.
-            let reply = Moment(coupleID: c.id, author: "demo-partner", day: moment.day, media: media, caption: "A little piece of my day · simulated")
+            let reply = Moment(coupleID: c.id, author: "demo-partner", day: moment.day, media: media, caption: tr("A little piece of my day · simulated"))
             store.db.moments.append(reply)
             store.db.memories.append(Memory(coupleID: c.id, owner: "demo-partner", title: reply.caption, body: "", day: moment.day, media: media, momentID: reply.id))
         } }
@@ -306,12 +310,12 @@ struct AppError: LocalizedError { var message: String; var errorDescription: Str
         let c = try requireCouple(); guard db.prefs.premium else { throw AppError(message: "Restore flame requires Together Plus.") }
         let yesterday = Day.add(today, -1)
         for member in c.members where !db.moments.contains(where: { $0.coupleID == c.id && $0.author == member && $0.day == yesterday }) {
-            db.moments.append(Moment(coupleID: c.id, author: member, day: yesterday, media: Media(path: "flame-restore", kind: "system"), caption: "🔥 Flame restored"))
+            db.moments.append(Moment(coupleID: c.id, author: member, day: yesterday, media: Media(path: "flame-restore", kind: "system"), caption: tr("🔥 Flame restored")))
         }
     }
     func startActivity(question: Question, deck: Deck, daily: Bool = false) throws -> String {
         let c = try requireCouple()
-        if deck.premium && !db.prefs.premium { throw AppError(message: "This deck requires the Together Plus demo switch in Profile.") }
+        if deck.premium && !db.prefs.premium { throw AppError(message: "This deck is part of Together Plus.") }
         // Today's question has the same id on both phones, so both answers land in one session.
         let dailyID = "daily-\(c.id)-\(today)"
         if daily, let existing = activities.first(where: { $0.id == dailyID }) ?? activities.first(where: { $0.day == today && $0.deckID == "deck_daily" }) { return existing.id }
@@ -337,7 +341,7 @@ struct AppError: LocalizedError { var message: String; var errorDescription: Str
     func send(_ text: String, kind: String = "text", media: Media? = nil) throws {
         let c = try requireCouple(); guard let id = db.currentUser, !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || media != nil else { return }
         db.messages.append(Note(coupleID: c.id, sender: id, text: text, kind: kind, media: media))
-        if partner?.simulated == true { later { store in guard store.couple?.id == c.id else { return }; store.db.messages.append(Note(coupleID: c.id, sender: "demo-partner", text: kind == "affection" ? "Sending one right back 💕 (simulated)" : "That made me smile. Thinking of you. (simulated)")) } }
+        if partner?.simulated == true { later { store in guard store.couple?.id == c.id else { return }; store.db.messages.append(Note(coupleID: c.id, sender: "demo-partner", text: kind == "affection" ? tr("Sending one right back 💕 (simulated)") : tr("That made me smile. Thinking of you. (simulated)"))) } }
     }
     func reactMessage(_ id: String) { guard messages.contains(where: { $0.id == id }), let user = db.currentUser, let i = db.messages.firstIndex(where: { $0.id == id }) else { return }; db.messages[i].reactions[user] = db.messages[i].reactions[user] == nil ? "❤️" : nil }
     func saveMemory(_ memory: Memory) throws { let c = try requireCouple(); guard memory.coupleID == c.id, memory.owner == db.currentUser else { throw AppError(message: "You can only edit your own memories.") }; if let i = db.memories.firstIndex(where: { $0.id == memory.id }) { guard db.memories[i].owner == db.currentUser else { return }; db.memories[i] = memory } else { db.memories.append(memory) } }

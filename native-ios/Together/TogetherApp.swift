@@ -5,11 +5,19 @@ import LocalAuthentication
     @StateObject private var store = Store()
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @Environment(\.scenePhase) private var phase
+    var language: String {
+        let lang = AppLanguage.resolve(store.db.prefs.language)
+        if AppLanguage.current != lang { AppLanguage.current = lang }
+        return lang
+    }
     var body: some Scene {
         WindowGroup {
             RootView().environmentObject(store)
+                .environment(\.locale, Locale(identifier: language))
+                .id(language)   // rebuild every screen when the language changes
                 .preferredColorScheme(store.db.prefs.appearance == "system" ? nil : store.db.prefs.appearance == "dark" ? .dark : .light)
                 .onAppear { appDelegate.store = store; PlaceMonitor.shared.refresh(store) }
+                .task { await PlusStore.shared.start(store) }
                 // Foreground: look for new affection every few seconds while connected.
                 .task(id: "\(store.couple?.id ?? "")-\(phase == .active)") {
                     guard store.couple != nil, phase == .active else { return }
@@ -93,23 +101,26 @@ struct Card<Content: View>: View {
 }
 struct PrimaryButton: View {
     @Environment(\.appPalette) var p
-    var title: String; var action: () -> Void
+    var title: LocalizedStringKey; var action: () -> Void
     var body: some View { Button(action: action) { Text(title).font(.headline).frame(maxWidth: .infinity).padding(.vertical, 16).foregroundStyle(p.color("onPrimary")).background(p.primary, in: Capsule()) }.buttonStyle(.smooth) }
 }
 struct InfoBanner: View {
     @Environment(\.appPalette) var p
-    var text: String; var icon = "info.circle"
+    var text: LocalizedStringKey; var icon = "info.circle"
     var body: some View { Label(text, systemImage: icon).font(.subheadline).foregroundStyle(p.secondary).padding(16).frame(maxWidth: .infinity, alignment: .leading).background(p.soft, in: RoundedRectangle(cornerRadius: 20)) }
 }
-struct SectionHeading: View { var title: String; var body: some View { Text(title).font(.title3.bold()).padding(.top, 4) } }
+extension PrimaryButton { @_disfavoredOverload init(title: String, action: @escaping () -> Void) { self.init(title: LocalizedStringKey(title), action: action) } }
+extension InfoBanner { @_disfavoredOverload init(text: String, icon: String = "info.circle") { self.init(text: LocalizedStringKey(text), icon: icon) } }
+extension SectionHeading { @_disfavoredOverload init(title: String) { self.init(title: LocalizedStringKey(title)) } }
+struct SectionHeading: View { var title: LocalizedStringKey; var body: some View { Text(title).font(.title3.bold()).padding(.top, 4) } }
 struct Avatar: View {
     @Environment(\.appPalette) var p
     var person: Person?; var size: CGFloat = 62
     var body: some View { Group { if let preset = PresetAvatar.emoji(person?.avatar) ?? PresetAvatar.emoji(person?.avatarURL) { Text(preset).font(.system(size: size * 0.55)).frame(maxWidth: .infinity, maxHeight: .infinity).background(p.soft) } else if let path = person?.avatar, let image = UIImage(contentsOfFile: MediaFiles.url(path).path) { Image(uiImage: image).resizable().scaledToFill() } else if let remote = person?.avatarURL.flatMap(URL.init(string:)) { AsyncImage(url: remote) { image in image.resizable().scaledToFill() } placeholder: { p.soft } } else { Text(String((person?.name ?? "?").prefix(1))).font(.system(size: size * 0.4, weight: .bold)).foregroundStyle(p.primary).frame(maxWidth: .infinity, maxHeight: .infinity).background(p.soft) } }.frame(width: size, height: size).clipShape(Circle()).accessibilityLabel(person?.name ?? "Partner") }
 }
 struct RowLink<Destination: View>: View {
-    var title: String; var icon: String; var detail = ""; @ViewBuilder var destination: Destination
-    var body: some View { NavigationLink { destination } label: { HStack(spacing: 14) { Image(systemName: icon).frame(width: 24).foregroundStyle(.tint); VStack(alignment: .leading, spacing: 3) { Text(title).font(.body.weight(.semibold)); if !detail.isEmpty { Text(detail).font(.caption).foregroundStyle(.secondary) } }; Spacer(); Image(systemName: "chevron.right").font(.caption).foregroundStyle(.secondary) }.padding(.vertical, 8).contentShape(Rectangle()) }.buttonStyle(.smooth) }
+    var title: LocalizedStringKey; var icon: String; var detail: LocalizedStringKey? = nil; @ViewBuilder var destination: Destination
+    var body: some View { NavigationLink { destination } label: { HStack(spacing: 14) { Image(systemName: icon).frame(width: 24).foregroundStyle(.tint); VStack(alignment: .leading, spacing: 3) { Text(title).font(.body.weight(.semibold)); if let detail { Text(detail).font(.caption).foregroundStyle(.secondary) } }; Spacer(); Image(systemName: "chevron.right").font(.caption).foregroundStyle(.secondary) }.padding(.vertical, 8).contentShape(Rectangle()) }.buttonStyle(.smooth) }
 }
 struct MainTabs: View {
     @EnvironmentObject var store: Store
@@ -129,7 +140,7 @@ struct LockView: View {
     @EnvironmentObject var store: Store
     @Environment(\.appPalette) var p
     @State private var pin = ""
-    var body: some View { VStack(spacing: 24) { Image(systemName: "lock.heart.fill").font(.system(size: 64)).foregroundStyle(p.primary); Text("Your little space").font(.largeTitle.bold()); Text("Unlock Together to continue").foregroundStyle(.secondary); SecureField("App PIN", text: $pin).keyboardType(.numberPad).textFieldStyle(.soft).frame(maxWidth: 260); PrimaryButton(title: "Unlock with PIN") { if !pin.isEmpty && pin == Secure.get("pin") { store.locked = false; pin = "" } else { store.error = "Incorrect PIN." } }.frame(maxWidth: 280); Button("Use Face ID / Touch ID") { Task { let context = LAContext(); do { if try await context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: "Unlock your private Together space") { store.locked = false } } catch { store.error = error.localizedDescription } } } }.frame(maxWidth: .infinity, maxHeight: .infinity).background(p.background).task { let context = LAContext(); if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) { if (try? await context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: "Unlock Together")) == true { store.locked = false } } } }
+    var body: some View { VStack(spacing: 24) { Image(systemName: "lock.heart.fill").font(.system(size: 64)).foregroundStyle(p.primary); Text("Your little space").font(.largeTitle.bold()); Text("Unlock Together to continue").foregroundStyle(.secondary); SecureField("App PIN", text: $pin).keyboardType(.numberPad).textFieldStyle(.soft).frame(maxWidth: 260); PrimaryButton(title: tr("Unlock with PIN")) { if !pin.isEmpty && pin == Secure.get("pin") { store.locked = false; pin = "" } else { store.error = tr("Incorrect PIN.") } }.frame(maxWidth: 280); Button("Use Face ID / Touch ID") { Task { let context = LAContext(); do { if try await context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: tr("Unlock your private Together space")) { store.locked = false } } catch { store.error = error.localizedDescription } } } }.frame(maxWidth: .infinity, maxHeight: .infinity).background(p.background).task { let context = LAContext(); if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) { if (try? await context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: tr("Unlock Together"))) == true { store.locked = false } } } }
 }
 
 /// Text field look shared with the RN `Input` (src/components/ui/Input.tsx): surface fill, 16pt corners, 56pt tall.

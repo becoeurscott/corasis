@@ -76,6 +76,8 @@ import Foundation
 
     // MARK: Local → shared
 
+    static let coder: JSONEncoder = { let e = JSONEncoder(); e.dateEncodingStrategy = .iso8601; return e }()
+    static let decoder: JSONDecoder = { let d = JSONDecoder(); d.dateDecodingStrategy = .iso8601; return d }()
     private struct Item { var kind: String; var id: String; var data: [String: Any]; var hash: String }
     private func item(_ kind: String, _ id: String, _ data: [String: Any]) -> Item {
         let json = (try? JSONSerialization.data(withJSONObject: data, options: [.sortedKeys])) ?? Data()
@@ -127,6 +129,9 @@ import Foundation
         for p in db.places ?? [] where p.coupleID == couple.id {
             add(item("place", p.id, ["owner": p.owner, "addedBy": p.addedBy, "name": p.name, "emoji": p.emoji, "lat": p.latitude, "lon": p.longitude, "radius": p.radius, "alerts": p.alerts]))
         }
+        for e in db.repairs ?? [] where e.coupleID == couple.id {
+            if let data = try? Self.coder.encode(e), let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any] { add(item("repair", e.id, dict)) }
+        }
         add(item("couple", "settings", ["start": opt(couple.start), "stage": couple.stage, "distance": couple.distance, "goals": couple.goals, "timezone": couple.timezone]))
         if let note = db.widgetMessages[couple.id], !note.isEmpty { add(item("widget", "note", ["text": note, "by": "", "at": iso(nil)])) }
         return out
@@ -175,6 +180,7 @@ import Foundation
             case "place": store.db.places?.removeAll { $0.id == id }; PlaceMonitor.shared.refresh(store)
             case "checkup": store.db.checkups?.removeAll { $0.id == id }
             case "truths": store.db.truths?.removeAll { $0.id == id }
+            case "repair": store.db.repairs?.removeAll { $0.id == id }
             default: break
             }
             state.hashes[key] = nil
@@ -228,6 +234,11 @@ import Foundation
             guard let round = str(d["round"]), let user = str(d["userId"]), let answers = d["answers"] as? [Int] else { return true }
             let e = TruthsEntry(coupleID: couple.id, round: round, user: user, answers: answers, guesses: d["guesses"] as? [Int] ?? [], submitted: date(d["submittedAt"]) ?? Date())
             var all = store.db.truths ?? []; all.removeAll { $0.id == e.id }; all.append(e); store.db.truths = all
+        case "repair":
+            guard let data = try? JSONSerialization.data(withJSONObject: d), var e = try? Self.decoder.decode(RepairEntry.self, from: data) else { return true }
+            e.coupleID = couple.id
+            guard e.user != store.me?.id || !(store.db.repairs ?? []).contains(where: { $0.id == e.id }) else { break }   // my own entry is mine
+            var all = store.db.repairs ?? []; all.removeAll { $0.id == e.id }; all.append(e); store.db.repairs = all
         case "couple":
             if let i = store.db.couples.firstIndex(where: { $0.id == couple.id }) {
                 store.db.couples[i].start = str(d["start"]); store.db.couples[i].stage = str(d["stage"]) ?? store.db.couples[i].stage

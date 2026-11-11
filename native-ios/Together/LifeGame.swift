@@ -39,7 +39,7 @@ enum Life {
     static func action(_ id: String) -> LifeActionDef? { content.actions.first { $0.id == id } }
     static func choice(_ id: String) -> LifeChoiceDef { content.choices[id]! }
     static func label(_ choice: String, _ option: String?) -> String { Self.choice(choice).options.first { $0.id == option }?.label ?? option ?? "" }
-    static func fill(_ name: String?, _ text: String, stage: String = "") -> String { text.replacingOccurrences(of: "{name}", with: name ?? "your little one").replacingOccurrences(of: "{stage}", with: stage.lowercased()) }
+    static func fill(_ name: String?, _ text: String, stage: String = "") -> String { text.replacingOccurrences(of: "{name}", with: name ?? tr("your little one")).replacingOccurrences(of: "{stage}", with: stage.lowercased()) }
     static func now(_ g: LifeGame, real: Date = Date()) -> Date { real.addingTimeInterval(g.clockOffset) }
     static func fresh(_ value: Double = 80) -> [String: Double] { Dictionary(uniqueKeysWithValues: content.needs.map { ($0.id, value) }) }
     static func clamp(_ v: Double) -> Double { max(0, min(100, v)) }
@@ -112,18 +112,18 @@ enum Life {
         for (k, v) in opt.skills ?? [:] { next.skills[k, default: 0] += v }
         if let s = opt.skill { next.skills[s, default: 0] += 10 }
         next.decisions[vote.choice] = result
-        let how = vote.coin ? " (a coin flip settled it)" : ""
+        let how = vote.coin ? tr(" (a coin flip settled it)") : ""
         let short = opt.label.components(separatedBy: ",").first ?? opt.label
         switch vote.choice {
         case "name":
             next.name = opt.label; next.status = "alive"; next.born = now; next.stageStarted = now; next.needs = fresh(80); next.needsAt = now
-            next.milestones.insert(LifeMilestone(kind: "born", text: "\(opt.label) was born\(how). Welcome to the world! 🍼", at: now), at: 0)
-        case "school": next.milestones.insert(LifeMilestone(kind: "choice", text: "\(next.name ?? "") started at \(opt.label)\(how). 🎒", at: now), at: 0)
-        case "hobby": next.milestones.insert(LifeMilestone(kind: "choice", text: "\(next.name ?? "") found a passion: \(opt.label.lowercased())\(how).", at: now), at: 0)
-        case "job": next.milestones.insert(LifeMilestone(kind: "choice", text: "\(next.name ?? "") got their first job as a \(opt.label.lowercased())\(how). 💼", at: now), at: 0)
+            next.milestones.insert(LifeMilestone(kind: "born", text: tr("\(opt.label) was born\(how). Welcome to the world! 🍼"), at: now), at: 0)
+        case "school": next.milestones.insert(LifeMilestone(kind: "choice", text: tr("\(next.name ?? "") started at \(opt.label)\(how). 🎒"), at: now), at: 0)
+        case "hobby": next.milestones.insert(LifeMilestone(kind: "choice", text: tr("\(next.name ?? "") found a passion: \(opt.label.lowercased())\(how)."), at: now), at: 0)
+        case "job": next.milestones.insert(LifeMilestone(kind: "choice", text: tr("\(next.name ?? "") got their first job as a \(opt.label.lowercased())\(how). 💼"), at: now), at: 0)
         default:
-            next.milestones.insert(LifeMilestone(kind: "choice", text: "\(next.name ?? "") fell in love with \(short)\(how).", at: now), at: 0)
-            next.milestones.insert(LifeMilestone(kind: "wedding", text: "Wedding day! \(next.name ?? "") and \(short) got married. 💍", at: now), at: 0)
+            next.milestones.insert(LifeMilestone(kind: "choice", text: tr("\(next.name ?? "") fell in love with \(short)\(how)."), at: now), at: 0)
+            next.milestones.insert(LifeMilestone(kind: "wedding", text: tr("Wedding day! \(next.name ?? "") and \(short) got married. 💍"), at: now), at: 0)
         }
         return next
     }
@@ -132,7 +132,7 @@ enum Life {
         var g = game; g.needs = decayed(game, at: now); g.needsAt = now
         func end(_ complete: Bool) -> LifeGame {
             var e = g; e.status = "ended"; e.ended = now; e.ending = endingText(g, complete: complete); e.votes = g.votes.filter(\.decided)
-            e.milestones.insert(LifeMilestone(kind: "ended", text: complete ? "\(g.name ?? "") lived a full life. 🕊️" : "A year has passed. \(g.name ?? "")'s story ends here.", at: now), at: 0)
+            e.milestones.insert(LifeMilestone(kind: "ended", text: complete ? tr("\(g.name ?? "") lived a full life. 🕊️") : tr("A year has passed. \(g.name ?? "")'s story ends here."), at: now), at: 0)
             return e
         }
         if ageDays(g, at: now) >= content.maxDays { return end(g.stage == "elder") }
@@ -142,7 +142,7 @@ enum Life {
             let next = content.stages[i + 1]
             let article = "aeiou".contains(next.label.lowercased().first!) ? "an" : "a"
             g.stage = next.id; g.stageStarted = now; g.care = 0
-            g.milestones.insert(LifeMilestone(kind: "grew", text: "\(g.name ?? "") is now \(next.id == "partnered" ? "a grown-up looking for love" : "\(article) \(next.label.lowercased())")! 🎉", at: now), at: 0)
+            g.milestones.insert(LifeMilestone(kind: "grew", text: tr("\(g.name ?? "") is now \(next.id == "partnered" ? "a grown-up looking for love" : "\(article) \(next.label.lowercased())")! 🎉"), at: now), at: 0)
         }
         if let c = pendingChoice(g), !g.votes.contains(where: { $0.choice == c }) { g.votes.append(LifeVote(choice: c, options: options(g, c), opened: now)) }
         return g
@@ -169,7 +169,7 @@ extension Store {
     func proposeBaby() throws {
         let c = try requireCouple(); guard let me = db.currentUser else { return }
         if let g = lifeGame, g.status != "ended" { return }
-        saveLife(LifeGame(coupleID: c.id, proposedBy: me, acceptedBy: [me], needs: Life.fresh(80), needsAt: Date(), skills: Dictionary(uniqueKeysWithValues: Life.content.skills.map { ($0.id, 0) }), milestones: [LifeMilestone(kind: "proposed", text: "A baby was proposed. 💞", at: Date())]))
+        saveLife(LifeGame(coupleID: c.id, proposedBy: me, acceptedBy: [me], needs: Life.fresh(80), needsAt: Date(), skills: Dictionary(uniqueKeysWithValues: Life.content.skills.map { ($0.id, 0) }), milestones: [LifeMilestone(kind: "proposed", text: tr("A baby was proposed. 💞"), at: Date())]))
         if partner?.simulated == true { later { store in try? store.acceptBaby(as: "demo-partner") } }
     }
     func respondToBaby(_ accept: Bool) throws {
@@ -452,7 +452,7 @@ struct LifeSky: View {
 // MARK: - Screens
 private let lifeInk = Color(hex: "#2B1E2F")
 private let lifeScenes: [String: [String]] = ["newborn": ["#DCEEFF", "#A9CFFF"], "toddler": ["#FFF1C9", "#FFC98A"], "child": ["#D7F5E6", "#8FD9B6"], "teen": ["#E6DEFF", "#A99BFF"], "adult": ["#DDF3FA", "#86C9E3"], "partnered": ["#FFE2E8", "#FF9FB5"], "elder": ["#F3EBDD", "#D2BFA0"]]
-private let lifeMoodLine = ["happy": "is happy and content", "hungry": "is hungry", "sleepy": "is getting sleepy", "dirty": "needs a bath", "bored": "wants to play", "lonely": "misses you", "sad": "feels neglected and has stopped growing"]
+private let lifeMoodLine = ["happy": tr("is happy and content"), "hungry": tr("is hungry"), "sleepy": tr("is getting sleepy"), "dirty": tr("needs a bath"), "bored": tr("wants to play"), "lonely": tr("misses you"), "sad": tr("feels neglected and has stopped growing")]
 
 /// Entry point: start/naming flow until the baby is born, then the room.
 struct LifeGameView: View {
@@ -465,7 +465,7 @@ struct LifeGameView: View {
 
 struct LifeStartView: View {
     @EnvironmentObject var store: Store
-    var partnerName: String { store.partner?.name ?? "your partner" }
+    var partnerName: String { store.partner?.name ?? tr("your partner") }
     var body: some View {
         let g = store.lifeGame
         let fresh = g == nil || g?.status == "ended"
@@ -475,10 +475,10 @@ struct LifeStartView: View {
             else {
                 Text(fresh ? "Raise a little one together" : g?.proposedBy == store.db.currentUser ? "Waiting for \(partnerName)" : "\(partnerName) wants a baby with you 💞").font(.title.bold())
                 Text(fresh ? "Feed, bathe, play and put them to bed. Vote together on their name, school, path, job and who they marry. They grow up as you care for them, and their whole life fits in one year." : g?.proposedBy == store.db.currentUser ? "You proposed having a baby. Once \(partnerName) says yes, you’ll both pick a name." : "Say yes and you’ll both pick a name in secret. Needs drop over real time, so check in every day.").foregroundStyle(.secondary)
-                if store.partner == nil { InfoBanner(text: "Connect with your partner first. A baby needs two parents.") }
-                if store.partner?.simulated == true && fresh { InfoBanner(text: "\(partnerName) is a simulated partner in this demo and will answer for themselves.", icon: "testtube.2") }
-                if fresh { PrimaryButton(title: "Propose having a baby") { store.perform { try store.proposeBaby() } }.disabled(store.partner == nil) }
-                if g?.status == "proposed" && g?.proposedBy != store.db.currentUser { PrimaryButton(title: "Yes, let’s do it") { store.perform { try store.respondToBaby(true) } }; Button("Not now") { store.perform { try store.respondToBaby(false) } }.frame(maxWidth: .infinity) }
+                if store.partner == nil { InfoBanner(text: tr("Connect with your partner first. A baby needs two parents.")) }
+                if store.partner?.simulated == true && fresh { InfoBanner(text: tr("\(partnerName) is a simulated partner in this demo and will answer for themselves."), icon: "testtube.2") }
+                if fresh { PrimaryButton(title: tr("Propose having a baby")) { store.perform { try store.proposeBaby() } }.disabled(store.partner == nil) }
+                if g?.status == "proposed" && g?.proposedBy != store.db.currentUser { PrimaryButton(title: tr("Yes, let’s do it")) { store.perform { try store.respondToBaby(true) } }; Button("Not now") { store.perform { try store.respondToBaby(false) } }.frame(maxWidth: .infinity) }
             }
         }.navigationTitle("Our Little One").navigationBarTitleDisplayMode(.inline)
     }
@@ -494,9 +494,9 @@ struct LifeVotePanel: View {
         VStack(alignment: .leading, spacing: 14) {
             Text(def.title).font(.title.bold())
             Text(Life.fill(game.name, def.prompt)).foregroundStyle(.secondary)
-            if vote.decided { InfoBanner(text: "Decided: \(Life.label(vote.choice, vote.result))\(vote.coin ? " (by coin flip)" : " — you both agreed!")", icon: "checkmark.seal") }
+            if vote.decided { InfoBanner(text: tr("Decided: \(Life.label(vote.choice, vote.result))\(vote.coin ? " (by coin flip)" : " — you both agreed!")"), icon: "checkmark.seal") }
             else {
-                if let prev = vote.previousPicks, let partner { InfoBanner(text: "You didn’t agree: you picked \(Life.label(vote.choice, prev[me])), \(partner.name) picked \(Life.label(vote.choice, prev[partner.id])). Pick again\(vote.round >= Life.content.coinFlipRound ? ". If you still disagree, a coin flip decides." : ".")", icon: "exclamationmark.triangle") }
+                if let prev = vote.previousPicks, let partner { InfoBanner(text: tr("You didn’t agree: you picked \(Life.label(vote.choice, prev[me])), \(partner.name) picked \(Life.label(vote.choice, prev[partner.id])). Pick again\(vote.round >= Life.content.coinFlipRound ? ". If you still disagree, a coin flip decides." : ".")"), icon: "exclamationmark.triangle") }
                 if let mine = vote.picks[me] {
                     Card { Text("Your pick: \(Life.label(vote.choice, mine))").font(.headline); Text("Waiting for \(partner?.name ?? "your partner"). Their pick stays hidden until you’ve both chosen.").foregroundStyle(.secondary) }
                 } else {
@@ -507,7 +507,7 @@ struct LifeVotePanel: View {
                         }
                     }
                     Text("\(partner.flatMap { vote.picks[$0.id] != nil ? "\($0.name) has picked. " : nil } ?? "")Your pick stays secret until you’ve both chosen.").font(.caption).foregroundStyle(.secondary).frame(maxWidth: .infinity)
-                    PrimaryButton(title: "Lock in my pick") { if let choice { store.perform { try store.castLifeVote(vote.id, option: choice) } } }.disabled(choice == nil).opacity(choice == nil ? 0.5 : 1)
+                    PrimaryButton(title: tr("Lock in my pick")) { if let choice { store.perform { try store.castLifeVote(vote.id, option: choice) } } }.disabled(choice == nil).opacity(choice == nil ? 0.5 : 1)
                 }
             }
         }
@@ -574,7 +574,7 @@ struct LifeRoomView: View {
                 guard g.status == "alive" else { return }
                 LifeSound.shared.play(mood == "happy" ? ["giggle1", "giggle2"] : ["pop"])
                 particles += LifeParticle.burst(mood == "happy" ? ["😄", "✨"] : ["❔"], x: roomWidth / 2, y: a.mouth, count: mood == "happy" ? 4 : 1)
-                notice = mood == "happy" ? "\(g.name ?? "") giggles! 😄" : "\(g.name ?? "") \(lifeMoodLine[mood] ?? "")."
+                notice = mood == "happy" ? tr("\(g.name ?? "") giggles! 😄") : "\(g.name ?? "") \(lifeMoodLine[mood] ?? "")."
             }
             .frame(width: roomWidth, height: Self.roomH - Self.babyBottom, alignment: .bottom)
             ForEach(particles) { LifeParticleView(p: $0) }
@@ -613,9 +613,9 @@ struct LifeRoomView: View {
                 try store.lifeAction(a.id)
                 guard let after = store.lifeGame else { return }
                 let gained = after.care - before.care
-                if after.stage != before.stage { feel(.large); LifeSound.shared.duck(); LifeSound.shared.play("fanfare", vary: 0); particles += LifeParticle.burst(["🎉", "🎊", "⭐"], x: x, y: an.mouth, count: 18); particles.append(LifeParticle(emoji: "Grew up!", x: x, y: an.mouth - an.head, kind: .number, size: 30, rise: 90, duration: 1.6)) }
+                if after.stage != before.stage { feel(.large); LifeSound.shared.duck(); LifeSound.shared.play("fanfare", vary: 0); particles += LifeParticle.burst(["🎉", "🎊", "⭐"], x: x, y: an.mouth, count: 18); particles.append(LifeParticle(emoji: tr("Grew up!"), x: x, y: an.mouth - an.head, kind: .number, size: 30, rise: 90, duration: 1.6)) }
                 else if gained > 0 { feel(.medium); LifeSound.shared.play("ding", db: -3, vary: 0.6); particles.append(LifeParticle(emoji: "+\(gained) ❤", x: x, y: an.mouth - an.head * 0.9, kind: .number, size: 26, rise: 70, duration: 1.2)) }
-                notice = after.stage != before.stage ? "\(g.name ?? "") grew up! 🎉" : after.care == before.care ? "You \(a.verb) \(g.name ?? ""). They need more care before it counts." : "You \(a.verb) \(g.name ?? "") · +\(a.care) care"
+                notice = after.stage != before.stage ? tr("\(g.name ?? "") grew up! 🎉") : after.care == before.care ? tr("You \(a.verb) \(g.name ?? ""). They need more care before it counts.") : tr("You \(a.verb) \(g.name ?? "") · +\(a.care) care")
             }
             pose = nil; busy = false
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) { particles.removeAll { _ in true } }
@@ -661,7 +661,7 @@ struct LifeRoomView: View {
             let vote = g.votes.first { !$0.decided }; let me = store.db.currentUser ?? ""; let partnerName = store.partner?.name ?? "Partner"
             ScrollView {
                 VStack(spacing: 14) {
-                    VStack(spacing: 2) { Text(g.status == "ended" ? "Their story is complete" : "\(stage.label) · Day \(min(Int(Life.content.maxDays), Int(Life.ageDays(g, at: now)) + 1)) of \(Int(Life.content.maxDays))").font(.caption).opacity(0.7) }
+                    VStack(spacing: 2) { Text(g.status == "ended" ? "Their story is complete" : tr("\(stage.label) · Day \(min(Int(Life.content.maxDays), Int(Life.ageDays(g, at: now)) + 1)) of \(Int(Life.content.maxDays))")).font(.caption).opacity(0.7) }
                     if g.status == "alive" {
                         HStack { ForEach(Life.content.needs, id: \.id) { n in let v = needs[n.id] ?? 0; VStack(spacing: 6) { Text(n.emoji).font(.title3).frame(width: 44, height: 44).background(.white, in: Circle()).overlay(Circle().stroke(v < 35 ? Color.red : lifeInk.opacity(0.12), lineWidth: 2)).modifier(PopOnIncrease(value: v)); ProgressView(value: v, total: 100).tint(v < 35 ? .red : v < 60 ? .orange : .green).frame(width: 40) }.frame(maxWidth: .infinity).accessibilityElement(children: .ignore).accessibilityLabel("\(n.label) \(Int(v)) percent") } }.padding(12).background(.white.opacity(0.6), in: RoundedRectangle(cornerRadius: 28))
                     }
@@ -683,7 +683,7 @@ struct LifeRoomView: View {
                     } else {
                         VStack(spacing: 6) {
                             Text("\(g.name ?? "") \(lifeMoodLine[mood] ?? "")").font(.body.weight(.semibold))
-                            if let next { ProgressView(value: Life.progress(g, at: now)).tint(lifeInk); Text(Life.pendingChoice(g).map { "Decide \"\(Life.choice($0).title.lowercased())\" together so \(g.name ?? "") can grow up" } ?? "Growing into: \(next.label) · \(g.care)/\(stage.careToGrow) care").font(.caption).opacity(0.7) }
+                            if let next { ProgressView(value: Life.progress(g, at: now)).tint(lifeInk); Text(Life.pendingChoice(g).map { tr("Decide \"\(Life.choice($0).title.lowercased())\" together so \(g.name ?? "") can grow up") } ?? "Growing into: \(next.label) · \(g.care)/\(stage.careToGrow) care").font(.caption).opacity(0.7) }
                             else { Text("Golden years · \(g.care)/\(stage.careToGrow) care").font(.caption).opacity(0.7) }
                             if let p = store.partner, let last = g.log.first(where: { $0.userID == p.id }) { Text("\(p.name)\(p.simulated ? " (simulated)" : "") \(Life.action(last.action)?.verb ?? "") \(g.name ?? "") \(last.at.formatted(.relative(presentation: .named, unitsStyle: .wide)))").font(.caption).opacity(0.7) }
                         }.multilineTextAlignment(.center).padding(12).frame(maxWidth: .infinity).background(.white.opacity(0.6), in: RoundedRectangle(cornerRadius: 28))
@@ -715,16 +715,16 @@ struct LifeStoryView: View {
         Page {
             if let g = store.lifeGame {
                 if let ending = g.ending { Card { Text(ending).font(.headline) } }
-                SectionHeading(title: "Who they became")
+                SectionHeading(title: tr("Who they became"))
                 LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) { ForEach(Life.content.skills, id: \.id) { s in Card { Text(s.emoji).font(.title2); Text(s.label).font(.headline); Text("\(g.skills[s.id] ?? 0) pts").font(.caption).foregroundStyle(.secondary) } } }
-                SectionHeading(title: "Milestones")
+                SectionHeading(title: tr("Milestones"))
                 ForEach(g.milestones) { m in HStack(alignment: .top, spacing: 12) { Circle().fill(.tint).frame(width: 12, height: 12).padding(.top, 5); VStack(alignment: .leading) { Text(m.text).font(.body.weight(.semibold)); Text(m.at.formatted(date: .abbreviated, time: .omitted)).font(.caption).foregroundStyle(.secondary) } } }
-                SectionHeading(title: "Care together")
+                SectionHeading(title: tr("Care together"))
                 let counts = Dictionary(grouping: g.log, by: \.userID).mapValues(\.count)
-                Text(counts.isEmpty ? "No care yet." : counts.map { "\(who($0.key)): \($0.value)" }.sorted().joined(separator: " · ")).foregroundStyle(.secondary)
+                Text(counts.isEmpty ? tr("No care yet.") : counts.map { "\(who($0.key)): \($0.value)" }.sorted().joined(separator: " · ")).foregroundStyle(.secondary)
                 ForEach(g.log.prefix(20)) { e in Text("\(Life.action(e.action)?.emoji ?? "") \(who(e.userID)) \(Life.action(e.action)?.verb ?? "") \(g.name ?? "") · \(e.at.formatted(.relative(presentation: .named)))").font(.caption).foregroundStyle(.secondary) }
             } else { ContentUnavailableView("No story yet", systemImage: "book", description: Text("Have a little one together to start writing it.")) }
         }.navigationTitle(store.lifeGame?.name.map { "\($0)'s story" } ?? "Their story").navigationBarTitleDisplayMode(.inline)
     }
-    func who(_ id: String) -> String { id == store.db.currentUser ? "You" : store.partner.map { $0.name + ($0.simulated ? " (simulated)" : "") } ?? "Partner" }
+    func who(_ id: String) -> String { id == store.db.currentUser ? tr("You") : store.partner.map { $0.name + ($0.simulated ? tr(" (simulated)") : "") } ?? tr("Partner") }
 }

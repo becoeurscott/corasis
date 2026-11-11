@@ -55,7 +55,7 @@ extension Store {
         UserDefaults.standard.set(near, forKey: key)
         guard near, !was else { return }
         if usesRemoteCouple { sendPartnerAlert(kind: "near", place: nil) }
-        else { Self.localNotify(title: "💞 You're close!", body: "You and \(partner.name) are near each other right now.") }
+        else { Self.localNotify(title: tr("💞 You're close!"), body: tr("You and \(partner.name) are near each other right now.")) }
     }
     static func localNotify(title: String, body: String) {
         let c = UNMutableNotificationContent(); c.title = title; c.body = body; c.sound = .default
@@ -102,7 +102,7 @@ struct PlaceAlertsView: View {
     @EnvironmentObject var store: Store
     @Environment(\.appPalette) var p
     @State private var editing: Place?
-    var partnerName: String { store.partner?.name ?? "your partner" }
+    var partnerName: String { store.partner?.name ?? tr("your partner") }
 
     var body: some View {
         ScrollView {
@@ -125,7 +125,7 @@ struct PlaceAlertsView: View {
                         }.buttonStyle(.smooth)
                     }.padding(14).background(p.surface, in: RoundedRectangle(cornerRadius: 24))
                 }
-                if store.partner == nil { InfoBanner(text: "Connect your partner to use place alerts.") }
+                if store.partner == nil { InfoBanner(text: tr("Connect your partner to use place alerts.")) }
             }.padding(20).frame(maxWidth: 680).frame(maxWidth: .infinity)
         }
         .background(p.background).foregroundStyle(p.text)
@@ -134,7 +134,7 @@ struct PlaceAlertsView: View {
         .onAppear { PlaceMonitor.shared.refresh(store) }
     }
     var suggestions: [(name: String, emoji: String, tint: Color)] {
-        [("\(partnerName)'s home", "🏠", Color(hex: "#FFE1EC")), ("\(partnerName)'s work", "💼", Color(hex: "#E1E8FF"))]
+        [(tr("\(partnerName)'s home"), "🏠", Color(hex: "#FFE1EC")), (tr("\(partnerName)'s work"), "💼", Color(hex: "#E1E8FF"))]
             .filter { s in !store.places.contains { $0.name == s.0 } }.map { ($0.0, $0.1, $0.2) }
     }
     func newPlace(owner: String?, name: String, emoji: String) -> Place? {
@@ -194,7 +194,7 @@ struct PlaceEditor: View {
                 Section { Button("Delete place", role: .destructive) { store.deletePlace(place.id); dismiss() } }
             }
         }
-        .navigationTitle(place.name.isEmpty ? "New place" : place.name).navigationBarTitleDisplayMode(.inline)
+        .navigationTitle(place.name.isEmpty ? tr("New place") : place.name).navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
             ToolbarItem(placement: .confirmationAction) {
@@ -268,7 +268,7 @@ struct MapAlertButtons: View {
             NavigationLink { ProximityAlertView() } label: { chip("bell.badge.fill", Proximity.enabled ? "Proximity · on" : "Proximity") }
         }
     }
-    func chip(_ icon: String, _ text: String) -> some View {
+    func chip(_ icon: String, _ text: LocalizedStringKey) -> some View {
         Label(text, systemImage: icon).font(.subheadline.weight(.semibold)).foregroundStyle(p.primary)
             .padding(.horizontal, 14).padding(.vertical, 10).background(.regularMaterial, in: Capsule()).shadow(color: .black.opacity(0.12), radius: 6, y: 2)
     }

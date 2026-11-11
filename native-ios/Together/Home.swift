@@ -6,6 +6,7 @@ struct HomeView: View {
     @Environment(\.appPalette) var p
     @State private var capture = false
     @State private var now = Date()
+    @State private var paywall = false
     private let timer = Timer.publish(every: 60, on: .main, in: .common).autoconnect()
     private var minutesLeft: Int {
         let tz = TimeZone(identifier: store.couple?.timezone ?? store.me?.timezone ?? TimeZone.current.identifier) ?? .current
@@ -20,7 +21,7 @@ struct HomeView: View {
             PartnerHeader()
             if store.couple != nil { AffectionBar() }
             if store.couple != nil { ShareLiveCard() }
-            if store.partner?.simulated == true { InfoBanner(text: "Alex is a simulated partner. Replies are generated on this device and never reach a real person.", icon: "testtube.2") }
+            if store.partner?.simulated == true { InfoBanner(text: tr("Alex is a simulated partner. Replies are generated on this device and never reach a real person."), icon: "testtube.2") }
             if store.partner == nil { Card { Text("Your shared space starts here").font(.title2.bold()); Text("Invite your partner or explore with a simulated partner.").foregroundStyle(.secondary); NavigationLink("Partner connection") { PartnerSettings() } } }
             Card {
                 HStack(spacing: 16) { Text(lostStreak ? "💔" : "🔥").font(.system(size: 36)).padding(16).background(p.soft, in: RoundedRectangle(cornerRadius: 18)); VStack(alignment: .leading) {
@@ -40,12 +41,12 @@ struct HomeView: View {
                     }
                 } }
                 if lostStreak {
-                    Button { if store.db.prefs.premium { store.perform { try store.restoreStreak() } } } label: {
+                    Button { if store.db.prefs.premium { store.perform { try store.restoreStreak() } } else { paywall = true } } label: {
                         HStack { Image(systemName: store.db.prefs.premium ? "flame.fill" : "lock.fill"); Text(store.db.prefs.premium ? "Restore my flame" : "Together Plus: Restore flame") }.font(.subheadline.bold()).foregroundStyle(.white).frame(maxWidth: .infinity).padding(14).background(store.db.prefs.premium ? p.primary : Color.gray, in: RoundedRectangle(cornerRadius: 16))
-                    }
+                    }.sheet(isPresented: $paywall) { NavigationStack { PaywallView() } }
                 }
                 HStack { status(store.me); Spacer(); status(store.partner) }
-                PrimaryButton(title: "Send my moment") { capture = true }
+                PrimaryButton(title: tr("Send my moment")) { capture = true }
                 NavigationLink { FlameView() } label: { Text("Flame details & history").font(.subheadline.bold()).frame(maxWidth: .infinity).padding(.top, 4) }
             }.onReceive(timer) { now = $0 }
             if let suggestion = store.connectionPreferences?.suggestion {
@@ -60,7 +61,7 @@ struct HomeView: View {
             if let baby = store.lifeGame, baby.status == "naming" || baby.status == "alive" { BabyCard(game: baby) }
         }.toolbar(.hidden, for: .navigationBar).sheet(isPresented: $capture) { NavigationStack { CaptureMomentView() } }
     }
-    func status(_ person: Person?) -> some View { let sent = store.moments.contains { $0.author == person?.id && $0.day == store.today }; return Text("\(person?.name ?? "Partner"): \(sent ? "Sent ✓" : "Waiting…")").font(.caption.bold()).foregroundStyle(p.primary).padding(10).background(p.soft.opacity(0.5), in: Capsule()) }
+    func status(_ person: Person?) -> some View { let sent = store.moments.contains { $0.author == person?.id && $0.day == store.today }; return Text("\(person?.name ?? "Partner"): \(sent ? tr("Sent ✓") : tr("Waiting…"))").font(.caption.bold()).foregroundStyle(p.primary).padding(10).background(p.soft.opacity(0.5), in: Capsule()) }
 }
 struct PartnerHeader: View {
     @EnvironmentObject var store: Store
@@ -70,7 +71,7 @@ struct PartnerHeader: View {
     @State private var charging = false
     private let avatar: CGFloat = 72
     var body: some View {
-        HStack(alignment: .top) { person(store.me); Spacer(minLength: 0); VStack(spacing: 8) { if let days = daysTogether { Text(days == 1 ? "1 day" : "\(days.formatted()) days").font(.caption.weight(.bold)).foregroundStyle(p.primary).padding(.top, 2).accessibilityLabel("Together for \(days) days") }; Text(store.partner == nil ? "🔗" : "💕").font(.title).frame(width: 48, height: 48).background(p.soft, in: Circle()).padding(.top, daysTogether == nil ? avatar / 2 - 24 : 0); if store.partner != nil { Text(timeDifference).font(.caption).foregroundStyle(.secondary) }; if let distance { Text("📍 " + distance).font(.caption).foregroundStyle(.secondary).accessibilityLabel(distance + " apart") } }.frame(width: 96); Spacer(minLength: 0); if store.partner != nil { person(store.partner) } else { invitePartner } }
+        HStack(alignment: .top) { person(store.me); Spacer(minLength: 0); VStack(spacing: 8) { if let days = daysTogether { Text(days == 1 ? "1 day" : "\(days.formatted()) days").font(.caption.weight(.bold)).foregroundStyle(p.primary).padding(.top, 2).accessibilityLabel("Together for \(days) days") }; Text(store.partner == nil ? "🔗" : "💕").font(.title).frame(width: 48, height: 48).background(p.soft, in: Circle()).padding(.top, daysTogether == nil ? avatar / 2 - 24 : 0); if store.partner != nil { Text(timeDifference).font(.caption).foregroundStyle(.secondary) }; if let distance { Text("📍 " + distance).font(.caption).foregroundStyle(.secondary).accessibilityLabel(distance + tr(" apart")) } }.frame(width: 96); Spacer(minLength: 0); if store.partner != nil { person(store.partner) } else { invitePartner } }
             .background(alignment: .top) { if store.partner != nil { GeometryReader { geo in let column = (geo.size.width - 96) / 2; let half = max(0, (geo.size.width - column - avatar - 12 - 52) / 2); HStack(spacing: 52) { DottedConnector(color: p.primary).frame(width: half, height: 4); DottedConnector(color: p.primary).frame(width: half, height: 4).scaleEffect(x: -1) }.position(x: geo.size.width / 2, y: avatar / 2) } } }
             .padding(.vertical, 12)
             .onAppear { readBattery(); locator.start() }
@@ -101,8 +102,8 @@ struct PartnerHeader: View {
         return VStack(spacing: 6) {
             Avatar(person: person, size: avatar); Text(person?.name ?? "Partner").font(.headline).lineLimit(1)
             HStack(spacing: 4) {
-                if let flag = Flag.emoji(code) { Text(flag).font(.subheadline).accessibilityLabel(Locale.current.localizedString(forRegionCode: code ?? "") ?? "Country") }
-                Text(clock(person?.timezone ?? TimeZone.current.identifier) + (mine ? " · You" : person?.simulated == true ? "" : " · Partner")).font(.caption).foregroundStyle(.secondary)
+                if let flag = Flag.emoji(code) { Text(flag).font(.subheadline).accessibilityLabel(Locale.current.localizedString(forRegionCode: code ?? "") ?? tr("Country")) }
+                Text(clock(person?.timezone ?? TimeZone.current.identifier) + (mine ? tr(" · You") : person?.simulated == true ? "" : tr(" · Partner"))).font(.caption).foregroundStyle(.secondary)
             }
             if let battery { BatteryGauge(percent: battery, charging: mine && charging) }
         }.frame(maxWidth: .infinity)
@@ -123,7 +124,7 @@ struct PartnerHeader: View {
         return f.string(from: Measurement(value: km, unit: UnitLength.kilometers))
     }
     func clock(_ zone: String) -> String { let f = DateFormatter(); f.timeZone = TimeZone(identifier: zone); f.dateFormat = "HH:mm"; return f.string(from: Date()) }
-    var timeDifference: String { let mine = TimeZone(identifier: store.me?.timezone ?? "UTC")?.secondsFromGMT() ?? 0; let theirs = TimeZone(identifier: store.partner?.timezone ?? "UTC")?.secondsFromGMT() ?? 0; let delta = Double(theirs - mine) / 3600; return delta == 0 ? "Same time zone" : "\(abs(delta).formatted())h \(delta > 0 ? "ahead" : "behind")" }
+    var timeDifference: String { let mine = TimeZone(identifier: store.me?.timezone ?? "UTC")?.secondsFromGMT() ?? 0; let theirs = TimeZone(identifier: store.partner?.timezone ?? "UTC")?.secondsFromGMT() ?? 0; let delta = Double(theirs - mine) / 3600; return delta == 0 ? tr("Same time zone") : delta > 0 ? tr("\(abs(delta).formatted())h ahead") : tr("\(abs(delta).formatted())h behind") }
 }
 enum Flag {
     /// "FR" → 🇫🇷
@@ -186,17 +187,17 @@ struct CaptureMomentView: View {
     @Environment(\.dismiss) var dismiss
     @State private var media: Media?
     @State private var caption = ""
-    var body: some View { Page { Text("A little piece of your day.").font(.title2.bold()); Text("Both of you send a photo or video for the day to count. Your couple day follows \(store.couple?.timezone ?? "your time zone").").foregroundStyle(.secondary); Card { MediaChooser(media: $media); TextField("Add a caption", text: $caption, axis: .vertical).textFieldStyle(.soft) }; PrimaryButton(title: "Send my moment") { store.perform { guard let media else { throw AppError(message: "Choose a photo or video first.") }; try store.addMoment(media: media, caption: caption); dismiss() } } }.navigationTitle("Daily moment").navigationBarTitleDisplayMode(.inline).toolbar { ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } } } }
+    var body: some View { Page { Text("A little piece of your day.").font(.title2.bold()); Text("Both of you send a photo or video for the day to count. Your couple day follows \(store.couple?.timezone ?? "your time zone").").foregroundStyle(.secondary); Card { MediaChooser(media: $media); TextField("Add a caption", text: $caption, axis: .vertical).textFieldStyle(.soft) }; PrimaryButton(title: tr("Send my moment")) { store.perform { guard let media else { throw AppError(message: "Choose a photo or video first.") }; try store.addMoment(media: media, caption: caption); dismiss() } } }.navigationTitle("Daily moment").navigationBarTitleDisplayMode(.inline).toolbar { ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } } } }
 }
 struct FlameView: View {
     @EnvironmentObject var store: Store
     @State private var capture = false
-    var body: some View { Page { Card { Text("🔥 \(store.streak.current) days").font(.largeTitle.bold()); Text("Longest flame: \(store.streak.longest) days").font(.headline); Text("Each of you sends one moment per couple day. Extra moments never add extra credit.").foregroundStyle(.secondary); PrimaryButton(title: "Send my moment") { capture = true } }; SectionHeading(title: "Moment history"); if store.moments.isEmpty { ContentUnavailableView("Your flame starts with a moment", systemImage: "flame", description: Text("Choose a photo or video to begin.")) }; ForEach(Array(Set(store.moments.map(\.day))).sorted().reversed(), id: \.self) { day in NavigationLink { MomentDayView(day: day) } label: { Card { HStack { Text(Day.label(day)).font(.headline); Spacer(); Text(store.streak.days.contains(day) ? "🔥 Complete" : "Waiting").font(.caption) } } }.buttonStyle(.smooth) } }.navigationTitle("Daily flame").sheet(isPresented: $capture) { NavigationStack { CaptureMomentView() } } }
+    var body: some View { Page { Card { Text("🔥 \(store.streak.current) days").font(.largeTitle.bold()); Text("Longest flame: \(store.streak.longest) days").font(.headline); Text("Each of you sends one moment per couple day. Extra moments never add extra credit.").foregroundStyle(.secondary); PrimaryButton(title: tr("Send my moment")) { capture = true } }; SectionHeading(title: tr("Moment history")); if store.moments.isEmpty { ContentUnavailableView("Your flame starts with a moment", systemImage: "flame", description: Text("Choose a photo or video to begin.")) }; ForEach(Array(Set(store.moments.map(\.day))).sorted().reversed(), id: \.self) { day in NavigationLink { MomentDayView(day: day) } label: { Card { HStack { Text(Day.label(day)).font(.headline); Spacer(); Text(store.streak.days.contains(day) ? "🔥 Complete" : "Waiting").font(.caption) } } }.buttonStyle(.smooth) } }.navigationTitle("Daily flame").sheet(isPresented: $capture) { NavigationStack { CaptureMomentView() } } }
 }
 struct MomentDayView: View {
     @EnvironmentObject var store: Store
     var day: String
-    var body: some View { Page { ForEach(store.moments.filter { $0.day == day }) { moment in Card { Text(store.db.people.first { $0.id == moment.author }.map { $0.name + ($0.simulated ? " · simulated" : "") } ?? "Partner").font(.headline); MediaPreview(media: moment.media); Text(moment.caption) } } }.navigationTitle(Day.label(day)).navigationBarTitleDisplayMode(.inline) }
+    var body: some View { Page { ForEach(store.moments.filter { $0.day == day }) { moment in Card { Text(store.db.people.first { $0.id == moment.author }.map { $0.name + ($0.simulated ? tr(" · simulated") : "") } ?? "Partner").font(.headline); MediaPreview(media: moment.media); Text(moment.caption) } } }.navigationTitle(Day.label(day)).navigationBarTitleDisplayMode(.inline) }
 }
 struct CoupleMapView: View {
     @EnvironmentObject var store: Store
@@ -224,9 +225,9 @@ struct CoupleMapView: View {
         }
         .overlay(alignment: .top) { MapAlertButtons().padding(.top, 12) }
         .onChange(of: pinsKey) { _, _ in camera = .automatic }
-        if store.partner?.simulated == true { InfoBanner(text: "Alex’s Montréal pin is a fixed demo location, not a live person’s position.") }
+        if store.partner?.simulated == true { InfoBanner(text: tr("Alex’s Montréal pin is a fixed demo location, not a live person’s position.")) }
         PartnerHeader()
-        Card { Toggle("Share my location", isOn: Binding(get: { ownSharing?.location ?? false }, set: { store.setSharing(location: $0); if $0 { location.request(store: store) } })); Toggle("Share my battery", isOn: Binding(get: { ownSharing?.battery ?? false }, set: { store.setSharing(battery: $0); UIDevice.current.isBatteryMonitoringEnabled = $0 })); if ownSharing?.battery == true { Text(UIDevice.current.batteryLevel >= 0 ? "Your battery: \(Int(UIDevice.current.batteryLevel * 100))%" : "Battery unavailable in this simulator").font(.caption) }; Text("Sharing is opt-in. Turning location off immediately clears your saved position. No location history is recorded.").font(.caption).foregroundStyle(.secondary) }
+        Card { Toggle("Share my location", isOn: Binding(get: { ownSharing?.location ?? false }, set: { store.setSharing(location: $0); if $0 { location.request(store: store) } })); Toggle("Share my battery", isOn: Binding(get: { ownSharing?.battery ?? false }, set: { store.setSharing(battery: $0); UIDevice.current.isBatteryMonitoringEnabled = $0 })); if ownSharing?.battery == true { Text(UIDevice.current.batteryLevel >= 0 ? tr("Your battery: \(Int(UIDevice.current.batteryLevel * 100))%") : "Battery unavailable in this simulator").font(.caption) }; Text("Sharing is opt-in. Turning location off immediately clears your saved position. No location history is recorded.").font(.caption).foregroundStyle(.secondary) }
     }.navigationTitle("Map").onChange(of: phase) { _, phase in if phase == .active && ownSharing?.location == true { location.request(store: store) } }.onAppear { if ownSharing?.location == true { location.request(store: store) } } }
     var ownSharing: Sharing? { store.db.sharing[store.db.currentUser ?? ""] }
     @State private var camera: MapCameraPosition = .automatic
@@ -313,7 +314,7 @@ struct MeetingCountdown: View {
         let c = cal.dateComponents([.month, .day, .hour, .minute, .second], from: now, to: target)
         return (c.month ?? 0, c.day ?? 0, c.hour ?? 0, c.minute ?? 0, c.second ?? 0)
     }
-    func tile(_ value: Int, _ label: String) -> some View {
+    func tile(_ value: Int, _ label: LocalizedStringKey) -> some View {
         VStack(spacing: 2) {
             Text(String(format: "%02d", value)).font(.system(size: 30, weight: .bold, design: .rounded)).monospacedDigit().contentTransition(.numericText())
             Text(label).font(.caption2.weight(.semibold)).opacity(0.85)
@@ -329,14 +330,14 @@ struct BabyCard: View {
     @Environment(\.appPalette) private var p
     let game: LifeGame
     var ageDays: Int { game.born.map { max(1, Int(Date().addingTimeInterval(game.clockOffset).timeIntervalSince($0) / 86400) + 1) } ?? 1 }
-    var stageLabel: String { Life.content.stages.first { $0.id == game.stage }?.label ?? "Baby" }
+    var stageLabel: String { Life.content.stages.first { $0.id == game.stage }?.label ?? tr("Baby") }
     var body: some View {
         NavigationLink { LifeGameView() } label: {
             HStack(spacing: 16) {
                 BabyView(look: Life.stage(game.stage).look, mood: game.status == "alive" ? Life.mood(Life.decayed(game, at: Life.now(game))) : "happy", size: 150).allowsHitTesting(false).scaleEffect(0.62).offset(y: 6).frame(width: 84, height: 84).background(.white.opacity(0.25), in: Circle()).clipShape(Circle())
                 VStack(alignment: .leading, spacing: 4) {
                     Text("OUR LITTLE ONE").font(.caption.bold()).tracking(2).opacity(0.9)
-                    Text(game.name ?? "Your little one").font(.system(size: 26, weight: .bold, design: .rounded)).lineLimit(1)
+                    Text(game.name ?? tr("Your little one")).font(.system(size: 26, weight: .bold, design: .rounded)).lineLimit(1)
                     Text(game.status == "naming" ? "Choose a name together" : "\(stageLabel) · Day \(ageDays) of 365").font(.subheadline).opacity(0.92)
                 }
                 Spacer(minLength: 0)
