@@ -64,7 +64,10 @@ extension Store {
         let id = UUID().uuidString
         var all = db.repairs ?? []
         all.append(RepairEntry(coupleID: c.id, repair: id, user: me, starter: true, topic: topic.trimmingCharacters(in: .whitespacesAndNewlines), response: "accepted"))
-        db.repairs = all; simulatePartnerRepair(id); return id
+        db.repairs = all; simulatePartnerRepair(id)
+        // Make sure the invitation is on the server before the partner's phone buzzes.
+        if usesRemoteCouple { let topic = all.last?.topic; Task { await CoupleSync.shared.sync(self); sendPartnerAlert(kind: "repair", place: topic?.isEmpty == false ? topic : nil) } }
+        return id
     }
     /// Changes only my own side of a repair.
     func updateRepair(_ id: String, _ change: (inout RepairEntry) -> Void) {

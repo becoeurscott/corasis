@@ -9458,6 +9458,40 @@
           }
         }
       }
+    },
+    "PUSH_REPAIR_TITLE": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "❤️ %@ would like to mend something with you"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "❤️ %@ aimerait réparer quelque chose avec toi"
+          }
+        }
+      }
+    },
+    "PUSH_REPAIR_BODY": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not looking for a fight, just to understand each other. Open Mend the Heart to answer."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas pour se disputer, juste pour se comprendre. Ouvre Réparons le Cœur pour répondre."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

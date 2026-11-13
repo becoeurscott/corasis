@@ -1,6 +1,6 @@
 /**
- * partner-alert-push — pushes a place alert (arrived / left a saved place) or a
- * proximity alert ("you're close") after send_partner_alert.
+ * partner-alert-push — pushes a place alert (arrived / left a saved place), a
+ * proximity alert ("you're close") or a Mend the Heart invitation after send_partner_alert.
  *
  * Called by the detecting phone with { alert_id }. Uses the caller's own token,
  * so the database function only answers for alerts they sent.
@@ -64,6 +64,17 @@ export default async function (req: Request): Promise<Response> {
         ? { title: `📍 ${t.sender_name} arrived`, body: `${t.sender_name} just arrived at ${place}.` }
         : { title: `👋 ${t.sender_name} left`, body: `${t.sender_name} just left ${place}.` };
 
+  // Repair invitations are localized on the phone (Localizable.xcstrings keys), English as fallback.
+  const alertFor = (self: boolean) =>
+    t.kind === 'repair'
+      ? {
+          title: `❤️ ${t.sender_name} would like to mend something with you`,
+          body: 'Not looking for a fight, just to understand each other. Open Mend the Heart to answer.',
+          'title-loc-key': 'PUSH_REPAIR_TITLE', 'title-loc-args': [t.sender_name],
+          'loc-key': 'PUSH_REPAIR_BODY',
+        }
+      : message(self);
+
   let sent = 0;
   const failures: string[] = [];
   for (const d of t.tokens.filter((x) => x.platform === 'ios')) {
@@ -71,7 +82,7 @@ export default async function (req: Request): Promise<Response> {
     const res = await fetch(`https://${host}/3/device/${d.token}`, {
       method: 'POST',
       headers: { authorization: `bearer ${jwt}`, 'apns-topic': topic, 'apns-push-type': 'alert', 'apns-priority': '10', 'content-type': 'application/json' },
-      body: JSON.stringify({ aps: { alert: message(d.self), sound: 'default', 'thread-id': 'partner-alert' }, partnerAlert: { id: alert_id, kind: t.kind } }),
+      body: JSON.stringify({ aps: { alert: alertFor(d.self), sound: 'default', 'thread-id': 'partner-alert' }, partnerAlert: { id: alert_id, kind: t.kind } }),
     }).catch((e) => ({ ok: false, status: 0, text: async () => String(e) }) as Response);
     if (res.ok) sent++;
     else failures.push(`${res.status} ${await res.text()}`);

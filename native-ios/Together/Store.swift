@@ -15,6 +15,8 @@ struct AppError: LocalizedError {
     @Published var error: String?
     @Published var locked = false
     @Published var pendingInvite = ""
+    /// Set when a Mend the Heart invitation notification is tapped.
+    @Published var openRepairs = false
     let file: URL
     private var generation = UUID()
     init(file: URL? = nil) {

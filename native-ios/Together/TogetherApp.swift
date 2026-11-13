@@ -76,6 +76,9 @@ struct RootView: View {
         .sheet(isPresented: Binding(get: { !store.pendingInvite.isEmpty && store.me != nil && store.verified }, set: { if !$0 { store.pendingInvite = "" } })) {
             NavigationStack { PartnerSettings().toolbar { ToolbarItem(placement: .cancellationAction) { Button("Close") { store.pendingInvite = "" } } } }.environmentObject(store).environment(\.appPalette, palette)
         }
+        .sheet(isPresented: Binding(get: { store.openRepairs && store.couple != nil && !store.locked }, set: { store.openRepairs = $0 })) {
+            NavigationStack { RepairHomeView().toolbar { ToolbarItem(placement: .cancellationAction) { Button("Close") { store.openRepairs = false } } } }.environmentObject(store).environment(\.appPalette, palette)
+        }
         .alert("Corasis", isPresented: Binding(get: { store.error != nil }, set: { if !$0 { store.error = nil } })) { Button("OK") { store.error = nil } } message: { Text(store.error ?? "") }
     }
     var palette: AppPalette { AppPalette(theme: store.db.prefs.theme, dark: scheme == .dark) }

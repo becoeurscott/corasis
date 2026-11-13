@@ -98,10 +98,17 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
             await MainActor.run { self.store?.showAffection(emoji) }
             return []
         }
+        // A repair invitation: fetch it now so it's there when they open Mend the Heart.
+        if (notification.request.content.userInfo["partnerAlert"] as? [String: Any])?["kind"] as? String == "repair",
+           let store = await MainActor.run(body: { self.store }) { await CoupleSync.shared.sync(store) }
         return [.banner, .sound]
     }
     /// Tapped the notification: open the app and play the burst.
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
+        if (response.notification.request.content.userInfo["partnerAlert"] as? [String: Any])?["kind"] as? String == "repair" {
+            await MainActor.run { self.store?.openRepairs = true }
+            if let store = await MainActor.run(body: { self.store }) { await CoupleSync.shared.sync(store) }
+        }
         if let emoji = (response.notification.request.content.userInfo["affection"] as? [String: Any])?["emoji"] as? String {
             await MainActor.run { self.store?.showAffection(emoji) }
         }
