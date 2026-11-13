@@ -1,2392 +1,2392 @@
 {
-  "schemaVersion": 1,
-  "palettes": {
-    "pink": {
-      "label": "Pink",
-      "tagline": "Soft, sweet and playful",
-      "light": {
-        "primary": "#E0507F",
-        "primaryStrong": "#C33A68",
-        "primarySoft": "#FBE3EC",
-        "gradientStart": "#FF8FB1",
-        "gradientEnd": "#E0507F",
-        "background": "#FFF7FA",
-        "backgroundAlt": "#FDEFF4",
-        "surfaceTint": "#FFF0F5",
-        "selected": "#FBE3EC",
-        "onPrimary": "#FFFFFF",
-        "surface": "#FFFFFF",
-        "surfaceRaised": "#FFFFFF",
-        "text": "#1B1420",
-        "textSecondary": "#5B5361",
-        "textMuted": "#8A8290",
-        "border": "#EDE6EF",
-        "borderStrong": "#D8CFDC",
-        "selectedBorder": "#E0507F",
-        "focus": "#C33A68",
-        "overlay": "rgba(20, 10, 25, 0.45)",
-        "shadow": "rgba(40, 20, 50, 0.12)",
-        "success": "#1E7F5C",
-        "successSoft": "#DDF3EA",
-        "warning": "#A35F00",
-        "warningSoft": "#FFF1D6",
-        "danger": "#C62828",
-        "dangerSoft": "#FDE2E2",
-        "info": "#1F5FA8",
-        "infoSoft": "#E0ECFB"
-      },
-      "dark": {
-        "primary": "#FF8FB1",
-        "primaryStrong": "#FFB0C8",
-        "primarySoft": "#3C1F2B",
-        "gradientStart": "#E0507F",
-        "gradientEnd": "#7A2B4A",
-        "background": "#17101A",
-        "backgroundAlt": "#1F1522",
-        "surface": "#231824",
-        "surfaceRaised": "#2C1F2E",
-        "surfaceTint": "#2E1C27",
-        "selected": "#3C1F2B",
-        "onPrimary": "#140A14",
-        "text": "#F6F1F7",
-        "textSecondary": "#C3B9C7",
-        "textMuted": "#8E8494",
-        "border": "#2E2633",
-        "borderStrong": "#443B4A",
-        "selectedBorder": "#FF8FB1",
-        "focus": "#FF8FB1",
-        "overlay": "rgba(0, 0, 0, 0.6)",
-        "shadow": "rgba(0, 0, 0, 0.5)",
-        "success": "#6FD3A6",
-        "successSoft": "#163A2C",
-        "warning": "#F6C25B",
-        "warningSoft": "#3D2E0E",
-        "danger": "#FF8A80",
-        "dangerSoft": "#4A1E1E",
-        "info": "#8CBBFF",
-        "infoSoft": "#1A2C47"
-      }
-    },
-    "purple": {
-      "label": "Purple",
-      "tagline": "Dreamy, calm and cozy",
-      "light": {
-        "primary": "#7C4DD6",
-        "primaryStrong": "#5F36B3",
-        "primarySoft": "#ECE3FB",
-        "gradientStart": "#A78BFA",
-        "gradientEnd": "#7C4DD6",
-        "background": "#FAF7FF",
-        "backgroundAlt": "#F2ECFC",
-        "surfaceTint": "#F5F0FE",
-        "selected": "#ECE3FB",
-        "onPrimary": "#FFFFFF",
-        "surface": "#FFFFFF",
-        "surfaceRaised": "#FFFFFF",
-        "text": "#1B1420",
-        "textSecondary": "#5B5361",
-        "textMuted": "#8A8290",
-        "border": "#EDE6EF",
-        "borderStrong": "#D8CFDC",
-        "selectedBorder": "#7C4DD6",
-        "focus": "#5F36B3",
-        "overlay": "rgba(20, 10, 25, 0.45)",
-        "shadow": "rgba(40, 20, 50, 0.12)",
-        "success": "#1E7F5C",
-        "successSoft": "#DDF3EA",
-        "warning": "#A35F00",
-        "warningSoft": "#FFF1D6",
-        "danger": "#C62828",
-        "dangerSoft": "#FDE2E2",
-        "info": "#1F5FA8",
-        "infoSoft": "#E0ECFB"
-      },
-      "dark": {
-        "primary": "#B49AFF",
-        "primaryStrong": "#CBB8FF",
-        "primarySoft": "#2C2142",
-        "gradientStart": "#7C4DD6",
-        "gradientEnd": "#3E2A74",
-        "background": "#120F1C",
-        "backgroundAlt": "#191425",
-        "surface": "#1E1829",
-        "surfaceRaised": "#272033",
-        "surfaceTint": "#241C34",
-        "selected": "#2C2142",
-        "onPrimary": "#140A14",
-        "text": "#F6F1F7",
-        "textSecondary": "#C3B9C7",
-        "textMuted": "#8E8494",
-        "border": "#2E2633",
-        "borderStrong": "#443B4A",
-        "selectedBorder": "#B49AFF",
-        "focus": "#B49AFF",
-        "overlay": "rgba(0, 0, 0, 0.6)",
-        "shadow": "rgba(0, 0, 0, 0.5)",
-        "success": "#6FD3A6",
-        "successSoft": "#163A2C",
-        "warning": "#F6C25B",
-        "warningSoft": "#3D2E0E",
-        "danger": "#FF8A80",
-        "dangerSoft": "#4A1E1E",
-        "info": "#8CBBFF",
-        "infoSoft": "#1A2C47"
-      }
-    },
-    "red": {
-      "label": "Red",
-      "tagline": "Warm, bold and passionate",
-      "light": {
-        "primary": "#E53935",
-        "primaryStrong": "#B71C1C",
-        "primarySoft": "#FDE3E1",
-        "gradientStart": "#FF7A6E",
-        "gradientEnd": "#E53935",
-        "background": "#FFF8F7",
-        "backgroundAlt": "#FDEFED",
-        "surfaceTint": "#FFF1EF",
-        "selected": "#FDE3E1",
-        "onPrimary": "#FFFFFF",
-        "surface": "#FFFFFF",
-        "surfaceRaised": "#FFFFFF",
-        "text": "#1B1420",
-        "textSecondary": "#5B5361",
-        "textMuted": "#8A8290",
-        "border": "#EDE6EF",
-        "borderStrong": "#D8CFDC",
-        "selectedBorder": "#E53935",
-        "focus": "#B71C1C",
-        "overlay": "rgba(20, 10, 25, 0.45)",
-        "shadow": "rgba(40, 20, 50, 0.12)",
-        "success": "#1E7F5C",
-        "successSoft": "#DDF3EA",
-        "warning": "#A35F00",
-        "warningSoft": "#FFF1D6",
-        "danger": "#C62828",
-        "dangerSoft": "#FDE2E2",
-        "info": "#1F5FA8",
-        "infoSoft": "#E0ECFB"
-      },
-      "dark": {
-        "primary": "#FF7A6E",
-        "primaryStrong": "#FF9C92",
-        "primarySoft": "#3E1E1C",
-        "gradientStart": "#E53935",
-        "gradientEnd": "#6E1A17",
-        "background": "#1A0F0F",
-        "backgroundAlt": "#221515",
-        "surface": "#261818",
-        "surfaceRaised": "#302020",
-        "surfaceTint": "#2F1B1A",
-        "selected": "#3E1E1C",
-        "onPrimary": "#140A14",
-        "text": "#F6F1F7",
-        "textSecondary": "#C3B9C7",
-        "textMuted": "#8E8494",
-        "border": "#2E2633",
-        "borderStrong": "#443B4A",
-        "selectedBorder": "#FF7A6E",
-        "focus": "#FF7A6E",
-        "overlay": "rgba(0, 0, 0, 0.6)",
-        "shadow": "rgba(0, 0, 0, 0.5)",
-        "success": "#6FD3A6",
-        "successSoft": "#163A2C",
-        "warning": "#F6C25B",
-        "warningSoft": "#3D2E0E",
-        "danger": "#FF8A80",
-        "dangerSoft": "#4A1E1E",
-        "info": "#8CBBFF",
-        "infoSoft": "#1A2C47"
-      }
-    },
-    "blue": {
-      "label": "Blue",
-      "tagline": "Fresh, steady and serene",
-      "light": {
-        "primary": "#2F6FED",
-        "primaryStrong": "#1F4FB5",
-        "primarySoft": "#E1EAFD",
-        "gradientStart": "#6FA3FF",
-        "gradientEnd": "#2F6FED",
-        "background": "#F6F9FF",
-        "backgroundAlt": "#ECF2FE",
-        "surfaceTint": "#EFF4FF",
-        "selected": "#E1EAFD",
-        "onPrimary": "#FFFFFF",
-        "surface": "#FFFFFF",
-        "surfaceRaised": "#FFFFFF",
-        "text": "#1B1420",
-        "textSecondary": "#5B5361",
-        "textMuted": "#8A8290",
-        "border": "#EDE6EF",
-        "borderStrong": "#D8CFDC",
-        "selectedBorder": "#2F6FED",
-        "focus": "#1F4FB5",
-        "overlay": "rgba(20, 10, 25, 0.45)",
-        "shadow": "rgba(40, 20, 50, 0.12)",
-        "success": "#1E7F5C",
-        "successSoft": "#DDF3EA",
-        "warning": "#A35F00",
-        "warningSoft": "#FFF1D6",
-        "danger": "#C62828",
-        "dangerSoft": "#FDE2E2",
-        "info": "#1F5FA8",
-        "infoSoft": "#E0ECFB"
-      },
-      "dark": {
-        "primary": "#7FA8FF",
-        "primaryStrong": "#A3C0FF",
-        "primarySoft": "#1C2A48",
-        "gradientStart": "#2F6FED",
-        "gradientEnd": "#16306B",
-        "background": "#0E1220",
-        "backgroundAlt": "#141A2B",
-        "surface": "#181F31",
-        "surfaceRaised": "#20283C",
-        "surfaceTint": "#1B2540",
-        "selected": "#1C2A48",
-        "onPrimary": "#140A14",
-        "text": "#F6F1F7",
-        "textSecondary": "#C3B9C7",
-        "textMuted": "#8E8494",
-        "border": "#2E2633",
-        "borderStrong": "#443B4A",
-        "selectedBorder": "#7FA8FF",
-        "focus": "#7FA8FF",
-        "overlay": "rgba(0, 0, 0, 0.6)",
-        "shadow": "rgba(0, 0, 0, 0.5)",
-        "success": "#6FD3A6",
-        "successSoft": "#163A2C",
-        "warning": "#F6C25B",
-        "warningSoft": "#3D2E0E",
-        "danger": "#FF8A80",
-        "dangerSoft": "#4A1E1E",
-        "info": "#8CBBFF",
-        "infoSoft": "#1A2C47"
-      }
-    }
+ "schemaVersion": 1,
+ "palettes": {
+  "pink": {
+   "label": "Pink",
+   "tagline": "Soft, sweet and playful",
+   "light": {
+    "primary": "#E0507F",
+    "primaryStrong": "#C33A68",
+    "primarySoft": "#FBE3EC",
+    "gradientStart": "#FF8FB1",
+    "gradientEnd": "#E0507F",
+    "background": "#FFF7FA",
+    "backgroundAlt": "#FDEFF4",
+    "surfaceTint": "#FFF0F5",
+    "selected": "#FBE3EC",
+    "onPrimary": "#FFFFFF",
+    "surface": "#FFFFFF",
+    "surfaceRaised": "#FFFFFF",
+    "text": "#1B1420",
+    "textSecondary": "#5B5361",
+    "textMuted": "#8A8290",
+    "border": "#EDE6EF",
+    "borderStrong": "#D8CFDC",
+    "selectedBorder": "#E0507F",
+    "focus": "#C33A68",
+    "overlay": "rgba(20, 10, 25, 0.45)",
+    "shadow": "rgba(40, 20, 50, 0.12)",
+    "success": "#1E7F5C",
+    "successSoft": "#DDF3EA",
+    "warning": "#A35F00",
+    "warningSoft": "#FFF1D6",
+    "danger": "#C62828",
+    "dangerSoft": "#FDE2E2",
+    "info": "#1F5FA8",
+    "infoSoft": "#E0ECFB"
+   },
+   "dark": {
+    "primary": "#FF8FB1",
+    "primaryStrong": "#FFB0C8",
+    "primarySoft": "#3C1F2B",
+    "gradientStart": "#E0507F",
+    "gradientEnd": "#7A2B4A",
+    "background": "#17101A",
+    "backgroundAlt": "#1F1522",
+    "surface": "#231824",
+    "surfaceRaised": "#2C1F2E",
+    "surfaceTint": "#2E1C27",
+    "selected": "#3C1F2B",
+    "onPrimary": "#140A14",
+    "text": "#F6F1F7",
+    "textSecondary": "#C3B9C7",
+    "textMuted": "#8E8494",
+    "border": "#2E2633",
+    "borderStrong": "#443B4A",
+    "selectedBorder": "#FF8FB1",
+    "focus": "#FF8FB1",
+    "overlay": "rgba(0, 0, 0, 0.6)",
+    "shadow": "rgba(0, 0, 0, 0.5)",
+    "success": "#6FD3A6",
+    "successSoft": "#163A2C",
+    "warning": "#F6C25B",
+    "warningSoft": "#3D2E0E",
+    "danger": "#FF8A80",
+    "dangerSoft": "#4A1E1E",
+    "info": "#8CBBFF",
+    "infoSoft": "#1A2C47"
+   }
   },
-  "categoryMeta": {
-    "getting_to_know": {
-      "label": "Getting to know each other",
-      "emoji": "🌱",
-      "blurb": "Light questions for the early days (or a fresh look)."
-    },
-    "everyday": {
-      "label": "Everyday connection",
-      "emoji": "☕",
-      "blurb": "Small check-ins that keep daily life shared."
-    },
-    "deeper": {
-      "label": "Deeper conversations",
-      "emoji": "🌙",
-      "blurb": "Slower questions for when you have time."
-    },
-    "love": {
-      "label": "Love and appreciation",
-      "emoji": "💗",
-      "blurb": "Say the things you think but rarely say."
-    },
-    "long_distance": {
-      "label": "Long distance",
-      "emoji": "✈️",
-      "blurb": "For couples living in two places."
-    },
-    "future": {
-      "label": "Future plans",
-      "emoji": "🧭",
-      "blurb": "Dreams, logistics and what comes next."
-    },
-    "repair": {
-      "label": "Communication and repair",
-      "emoji": "🪢",
-      "blurb": "Gentle prompts for after a hard moment. Not therapy."
-    },
-    "fun": {
-      "label": "Fun and playful",
-      "emoji": "🎈",
-      "blurb": "Silly, quick and low stakes."
-    }
+  "purple": {
+   "label": "Purple",
+   "tagline": "Dreamy, calm and cozy",
+   "light": {
+    "primary": "#7C4DD6",
+    "primaryStrong": "#5F36B3",
+    "primarySoft": "#ECE3FB",
+    "gradientStart": "#A78BFA",
+    "gradientEnd": "#7C4DD6",
+    "background": "#FAF7FF",
+    "backgroundAlt": "#F2ECFC",
+    "surfaceTint": "#F5F0FE",
+    "selected": "#ECE3FB",
+    "onPrimary": "#FFFFFF",
+    "surface": "#FFFFFF",
+    "surfaceRaised": "#FFFFFF",
+    "text": "#1B1420",
+    "textSecondary": "#5B5361",
+    "textMuted": "#8A8290",
+    "border": "#EDE6EF",
+    "borderStrong": "#D8CFDC",
+    "selectedBorder": "#7C4DD6",
+    "focus": "#5F36B3",
+    "overlay": "rgba(20, 10, 25, 0.45)",
+    "shadow": "rgba(40, 20, 50, 0.12)",
+    "success": "#1E7F5C",
+    "successSoft": "#DDF3EA",
+    "warning": "#A35F00",
+    "warningSoft": "#FFF1D6",
+    "danger": "#C62828",
+    "dangerSoft": "#FDE2E2",
+    "info": "#1F5FA8",
+    "infoSoft": "#E0ECFB"
+   },
+   "dark": {
+    "primary": "#B49AFF",
+    "primaryStrong": "#CBB8FF",
+    "primarySoft": "#2C2142",
+    "gradientStart": "#7C4DD6",
+    "gradientEnd": "#3E2A74",
+    "background": "#120F1C",
+    "backgroundAlt": "#191425",
+    "surface": "#1E1829",
+    "surfaceRaised": "#272033",
+    "surfaceTint": "#241C34",
+    "selected": "#2C2142",
+    "onPrimary": "#140A14",
+    "text": "#F6F1F7",
+    "textSecondary": "#C3B9C7",
+    "textMuted": "#8E8494",
+    "border": "#2E2633",
+    "borderStrong": "#443B4A",
+    "selectedBorder": "#B49AFF",
+    "focus": "#B49AFF",
+    "overlay": "rgba(0, 0, 0, 0.6)",
+    "shadow": "rgba(0, 0, 0, 0.5)",
+    "success": "#6FD3A6",
+    "successSoft": "#163A2C",
+    "warning": "#F6C25B",
+    "warningSoft": "#3D2E0E",
+    "danger": "#FF8A80",
+    "dangerSoft": "#4A1E1E",
+    "info": "#8CBBFF",
+    "infoSoft": "#1A2C47"
+   }
   },
-  "questions": [
-    {
-      "id": "gk1",
-      "type": "daily_question",
-      "category": "getting_to_know",
-      "text": "What is a small thing that instantly puts you in a good mood?"
-    },
-    {
-      "id": "gk2",
-      "type": "daily_question",
-      "category": "getting_to_know",
-      "text": "Which childhood habit do you still secretly have?"
-    },
-    {
-      "id": "gk3",
-      "type": "daily_question",
-      "category": "getting_to_know",
-      "text": "What is a song you could listen to on repeat right now?"
-    },
-    {
-      "id": "gk4",
-      "type": "daily_question",
-      "category": "getting_to_know",
-      "text": "If you had a free Saturday with no plans, how would it go?"
-    },
-    {
-      "id": "gk5",
-      "type": "daily_question",
-      "category": "getting_to_know",
-      "text": "What is something you are weirdly good at?"
-    },
-    {
-      "id": "gk6",
-      "type": "daily_question",
-      "category": "getting_to_know",
-      "text": "What was your favorite meal growing up?"
-    },
-    {
-      "id": "gk7",
-      "type": "daily_question",
-      "category": "getting_to_know",
-      "text": "Which place makes you feel most like yourself?"
-    },
-    {
-      "id": "gk8",
-      "type": "daily_question",
-      "category": "getting_to_know",
-      "text": "What is a skill you would love to learn this year?"
-    },
-    {
-      "id": "ev1",
-      "type": "daily_question",
-      "category": "everyday",
-      "text": "What was the best part of your day so far?"
-    },
-    {
-      "id": "ev2",
-      "type": "daily_question",
-      "category": "everyday",
-      "text": "What is one thing on your mind that you have not said out loud yet?"
-    },
-    {
-      "id": "ev3",
-      "type": "daily_question",
-      "category": "everyday",
-      "text": "What did you eat today that you would recommend?"
-    },
-    {
-      "id": "ev4",
-      "type": "daily_question",
-      "category": "everyday",
-      "text": "Who made you smile today?"
-    },
-    {
-      "id": "ev5",
-      "type": "daily_question",
-      "category": "everyday",
-      "text": "What is something small I could do to make tomorrow easier for you?"
-    },
-    {
-      "id": "ev6",
-      "type": "daily_question",
-      "category": "everyday",
-      "text": "What are you looking forward to this week?"
-    },
-    {
-      "id": "ev7",
-      "type": "daily_question",
-      "category": "everyday",
-      "text": "What did you see today that reminded you of me?"
-    },
-    {
-      "id": "ev8",
-      "type": "daily_question",
-      "category": "everyday",
-      "text": "How is your energy right now, from 1 to 10, and why?"
-    },
-    {
-      "id": "dp1",
-      "type": "daily_question",
-      "category": "deeper",
-      "text": "What is something you are proud of that you rarely mention?"
-    },
-    {
-      "id": "dp2",
-      "type": "daily_question",
-      "category": "deeper",
-      "text": "When do you feel most understood by me?"
-    },
-    {
-      "id": "dp3",
-      "type": "daily_question",
-      "category": "deeper",
-      "text": "What is a belief you have changed your mind about?"
-    },
-    {
-      "id": "dp4",
-      "type": "daily_question",
-      "category": "deeper",
-      "text": "What does rest actually look like for you?"
-    },
-    {
-      "id": "dp5",
-      "type": "daily_question",
-      "category": "deeper",
-      "text": "What is a fear you have about us that you would like to say gently?"
-    },
-    {
-      "id": "dp6",
-      "type": "daily_question",
-      "category": "deeper",
-      "text": "What is one thing your younger self would be surprised about in your life now?"
-    },
-    {
-      "id": "dp7",
-      "type": "daily_question",
-      "category": "deeper",
-      "text": "Which friendship has shaped you the most?"
-    },
-    {
-      "id": "dp8",
-      "type": "daily_question",
-      "category": "deeper",
-      "text": "What helps you when you feel overwhelmed?"
-    },
-    {
-      "id": "lv1",
-      "type": "daily_question",
-      "category": "love",
-      "text": "What is something I did recently that you appreciated more than I probably realized?"
-    },
-    {
-      "id": "lv2",
-      "type": "daily_question",
-      "category": "love",
-      "text": "How do you most like to receive affection: words, time, touch, help, or gifts?"
-    },
-    {
-      "id": "lv3",
-      "type": "daily_question",
-      "category": "love",
-      "text": "What is your favorite memory of us from this year?"
-    },
-    {
-      "id": "lv4",
-      "type": "daily_question",
-      "category": "love",
-      "text": "What is a quality of mine you hope never changes?"
-    },
-    {
-      "id": "lv5",
-      "type": "daily_question",
-      "category": "love",
-      "text": "When did you first feel at home with me?"
-    },
-    {
-      "id": "lv6",
-      "type": "daily_question",
-      "category": "love",
-      "text": "What is a compliment you wish you heard more often?"
-    },
-    {
-      "id": "lv7",
-      "type": "daily_question",
-      "category": "love",
-      "text": "What makes you feel chosen?"
-    },
-    {
-      "id": "lv8",
-      "type": "daily_question",
-      "category": "love",
-      "text": "What is one small ritual of ours that you love?"
-    },
-    {
-      "id": "ld1",
-      "type": "daily_question",
-      "category": "long_distance",
-      "text": "What is the hardest hour of the day to be apart?"
-    },
-    {
-      "id": "ld2",
-      "type": "daily_question",
-      "category": "long_distance",
-      "text": "What is something you want to do together in the first hour we see each other next?"
-    },
-    {
-      "id": "ld3",
-      "type": "daily_question",
-      "category": "long_distance",
-      "text": "How do you like to be supported after a long day when we cannot be in the same room?"
-    },
-    {
-      "id": "ld4",
-      "type": "daily_question",
-      "category": "long_distance",
-      "text": "What small object of mine do you wish you had with you?"
-    },
-    {
-      "id": "ld5",
-      "type": "daily_question",
-      "category": "long_distance",
-      "text": "What is a time-zone trick that would make calls easier for you?"
-    },
-    {
-      "id": "ld6",
-      "type": "daily_question",
-      "category": "long_distance",
-      "text": "What is one thing that is actually easier about distance right now?"
-    },
-    {
-      "id": "ld7",
-      "type": "daily_question",
-      "category": "long_distance",
-      "text": "What do you want our next visit to feel like?"
-    },
-    {
-      "id": "ld8",
-      "type": "daily_question",
-      "category": "long_distance",
-      "text": "Which message of mine do you reread when you miss me?"
-    },
-    {
-      "id": "ft1",
-      "type": "daily_question",
-      "category": "future",
-      "text": "If we could live anywhere for one year, where would you pick?"
-    },
-    {
-      "id": "ft2",
-      "type": "daily_question",
-      "category": "future",
-      "text": "What is one trip you want us to take before anything else?"
-    },
-    {
-      "id": "ft3",
-      "type": "daily_question",
-      "category": "future",
-      "text": "What does a good Sunday look like for us in five years?"
-    },
-    {
-      "id": "ft4",
-      "type": "daily_question",
-      "category": "future",
-      "text": "What is a tradition you would like us to start?"
-    },
-    {
-      "id": "ft5",
-      "type": "daily_question",
-      "category": "future",
-      "text": "What are you saving up for, big or small?"
-    },
-    {
-      "id": "ft6",
-      "type": "daily_question",
-      "category": "future",
-      "text": "What would you want our home to feel like when someone walks in?"
-    },
-    {
-      "id": "ft7",
-      "type": "daily_question",
-      "category": "future",
-      "text": "What is a goal you would like us to work on together this year?"
-    },
-    {
-      "id": "ft8",
-      "type": "daily_question",
-      "category": "future",
-      "text": "What is something you want to be true about us next anniversary?"
-    },
-    {
-      "id": "rp1",
-      "type": "daily_question",
-      "category": "repair",
-      "text": "When we disagree, what helps you feel heard?"
-    },
-    {
-      "id": "rp2",
-      "type": "daily_question",
-      "category": "repair",
-      "text": "What is a sign that you need a break during a tough conversation?"
-    },
-    {
-      "id": "rp3",
-      "type": "daily_question",
-      "category": "repair",
-      "text": "What is something you wish I understood about how you argue?"
-    },
-    {
-      "id": "rp4",
-      "type": "daily_question",
-      "category": "repair",
-      "text": "How do you like to be approached after a misunderstanding?"
-    },
-    {
-      "id": "rp5",
-      "type": "daily_question",
-      "category": "repair",
-      "text": "What is one thing I could say that would make repair easier for you?"
-    },
-    {
-      "id": "rp6",
-      "type": "daily_question",
-      "category": "repair",
-      "text": "What is a small misunderstanding we can laugh about now?"
-    },
-    {
-      "id": "rp7",
-      "type": "daily_question",
-      "category": "repair",
-      "text": "What does a good apology sound like to you?"
-    },
-    {
-      "id": "rp8",
-      "type": "daily_question",
-      "category": "repair",
-      "text": "What is something you would like to ask for more often without feeling needy?"
-    },
-    {
-      "id": "fn1",
-      "type": "daily_question",
-      "category": "fun",
-      "text": "If we were a duo in a movie, what genre would it be?"
-    },
-    {
-      "id": "fn2",
-      "type": "daily_question",
-      "category": "fun",
-      "text": "What is your most unreasonable food opinion?"
-    },
-    {
-      "id": "fn3",
-      "type": "daily_question",
-      "category": "fun",
-      "text": "Which fictional couple are we most like?"
-    },
-    {
-      "id": "fn4",
-      "type": "daily_question",
-      "category": "fun",
-      "text": "What would your walk-on music be?"
-    },
-    {
-      "id": "fn5",
-      "type": "daily_question",
-      "category": "fun",
-      "text": "What is a tiny luxury you refuse to give up?"
-    },
-    {
-      "id": "fn6",
-      "type": "daily_question",
-      "category": "fun",
-      "text": "If you had to teach a class on anything, what would it be?"
-    },
-    {
-      "id": "fn7",
-      "type": "daily_question",
-      "category": "fun",
-      "text": "What is the best bad movie you have ever loved?"
-    },
-    {
-      "id": "fn8",
-      "type": "daily_question",
-      "category": "fun",
-      "text": "What animal would you be in a team of two?"
-    },
-    {
-      "id": "qz1",
-      "type": "quiz",
-      "category": "fun",
-      "text": "What is your partner's go-to comfort food?",
-      "aboutPartner": true
-    },
-    {
-      "id": "qz2",
-      "type": "quiz",
-      "category": "fun",
-      "text": "How does your partner take their coffee or tea?",
-      "aboutPartner": true,
-      "options": [
-        "Black / plain",
-        "With milk",
-        "With sugar",
-        "Milk and sugar",
-        "Neither, something else"
-      ]
-    },
-    {
-      "id": "qz3",
-      "type": "quiz",
-      "category": "fun",
-      "text": "Which would your partner pick for a free evening?",
-      "aboutPartner": true,
-      "options": [
-        "A long walk",
-        "A movie at home",
-        "Dinner out",
-        "Early night"
-      ]
-    },
-    {
-      "id": "qz4",
-      "type": "quiz",
-      "category": "fun",
-      "text": "What is your partner's biggest small annoyance?",
-      "aboutPartner": true
-    },
-    {
-      "id": "qz5",
-      "type": "quiz",
-      "category": "fun",
-      "text": "What is your partner most likely to do on a rainy Sunday?",
-      "aboutPartner": true,
-      "options": [
-        "Cook something",
-        "Read or scroll",
-        "Nap",
-        "Call someone"
-      ]
-    },
-    {
-      "id": "qz6",
-      "type": "quiz",
-      "category": "fun",
-      "text": "Which season is your partner happiest in?",
-      "aboutPartner": true,
-      "options": [
-        "Spring",
-        "Summer",
-        "Autumn",
-        "Winter"
-      ]
-    },
-    {
-      "id": "wr1",
-      "type": "would_you_rather",
-      "category": "fun",
-      "text": "Would you rather",
-      "options": [
-        "Cook together every night",
-        "Eat out together every night"
-      ]
-    },
-    {
-      "id": "wr2",
-      "type": "would_you_rather",
-      "category": "fun",
-      "text": "Would you rather",
-      "options": [
-        "A surprise weekend trip",
-        "A planned two-week holiday"
-      ]
-    },
-    {
-      "id": "wr3",
-      "type": "would_you_rather",
-      "category": "fun",
-      "text": "Would you rather",
-      "options": [
-        "Morning calls",
-        "Late-night calls"
-      ]
-    },
-    {
-      "id": "wr4",
-      "type": "would_you_rather",
-      "category": "fun",
-      "text": "Would you rather",
-      "options": [
-        "Handwritten letters",
-        "Voice notes"
-      ]
-    },
-    {
-      "id": "wr5",
-      "type": "would_you_rather",
-      "category": "fun",
-      "text": "Would you rather",
-      "options": [
-        "Live near the sea",
-        "Live near the mountains"
-      ]
-    },
-    {
-      "id": "wr6",
-      "type": "would_you_rather",
-      "category": "fun",
-      "text": "Would you rather",
-      "options": [
-        "Relive our first date",
-        "Fast-forward to our next trip"
-      ]
-    },
-    {
-      "id": "gs1",
-      "type": "guess",
-      "category": "love",
-      "text": "What would your partner say is their favorite thing about you?",
-      "aboutPartner": true
-    },
-    {
-      "id": "gs2",
-      "type": "guess",
-      "category": "future",
-      "text": "Where would your partner want to travel next?",
-      "aboutPartner": true
-    },
-    {
-      "id": "gs3",
-      "type": "guess",
-      "category": "everyday",
-      "text": "What did your partner have for breakfast today?",
-      "aboutPartner": true
-    },
-    {
-      "id": "gs4",
-      "type": "guess",
-      "category": "fun",
-      "text": "What song is your partner playing on repeat this week?",
-      "aboutPartner": true
-    },
-    {
-      "id": "pc1",
-      "type": "photo_challenge",
-      "category": "everyday",
-      "text": "Show me your view right now."
-    },
-    {
-      "id": "pc2",
-      "type": "photo_challenge",
-      "category": "everyday",
-      "text": "Something that made you smile today."
-    },
-    {
-      "id": "pc3",
-      "type": "photo_challenge",
-      "category": "fun",
-      "text": "Your most chaotic corner."
-    },
-    {
-      "id": "pc4",
-      "type": "photo_challenge",
-      "category": "love",
-      "text": "Something that reminds you of me."
-    },
-    {
-      "id": "pc5",
-      "type": "photo_challenge",
-      "category": "long_distance",
-      "text": "The sky where you are."
-    },
-    {
-      "id": "pc6",
-      "type": "photo_challenge",
-      "category": "fun",
-      "text": "Your outfit of the day, with commentary."
-    }
-  ],
-  "decks": [
-    {
-      "id": "deck_daily",
-      "title": "Daily question",
-      "category": "everyday",
-      "type": "daily_question",
-      "description": "One question a day, answered separately and revealed together.",
-      "questionIds": [
-        "gk1",
-        "gk2",
-        "gk3",
-        "gk4",
-        "gk5",
-        "gk6",
-        "gk7",
-        "gk8",
-        "ev1",
-        "ev2",
-        "ev3",
-        "ev4",
-        "ev5",
-        "ev6",
-        "ev7",
-        "ev8",
-        "dp1",
-        "dp2",
-        "dp3",
-        "dp4",
-        "dp5",
-        "dp6",
-        "dp7",
-        "dp8",
-        "lv1",
-        "lv2",
-        "lv3",
-        "lv4",
-        "lv5",
-        "lv6",
-        "lv7",
-        "lv8",
-        "ld1",
-        "ld2",
-        "ld3",
-        "ld4",
-        "ld5",
-        "ld6",
-        "ld7",
-        "ld8",
-        "ft1",
-        "ft2",
-        "ft3",
-        "ft4",
-        "ft5",
-        "ft6",
-        "ft7",
-        "ft8",
-        "rp1",
-        "rp2",
-        "rp3",
-        "rp4",
-        "rp5",
-        "rp6",
-        "rp7",
-        "rp8",
-        "fn1",
-        "fn2",
-        "fn3",
-        "fn4",
-        "fn5",
-        "fn6",
-        "fn7",
-        "fn8"
-      ],
-      "premium": false,
-      "emoji": "💬"
-    },
-    {
-      "id": "deck_quiz",
-      "title": "Who knows the other best?",
-      "category": "fun",
-      "type": "quiz",
-      "description": "Guess facts about each other. Scores are for fun, not a verdict.",
-      "questionIds": [
-        "qz1",
-        "qz2",
-        "qz3",
-        "qz4",
-        "qz5",
-        "qz6"
-      ],
-      "premium": false,
-      "emoji": "🧠"
-    },
-    {
-      "id": "deck_wyr",
-      "title": "Would you rather? Couples edition",
-      "category": "fun",
-      "type": "would_you_rather",
-      "description": "Pick a side, then see if you agree.",
-      "questionIds": [
-        "wr1",
-        "wr2",
-        "wr3",
-        "wr4",
-        "wr5",
-        "wr6"
-      ],
-      "premium": false,
-      "emoji": "⚖️"
-    },
-    {
-      "id": "deck_guess",
-      "title": "Guess your partner's answer",
-      "category": "love",
-      "type": "guess",
-      "description": "Predict what they will say. Reveal side by side.",
-      "questionIds": [
-        "gs1",
-        "gs2",
-        "gs3",
-        "gs4"
-      ],
-      "premium": false,
-      "emoji": "🔮"
-    },
-    {
-      "id": "deck_photo",
-      "title": "Daily photo challenge",
-      "category": "everyday",
-      "type": "photo_challenge",
-      "description": "A small photo prompt for both of you.",
-      "questionIds": [
-        "pc1",
-        "pc2",
-        "pc3",
-        "pc4",
-        "pc5",
-        "pc6"
-      ],
-      "premium": false,
-      "emoji": "📸"
-    },
-    {
-      "id": "deck_gk",
-      "title": "Getting to know each other",
-      "category": "getting_to_know",
-      "type": "deck",
-      "description": "Light questions for the early days (or a fresh look).",
-      "questionIds": [
-        "gk1",
-        "gk2",
-        "gk3",
-        "gk4",
-        "gk5",
-        "gk6",
-        "gk7",
-        "gk8"
-      ],
-      "premium": false,
-      "emoji": "🌱"
-    },
-    {
-      "id": "deck_ev",
-      "title": "Everyday connection",
-      "category": "everyday",
-      "type": "deck",
-      "description": "Small check-ins that keep daily life shared.",
-      "questionIds": [
-        "ev1",
-        "ev2",
-        "ev3",
-        "ev4",
-        "ev5",
-        "ev6",
-        "ev7",
-        "ev8"
-      ],
-      "premium": false,
-      "emoji": "☕"
-    },
-    {
-      "id": "deck_dp",
-      "title": "Deeper conversations",
-      "category": "deeper",
-      "type": "deck",
-      "description": "Slower questions for when you have time.",
-      "questionIds": [
-        "dp1",
-        "dp2",
-        "dp3",
-        "dp4",
-        "dp5",
-        "dp6",
-        "dp7",
-        "dp8"
-      ],
-      "premium": false,
-      "emoji": "🌙"
-    },
-    {
-      "id": "deck_lv",
-      "title": "Love and appreciation",
-      "category": "love",
-      "type": "deck",
-      "description": "Say the things you think but rarely say.",
-      "questionIds": [
-        "lv1",
-        "lv2",
-        "lv3",
-        "lv4",
-        "lv5",
-        "lv6",
-        "lv7",
-        "lv8"
-      ],
-      "premium": false,
-      "emoji": "💗"
-    },
-    {
-      "id": "deck_ld",
-      "title": "Long distance",
-      "category": "long_distance",
-      "type": "deck",
-      "description": "For couples living in two places.",
-      "questionIds": [
-        "ld1",
-        "ld2",
-        "ld3",
-        "ld4",
-        "ld5",
-        "ld6",
-        "ld7",
-        "ld8"
-      ],
-      "premium": false,
-      "emoji": "✈️"
-    },
-    {
-      "id": "deck_ft",
-      "title": "Future plans",
-      "category": "future",
-      "type": "deck",
-      "description": "Dreams, logistics and what comes next.",
-      "questionIds": [
-        "ft1",
-        "ft2",
-        "ft3",
-        "ft4",
-        "ft5",
-        "ft6",
-        "ft7",
-        "ft8"
-      ],
-      "premium": true,
-      "emoji": "🧭"
-    },
-    {
-      "id": "deck_rp",
-      "title": "Communication and repair",
-      "category": "repair",
-      "type": "deck",
-      "description": "Gentle prompts for after a hard moment. Not therapy.",
-      "questionIds": [
-        "rp1",
-        "rp2",
-        "rp3",
-        "rp4",
-        "rp5",
-        "rp6",
-        "rp7",
-        "rp8"
-      ],
-      "premium": true,
-      "emoji": "🪢"
-    },
-    {
-      "id": "deck_fn",
-      "title": "Fun and playful",
-      "category": "fun",
-      "type": "deck",
-      "description": "Silly, quick and low stakes.",
-      "questionIds": [
-        "fn1",
-        "fn2",
-        "fn3",
-        "fn4",
-        "fn5",
-        "fn6",
-        "fn7",
-        "fn8"
-      ],
-      "premium": false,
-      "emoji": "🎈"
-    }
-  ],
-  "simulatedAnswers": {
-    "default": "Honestly? Thinking about our next trip. I keep planning it in my head.",
-    "gk1": "Sun on the kitchen table in the morning.",
-    "ev1": "A long walk after work, finally no rain.",
-    "ev4": "A kid on the bus wearing a dinosaur backpack.",
-    "lv1": "When you called just to say good night even though you were exhausted.",
-    "ld2": "Just hold hands and get coffee. Nothing fancy.",
-    "ft1": "Lisbon. Hills, light, pastries.",
-    "rp1": "When you repeat back what I said before replying.",
-    "fn3": "The one from that cooking show, obviously.",
-    "qz2": "With milk",
-    "qz3": "A long walk",
-    "qz5": "Cook something",
-    "qz6": "Autumn",
-    "wr1": "Cook together every night",
-    "wr2": "A surprise weekend trip",
-    "wr3": "Late-night calls",
-    "wr4": "Voice notes",
-    "wr5": "Live near the sea",
-    "wr6": "Fast-forward to our next trip",
-    "gs1": "That you notice small things.",
-    "gs2": "Japan in spring.",
-    "gs3": "Toast with too much butter.",
-    "gs4": "That old Sade album again."
+  "red": {
+   "label": "Red",
+   "tagline": "Warm, bold and passionate",
+   "light": {
+    "primary": "#E53935",
+    "primaryStrong": "#B71C1C",
+    "primarySoft": "#FDE3E1",
+    "gradientStart": "#FF7A6E",
+    "gradientEnd": "#E53935",
+    "background": "#FFF8F7",
+    "backgroundAlt": "#FDEFED",
+    "surfaceTint": "#FFF1EF",
+    "selected": "#FDE3E1",
+    "onPrimary": "#FFFFFF",
+    "surface": "#FFFFFF",
+    "surfaceRaised": "#FFFFFF",
+    "text": "#1B1420",
+    "textSecondary": "#5B5361",
+    "textMuted": "#8A8290",
+    "border": "#EDE6EF",
+    "borderStrong": "#D8CFDC",
+    "selectedBorder": "#E53935",
+    "focus": "#B71C1C",
+    "overlay": "rgba(20, 10, 25, 0.45)",
+    "shadow": "rgba(40, 20, 50, 0.12)",
+    "success": "#1E7F5C",
+    "successSoft": "#DDF3EA",
+    "warning": "#A35F00",
+    "warningSoft": "#FFF1D6",
+    "danger": "#C62828",
+    "dangerSoft": "#FDE2E2",
+    "info": "#1F5FA8",
+    "infoSoft": "#E0ECFB"
+   },
+   "dark": {
+    "primary": "#FF7A6E",
+    "primaryStrong": "#FF9C92",
+    "primarySoft": "#3E1E1C",
+    "gradientStart": "#E53935",
+    "gradientEnd": "#6E1A17",
+    "background": "#1A0F0F",
+    "backgroundAlt": "#221515",
+    "surface": "#261818",
+    "surfaceRaised": "#302020",
+    "surfaceTint": "#2F1B1A",
+    "selected": "#3E1E1C",
+    "onPrimary": "#140A14",
+    "text": "#F6F1F7",
+    "textSecondary": "#C3B9C7",
+    "textMuted": "#8E8494",
+    "border": "#2E2633",
+    "borderStrong": "#443B4A",
+    "selectedBorder": "#FF7A6E",
+    "focus": "#FF7A6E",
+    "overlay": "rgba(0, 0, 0, 0.6)",
+    "shadow": "rgba(0, 0, 0, 0.5)",
+    "success": "#6FD3A6",
+    "successSoft": "#163A2C",
+    "warning": "#F6C25B",
+    "warningSoft": "#3D2E0E",
+    "danger": "#FF8A80",
+    "dangerSoft": "#4A1E1E",
+    "info": "#8CBBFF",
+    "infoSoft": "#1A2C47"
+   }
   },
-  "connectionOnboarding": {
-    "version": 1,
-    "title": "Make it yours",
-    "intro": "A few quick choices. Your own pace.",
-    "privacy": "Private. Always optional.",
-    "summaryTitle": "Your pace. Your space.",
-    "summaryBody": "Start with one small moment.",
-    "questions": [
-      {
-        "id": "focus",
-        "title": "What would feel good?",
-        "subtitle": "Choose what matters today.",
-        "options": [
-          {
-            "id": "daily_connection",
-            "label": "Everyday closeness",
-            "response": "Small moments can bring you closer.",
-            "deckId": "deck_ev"
-          },
-          {
-            "id": "deeper_conversations",
-            "label": "Deeper conversations",
-            "response": "There’s room for meaningful talks.",
-            "deckId": "deck_dp"
-          },
-          {
-            "id": "playful_moments",
-            "label": "More fun together",
-            "response": "A little laughter counts too.",
-            "deckId": "deck_fn"
-          },
-          {
-            "id": "appreciation",
-            "label": "Feeling appreciated",
-            "response": "Little words can mean a lot.",
-            "deckId": "deck_lv"
-          }
-        ]
-      },
-      {
-        "id": "challenge",
-        "title": "What gets in the way?",
-        "subtitle": "No blame. Just your day-to-day.",
-        "options": [
-          {
-            "id": "busy_days",
-            "label": "Busy days",
-            "response": "Let’s keep it short and easy.",
-            "deckId": "deck_ev"
-          },
-          {
-            "id": "time_zones",
-            "label": "Different schedules",
-            "response": "Connect when it works for you.",
-            "deckId": "deck_ld"
-          },
-          {
-            "id": "same_conversations",
-            "label": "The same conversations",
-            "response": "Try a fresh question together.",
-            "deckId": "deck_gk"
-          },
-          {
-            "id": "finding_words",
-            "label": "Finding the right words",
-            "response": "A gentle prompt can help.",
-            "deckId": "deck_lv"
-          }
-        ]
-      },
-      {
-        "id": "affection",
-        "title": "What feels like care?",
-        "subtitle": "Pick what means most to you.",
-        "options": [
-          {
-            "id": "words",
-            "label": "Kind words",
-            "response": "A thoughtful note goes a long way.",
-            "deckId": "deck_lv"
-          },
-          {
-            "id": "photos",
-            "label": "Little photos",
-            "response": "Share a glimpse of your day.",
-            "deckId": "deck_photo"
-          },
-          {
-            "id": "quality_time",
-            "label": "Time to talk",
-            "response": "Make a little room to listen.",
-            "deckId": "deck_dp"
-          },
-          {
-            "id": "play",
-            "label": "Laughing together",
-            "response": "Let’s make space for fun.",
-            "deckId": "deck_wyr"
-          }
-        ]
-      },
-      {
-        "id": "daily_time",
-        "title": "What fits your day?",
-        "subtitle": "Small moments count.",
-        "options": [
-          {
-            "id": "two_minutes",
-            "label": "2 minutes",
-            "response": "A little moment is enough."
-          },
-          {
-            "id": "five_minutes",
-            "label": "5 minutes",
-            "response": "A little room to connect."
-          },
-          {
-            "id": "ten_minutes",
-            "label": "10+ minutes",
-            "response": "Take your time together."
-          },
-          {
-            "id": "flexible",
-            "label": "It depends",
-            "response": "Your rhythm can change."
-          }
-        ]
-      },
-      {
-        "id": "pace",
-        "title": "Where should we start?",
-        "subtitle": "You can change this later.",
-        "options": [
-          {
-            "id": "gentle",
-            "label": "Keep it gentle",
-            "response": "An easy start, with no pressure.",
-            "deckId": "deck_ev"
-          },
-          {
-            "id": "playful",
-            "label": "Make it playful",
-            "response": "Start with a little fun.",
-            "deckId": "deck_fn"
-          },
-          {
-            "id": "thoughtful",
-            "label": "Go a little deeper",
-            "response": "A thoughtful place to begin.",
-            "deckId": "deck_dp"
-          }
-        ]
-      }
-    ],
-    "storageNotice": "Saved after account verification. Demo stays on this device."
-  },
-  "games": [
-    {
-      "id": "our_little_one",
-      "title": "Our Little One",
-      "tagline": "Raise a whole life together",
-      "description": "Decide together to have a baby, then feed, bathe, play and vote on the big choices as they grow up, go to school, find a job, marry and grow old. A whole life, within one year.",
-      "tags": [
-        "Co-op",
-        "Daily",
-        "Life sim"
-      ],
-      "players": "2 parents",
-      "pace": "A life in one year",
-      "emoji": "👶",
-      "colors": [
-        "#7FB8FF",
-        "#4C6FE0"
-      ],
-      "status": "available"
-    },
-    {
-      "id": "marriage_checkup",
-      "title": "Marriage Check-up",
-      "tagline": "Rate your marriage, then compare",
-      "description": "Once a month, each of you rates 25 parts of your marriage in secret and guesses your spouse's score. Then reveal together: where you're in tune, what's going great and what to talk about.",
-      "tags": [
-        "Married",
-        "Monthly",
-        "Honest"
-      ],
-      "players": "2 spouses",
-      "pace": "10 minutes a month",
-      "emoji": "💍",
-      "colors": [
-        "#F7A8C4",
-        "#C2477A"
-      ],
-      "status": "available"
-    },
-    {
-      "id": "five_truths",
-      "title": "Five Truths",
-      "tagline": "5 questions for life",
-      "description": "Five honest questions about your relationship. Answer each one in secret, guess what your partner said, then reveal together and talk about where you differ.",
-      "players": "2 partners",
-      "pace": "5 minutes a month",
-      "emoji": "🗝️",
-      "status": "available",
-      "tags": [
-        "Deep talk",
-        "Couples"
-      ],
-      "colors": [
-        "#B9A4FF",
-        "#7C5CFF"
-      ]
-    },
-    {
-      "id": "draw_guess",
-      "title": "Draw & Guess",
-      "tagline": "Sketch it, they guess it",
-      "description": "Draw a secret word with your finger. Your partner guesses it when they are free, and every drawing is kept in your Memories.",
-      "tags": [
-        "Drawing",
-        "Turn-based"
-      ],
-      "players": "2 players",
-      "pace": "2 min a turn",
-      "emoji": "🎨",
-      "colors": [
-        "#FF7A9C",
-        "#E0306A"
-      ],
-      "status": "coming_soon"
-    },
-    {
-      "id": "two_halves",
-      "title": "Two Halves",
-      "tagline": "Half the clues each",
-      "description": "A small daily puzzle split in two. Each of you sees half the clues, so the only way to solve it is to talk.",
-      "tags": [
-        "Puzzle",
-        "Co-op",
-        "Daily"
-      ],
-      "players": "2 players",
-      "pace": "5 min a day",
-      "emoji": "🧩",
-      "colors": [
-        "#FFC43D",
-        "#F08A00"
-      ],
-      "status": "coming_soon"
-    },
-    {
-      "id": "our_garden",
-      "title": "Our Garden",
-      "tagline": "Grow something together",
-      "description": "A shared garden that grows with every moment, answer and voice note, and wilts a little when the flame goes quiet.",
-      "tags": [
-        "Co-op",
-        "Daily"
-      ],
-      "players": "2 players",
-      "pace": "Every day",
-      "emoji": "🌱",
-      "colors": [
-        "#5FD49B",
-        "#14946A"
-      ],
-      "status": "coming_soon"
-    },
-    {
-      "id": "love_duels",
-      "title": "Love Duels",
-      "tagline": "Board games, one move at a time",
-      "description": "Four in a row, dots and boxes and more. Play a move, your partner gets a nudge, and a match can last all week.",
-      "tags": [
-        "Duel",
-        "Turn-based"
-      ],
-      "players": "2 players",
-      "pace": "1 move at a time",
-      "emoji": "⚔️",
-      "colors": [
-        "#8A7BFF",
-        "#4A39D6"
-      ],
-      "status": "coming_soon"
-    }
-  ],
-  "lifeGame": {
-    "maxDays": 365,
-    "careThreshold": 40,
-    "coinFlipRound": 2,
-    "needs": [
-      {
-        "id": "hunger",
-        "label": "Food",
-        "emoji": "🍼",
-        "decayPerHour": 4
-      },
-      {
-        "id": "energy",
-        "label": "Sleep",
-        "emoji": "💤",
-        "decayPerHour": 3
-      },
-      {
-        "id": "hygiene",
-        "label": "Clean",
-        "emoji": "🫧",
-        "decayPerHour": 2.5
-      },
-      {
-        "id": "fun",
-        "label": "Fun",
-        "emoji": "🎈",
-        "decayPerHour": 3.5
-      },
-      {
-        "id": "love",
-        "label": "Love",
-        "emoji": "💗",
-        "decayPerHour": 2
-      }
-    ],
-    "skills": [
-      {
-        "id": "smart",
-        "label": "Smart",
-        "emoji": "📚"
-      },
-      {
-        "id": "kind",
-        "label": "Kind",
-        "emoji": "🤝"
-      },
-      {
-        "id": "creative",
-        "label": "Creative",
-        "emoji": "🎨"
-      },
-      {
-        "id": "sporty",
-        "label": "Sporty",
-        "emoji": "⚽"
-      }
-    ],
-    "actions": [
-      {
-        "id": "feed",
-        "label": "Feed",
-        "emoji": "🍼",
-        "verb": "fed",
-        "effects": {
-          "hunger": 40,
-          "love": 5
-        },
-        "care": 15,
-        "skills": {}
-      },
-      {
-        "id": "bathe",
-        "label": "Bath",
-        "emoji": "🛁",
-        "verb": "bathed",
-        "effects": {
-          "hygiene": 50,
-          "fun": 5
-        },
-        "care": 15,
-        "skills": {}
-      },
-      {
-        "id": "sleep",
-        "label": "Sleep",
-        "emoji": "🌙",
-        "verb": "put to bed",
-        "effects": {
-          "energy": 60
-        },
-        "care": 15,
-        "skills": {}
-      },
-      {
-        "id": "cuddle",
-        "label": "Cuddle",
-        "emoji": "🤗",
-        "verb": "cuddled",
-        "effects": {
-          "love": 35,
-          "fun": 10
-        },
-        "care": 15,
-        "skills": {
-          "kind": 1
-        }
-      },
-      {
-        "id": "play",
-        "label": "Play",
-        "emoji": "🧸",
-        "verb": "played with",
-        "effects": {
-          "fun": 40,
-          "energy": -10,
-          "hunger": -5
-        },
-        "care": 20,
-        "skills": {
-          "creative": 2,
-          "sporty": 1
-        }
-      },
-      {
-        "id": "talk",
-        "label": "Talk",
-        "emoji": "🗣️",
-        "verb": "talked with",
-        "effects": {
-          "love": 20,
-          "fun": 15
-        },
-        "care": 20,
-        "skills": {
-          "smart": 1,
-          "kind": 1
-        }
-      },
-      {
-        "id": "homework",
-        "label": "Homework",
-        "emoji": "✏️",
-        "verb": "did homework with",
-        "effects": {
-          "fun": -10,
-          "energy": -10,
-          "love": 10
-        },
-        "care": 25,
-        "skills": {
-          "smart": 3
-        }
-      },
-      {
-        "id": "hobby",
-        "label": "Hobby",
-        "emoji": "🎸",
-        "verb": "did a hobby with",
-        "effects": {
-          "fun": 35,
-          "energy": -15
-        },
-        "care": 25,
-        "skills": {
-          "creative": 2,
-          "sporty": 2
-        }
-      },
-      {
-        "id": "chat",
-        "label": "Deep talk",
-        "emoji": "💬",
-        "verb": "had a deep talk with",
-        "effects": {
-          "love": 30
-        },
-        "care": 25,
-        "skills": {
-          "kind": 2,
-          "smart": 1
-        }
-      },
-      {
-        "id": "work",
-        "label": "Support",
-        "emoji": "💼",
-        "verb": "cheered on",
-        "effects": {
-          "love": 20,
-          "energy": 10,
-          "fun": 10
-        },
-        "care": 25,
-        "skills": {
-          "smart": 1,
-          "kind": 1
-        }
-      },
-      {
-        "id": "date",
-        "label": "Advice",
-        "emoji": "💌",
-        "verb": "gave love advice to",
-        "effects": {
-          "love": 30,
-          "fun": 15
-        },
-        "care": 25,
-        "skills": {
-          "kind": 2
-        }
-      },
-      {
-        "id": "stories",
-        "label": "Stories",
-        "emoji": "📖",
-        "verb": "shared stories with",
-        "effects": {
-          "love": 30,
-          "fun": 20,
-          "energy": 10
-        },
-        "care": 25,
-        "skills": {
-          "kind": 1,
-          "creative": 1
-        }
-      }
-    ],
-    "stages": [
-      {
-        "id": "newborn",
-        "label": "Newborn",
-        "minDays": 7,
-        "careToGrow": 300,
-        "actions": [
-          "feed",
-          "bathe",
-          "sleep",
-          "cuddle"
-        ],
-        "choice": null,
-        "look": {
-          "scale": 0.62,
-          "hair": "none",
-          "accessory": "pacifier",
-          "outfit": "#FFD6E5"
-        }
-      },
-      {
-        "id": "toddler",
-        "label": "Toddler",
-        "minDays": 21,
-        "careToGrow": 600,
-        "actions": [
-          "feed",
-          "bathe",
-          "sleep",
-          "cuddle",
-          "play",
-          "talk"
-        ],
-        "choice": null,
-        "look": {
-          "scale": 0.72,
-          "hair": "tuft",
-          "accessory": "none",
-          "outfit": "#FFE08A"
-        }
-      },
-      {
-        "id": "child",
-        "label": "Child",
-        "minDays": 45,
-        "careToGrow": 900,
-        "actions": [
-          "feed",
-          "bathe",
-          "sleep",
-          "play",
-          "talk",
-          "homework"
-        ],
-        "choice": "school",
-        "look": {
-          "scale": 0.82,
-          "hair": "short",
-          "accessory": "backpack",
-          "outfit": "#9FD8FF"
-        }
-      },
-      {
-        "id": "teen",
-        "label": "Teen",
-        "minDays": 45,
-        "careToGrow": 900,
-        "actions": [
-          "feed",
-          "bathe",
-          "sleep",
-          "homework",
-          "hobby",
-          "chat"
-        ],
-        "choice": "hobby",
-        "look": {
-          "scale": 0.92,
-          "hair": "long",
-          "accessory": "headphones",
-          "outfit": "#B8A6FF"
-        }
-      },
-      {
-        "id": "adult",
-        "label": "Adult",
-        "minDays": 45,
-        "careToGrow": 900,
-        "actions": [
-          "feed",
-          "sleep",
-          "hobby",
-          "chat",
-          "work"
-        ],
-        "choice": "job",
-        "look": {
-          "scale": 1,
-          "hair": "short",
-          "accessory": "tie",
-          "outfit": "#7ED6B0"
-        }
-      },
-      {
-        "id": "partnered",
-        "label": "Married",
-        "minDays": 30,
-        "careToGrow": 600,
-        "actions": [
-          "feed",
-          "sleep",
-          "chat",
-          "work",
-          "date"
-        ],
-        "choice": "partner",
-        "look": {
-          "scale": 1,
-          "hair": "short",
-          "accessory": "ring",
-          "outfit": "#FFB27A"
-        }
-      },
-      {
-        "id": "elder",
-        "label": "Elder",
-        "minDays": 30,
-        "careToGrow": 600,
-        "actions": [
-          "feed",
-          "sleep",
-          "chat",
-          "cuddle",
-          "stories"
-        ],
-        "choice": null,
-        "look": {
-          "scale": 0.95,
-          "hair": "grey",
-          "accessory": "glasses",
-          "outfit": "#D9CBB8"
-        }
-      }
-    ],
-    "choices": {
-      "name": {
-        "title": "Name your baby",
-        "prompt": "Pick a name in secret. If you both choose the same one, it’s decided.",
-        "options": [
-          {
-            "id": "mia",
-            "label": "Mia",
-            "emoji": "🌸"
-          },
-          {
-            "id": "noah",
-            "label": "Noah",
-            "emoji": "🌊"
-          },
-          {
-            "id": "ava",
-            "label": "Ava",
-            "emoji": "🕊️"
-          },
-          {
-            "id": "leo",
-            "label": "Leo",
-            "emoji": "🦁"
-          },
-          {
-            "id": "zoe",
-            "label": "Zoé",
-            "emoji": "🌿"
-          },
-          {
-            "id": "kai",
-            "label": "Kai",
-            "emoji": "🌅"
-          },
-          {
-            "id": "amara",
-            "label": "Amara",
-            "emoji": "✨"
-          },
-          {
-            "id": "eli",
-            "label": "Eli",
-            "emoji": "⭐"
-          }
-        ]
-      },
-      "school": {
-        "title": "Choose a school",
-        "prompt": "Where should {name} go to school?",
-        "options": [
-          {
-            "id": "northstar",
-            "label": "Northstar Science Academy",
-            "emoji": "🔭",
-            "skills": {
-              "smart": 15
-            }
-          },
-          {
-            "id": "maple",
-            "label": "Maple Street Community School",
-            "emoji": "🍁",
-            "skills": {
-              "kind": 15
-            }
-          },
-          {
-            "id": "explorers",
-            "label": "Little Explorers Arts School",
-            "emoji": "🎨",
-            "skills": {
-              "creative": 15
-            }
-          },
-          {
-            "id": "riverside",
-            "label": "Riverside Sports School",
-            "emoji": "🏃",
-            "skills": {
-              "sporty": 15
-            }
-          }
-        ]
-      },
-      "hobby": {
-        "title": "Pick a path",
-        "prompt": "{name} is a teenager now. What should they dive into?",
-        "options": [
-          {
-            "id": "robotics",
-            "label": "Robotics club",
-            "emoji": "🤖",
-            "skills": {
-              "smart": 15
-            }
-          },
-          {
-            "id": "volunteer",
-            "label": "Volunteering",
-            "emoji": "🤲",
-            "skills": {
-              "kind": 15
-            }
-          },
-          {
-            "id": "band",
-            "label": "Starting a band",
-            "emoji": "🎸",
-            "skills": {
-              "creative": 15
-            }
-          },
-          {
-            "id": "football",
-            "label": "Football team",
-            "emoji": "⚽",
-            "skills": {
-              "sporty": 15
-            }
-          }
-        ]
-      },
-      "job": {
-        "title": "First job",
-        "prompt": "These fit {name} best. Which job should they take?",
-        "pick": 3,
-        "options": [
-          {
-            "id": "scientist",
-            "label": "Scientist",
-            "emoji": "🧪",
-            "skill": "smart"
-          },
-          {
-            "id": "engineer",
-            "label": "Engineer",
-            "emoji": "🛠️",
-            "skill": "smart"
-          },
-          {
-            "id": "teacher",
-            "label": "Teacher",
-            "emoji": "🍎",
-            "skill": "kind"
-          },
-          {
-            "id": "nurse",
-            "label": "Nurse",
-            "emoji": "🩺",
-            "skill": "kind"
-          },
-          {
-            "id": "designer",
-            "label": "Designer",
-            "emoji": "🖌️",
-            "skill": "creative"
-          },
-          {
-            "id": "chef",
-            "label": "Chef",
-            "emoji": "👩‍🍳",
-            "skill": "creative"
-          },
-          {
-            "id": "coach",
-            "label": "Sports coach",
-            "emoji": "🏅",
-            "skill": "sporty"
-          },
-          {
-            "id": "firefighter",
-            "label": "Firefighter",
-            "emoji": "🚒",
-            "skill": "sporty"
-          }
-        ]
-      },
-      "partner": {
-        "title": "Who will they marry?",
-        "prompt": "{name} has met someone special. Who gets your blessing?",
-        "options": [
-          {
-            "id": "sam",
-            "label": "Sam, a warm-hearted baker",
-            "emoji": "🥐"
-          },
-          {
-            "id": "robin",
-            "label": "Robin, an adventurous pilot",
-            "emoji": "✈️"
-          },
-          {
-            "id": "noor",
-            "label": "Noor, a witty librarian",
-            "emoji": "📚"
-          },
-          {
-            "id": "jules",
-            "label": "Jules, a calm gardener",
-            "emoji": "🌻"
-          }
-        ]
-      }
-    },
-    "endings": {
-      "complete": "{name} lived a full life and grew old surrounded by love. Thank you for raising them together.",
-      "early": "A year has passed. {name}’s story ends here, as a {stage}. Every moment you shared with them still counts.",
-      "traits": {
-        "smart": "They never stopped being curious.",
-        "kind": "Everyone remembers how kind they were.",
-        "creative": "They filled the world with things they made.",
-        "sporty": "They never stopped moving."
-      }
-    },
-    "rooms": [
-      {
-        "id": "living",
-        "label": "Living room",
-        "emoji": "🛋️",
-        "need": "fun",
-        "actions": [
-          "play",
-          "cuddle",
-          "talk",
-          "homework",
-          "hobby",
-          "chat",
-          "work",
-          "date",
-          "stories"
-        ]
-      },
-      {
-        "id": "kitchen",
-        "label": "Kitchen",
-        "emoji": "🍽️",
-        "need": "hunger",
-        "actions": [
-          "feed"
-        ]
-      },
-      {
-        "id": "bathroom",
-        "label": "Bathroom",
-        "emoji": "🛁",
-        "need": "hygiene",
-        "actions": [
-          "bathe"
-        ]
-      },
-      {
-        "id": "bedroom",
-        "label": "Bedroom",
-        "emoji": "🌙",
-        "need": "energy",
-        "actions": [
-          "sleep"
-        ]
-      },
-      {
-        "id": "wardrobe",
-        "label": "Wardrobe",
-        "emoji": "👕",
-        "need": "love",
-        "actions": []
-      }
-    ]
-  },
-  "motion": {
-    "pressScale": 0.98,
-    "pressedOpacity": 0.88,
-    "pressInMs": 80,
-    "releaseMs": 180,
-    "transitionMs": 160
-  },
-  "onboardingTransition": {
-    "title": "A little more about you",
-    "message": "Next: 5 quick questions to make this space feel like yours.",
-    "durationMs": 2400
-  },
-  "accountCreation": {
-    "title": "Create your account",
-    "subtitle": "Keep your moments, your way.",
-    "emailPlaceholder": "Enter your email address",
-    "emailAction": "Sign up with Email",
-    "existingAccount": "Already have an account?",
-    "privacyNote": "We email you a 6-digit code to sign you in. No password needed."
-  },
-  "signIn": {
-    "title": "Welcome to Corasis",
-    "subtitle": "Enter your email. New here? We’ll set you up. Already have an account? We’ll sign you in.",
-    "emailPlaceholder": "Enter your email address",
-    "action": "Continue with Email",
-    "noAccount": "New to Corasis?",
-    "createAction": "Create an account",
-    "restoreNote": "Your session is restored automatically next time you open the app."
-  },
-  "emailCode": {
-    "title": "Check your email",
-    "subtitle": "We sent a 6-digit code to {email}.",
-    "placeholder": "6-digit code",
-    "action": "Verify",
-    "resend": "Resend code",
-    "resent": "New code sent",
-    "change": "Use a different email",
-    "demo": "No email service in this build. Your code is {code}."
-  },
-  "checkup": {
-    "scale": [
-      "Not happy",
-      "A little happy",
-      "Happy",
-      "Quite happy",
-      "Very happy"
-    ],
-    "items": [
-      {
-        "id": "trust",
-        "emoji": "🤝",
-        "text": "Our trust and respect for each other"
-      },
-      {
-        "id": "space",
-        "emoji": "🏡",
-        "text": "How my space and habits are respected"
-      },
-      {
-        "id": "admire",
-        "emoji": "✨",
-        "text": "How much I admire my spouse"
-      },
-      {
-        "id": "admired",
-        "emoji": "🌟",
-        "text": "Feeling admired by my spouse"
-      },
-      {
-        "id": "team",
-        "emoji": "👯",
-        "text": "Feeling like a team, in it together"
-      },
-      {
-        "id": "plans",
-        "emoji": "🗺️",
-        "text": "Agreeing on our plans, now and for the years ahead"
-      },
-      {
-        "id": "talk",
-        "emoji": "💬",
-        "text": "Talking openly about our feelings"
-      },
-      {
-        "id": "intimacy_often",
-        "emoji": "🔥",
-        "text": "How often we're intimate"
-      },
-      {
-        "id": "intimacy_quality",
-        "emoji": "💞",
-        "text": "The quality of our intimacy"
-      },
-      {
-        "id": "tenderness",
-        "emoji": "🫶",
-        "text": "Tender moments outside the bedroom"
-      },
-      {
-        "id": "children",
-        "emoji": "🧸",
-        "text": "How we raise (or plan to raise) our children"
-      },
-      {
-        "id": "money",
-        "emoji": "💰",
-        "text": "How we handle money together"
-      },
-      {
-        "id": "chores",
-        "emoji": "🧺",
-        "text": "How we share the housework"
-      },
-      {
-        "id": "inlaws",
-        "emoji": "👵",
-        "text": "My relationship with my in-laws"
-      },
-      {
-        "id": "leisure",
-        "emoji": "🎨",
-        "text": "Our hobbies and free time"
-      },
-      {
-        "id": "everyday",
-        "emoji": "☕",
-        "text": "Everyday life together"
-      },
-      {
-        "id": "decisions",
-        "emoji": "⚖️",
-        "text": "How we make decisions"
-      },
-      {
-        "id": "conflicts",
-        "emoji": "🕊️",
-        "text": "How we work through disagreements"
-      },
-      {
-        "id": "time_amount",
-        "emoji": "⏳",
-        "text": "How much time we spend together"
-      },
-      {
-        "id": "time_quality",
-        "emoji": "🌅",
-        "text": "The quality of our time together"
-      },
-      {
-        "id": "support",
-        "emoji": "🛟",
-        "text": "The support I get in hard times"
-      },
-      {
-        "id": "friends",
-        "emoji": "🥂",
-        "text": "Our friendships with other couples"
-      },
-      {
-        "id": "getaways",
-        "emoji": "✈️",
-        "text": "Getaways just for the two of us"
-      },
-      {
-        "id": "commitment",
-        "emoji": "💍",
-        "text": "Our commitment and how we share decisions and power"
-      },
-      {
-        "id": "freedom",
-        "emoji": "🦋",
-        "text": "Feeling free within our marriage"
-      }
-    ],
-    "bands": [
-      {
-        "min": 76,
-        "title": "Thriving",
-        "text": "You're both deeply happy together. Keep doing what works, and celebrate it."
-      },
-      {
-        "min": 51,
-        "title": "Strong, with ups and downs",
-        "text": "A good marriage with a few soft spots. Pick one topic below and talk about it this week."
-      },
-      {
-        "min": 26,
-        "title": "Going through a rough patch",
-        "text": "Some important things feel off right now. Talk calmly about the biggest gaps, one at a time."
-      },
-      {
-        "min": 0,
-        "title": "Needs care now",
-        "text": "Things feel hard right now. Be gentle with each other, and consider talking with a couples counsellor."
-      }
-    ],
-    "disclaimer": "Just for fun and conversation. This isn't a clinical test."
-  },
-  "truths": {
-    "intro": "Five questions that get to the heart of a relationship. Be honest: your partner only sees your answers once you've both finished.",
-    "items": [
-      {
-        "id": "compliment",
-        "emoji": "🪞",
-        "text": "If someone said you were just like your partner, would you take it as a compliment?",
-        "options": [
-          "Yes, I'd be proud",
-          "Partly",
-          "Not really"
-        ]
-      },
-      {
-        "id": "fulfilled",
-        "emoji": "🌕",
-        "text": "Does your partner make you feel truly fulfilled, or just less alone?",
-        "options": [
-          "Truly fulfilled",
-          "A bit of both",
-          "Mostly less alone"
-        ]
-      },
-      {
-        "id": "now",
-        "emoji": "🌱",
-        "text": "Are you in love with who your partner is today, or with who they could become?",
-        "options": [
-          "Who they are today",
-          "Both",
-          "Who they could become"
-        ]
-      },
-      {
-        "id": "yourself",
-        "emoji": "🦋",
-        "text": "Can you fully be yourself, or do you hide parts of you to keep your partner comfortable?",
-        "options": [
-          "I'm fully myself",
-          "I hold back a little",
-          "I hide a lot"
-        ]
-      },
-      {
-        "id": "child",
-        "emoji": "👧",
-        "text": "If your child brought home someone just like your partner, would you be happy for them or tell them to run?",
-        "options": [
-          "Happy for them",
-          "I'd have doubts",
-          "Tell them to run"
-        ]
-      }
-    ],
-    "talk": "Where your answers differ, ask each other “what makes you feel that way?” and just listen."
+  "blue": {
+   "label": "Blue",
+   "tagline": "Fresh, steady and serene",
+   "light": {
+    "primary": "#2F6FED",
+    "primaryStrong": "#1F4FB5",
+    "primarySoft": "#E1EAFD",
+    "gradientStart": "#6FA3FF",
+    "gradientEnd": "#2F6FED",
+    "background": "#F6F9FF",
+    "backgroundAlt": "#ECF2FE",
+    "surfaceTint": "#EFF4FF",
+    "selected": "#E1EAFD",
+    "onPrimary": "#FFFFFF",
+    "surface": "#FFFFFF",
+    "surfaceRaised": "#FFFFFF",
+    "text": "#1B1420",
+    "textSecondary": "#5B5361",
+    "textMuted": "#8A8290",
+    "border": "#EDE6EF",
+    "borderStrong": "#D8CFDC",
+    "selectedBorder": "#2F6FED",
+    "focus": "#1F4FB5",
+    "overlay": "rgba(20, 10, 25, 0.45)",
+    "shadow": "rgba(40, 20, 50, 0.12)",
+    "success": "#1E7F5C",
+    "successSoft": "#DDF3EA",
+    "warning": "#A35F00",
+    "warningSoft": "#FFF1D6",
+    "danger": "#C62828",
+    "dangerSoft": "#FDE2E2",
+    "info": "#1F5FA8",
+    "infoSoft": "#E0ECFB"
+   },
+   "dark": {
+    "primary": "#7FA8FF",
+    "primaryStrong": "#A3C0FF",
+    "primarySoft": "#1C2A48",
+    "gradientStart": "#2F6FED",
+    "gradientEnd": "#16306B",
+    "background": "#0E1220",
+    "backgroundAlt": "#141A2B",
+    "surface": "#181F31",
+    "surfaceRaised": "#20283C",
+    "surfaceTint": "#1B2540",
+    "selected": "#1C2A48",
+    "onPrimary": "#140A14",
+    "text": "#F6F1F7",
+    "textSecondary": "#C3B9C7",
+    "textMuted": "#8E8494",
+    "border": "#2E2633",
+    "borderStrong": "#443B4A",
+    "selectedBorder": "#7FA8FF",
+    "focus": "#7FA8FF",
+    "overlay": "rgba(0, 0, 0, 0.6)",
+    "shadow": "rgba(0, 0, 0, 0.5)",
+    "success": "#6FD3A6",
+    "successSoft": "#163A2C",
+    "warning": "#F6C25B",
+    "warningSoft": "#3D2E0E",
+    "danger": "#FF8A80",
+    "dangerSoft": "#4A1E1E",
+    "info": "#8CBBFF",
+    "infoSoft": "#1A2C47"
+   }
   }
+ },
+ "categoryMeta": {
+  "getting_to_know": {
+   "label": "Getting to know each other",
+   "emoji": "🌱",
+   "blurb": "Light questions for the early days (or a fresh look)."
+  },
+  "everyday": {
+   "label": "Everyday connection",
+   "emoji": "☕",
+   "blurb": "Small check-ins that keep daily life shared."
+  },
+  "deeper": {
+   "label": "Deeper conversations",
+   "emoji": "🌙",
+   "blurb": "Slower questions for when you have time."
+  },
+  "love": {
+   "label": "Love and appreciation",
+   "emoji": "💗",
+   "blurb": "Say the things you think but rarely say."
+  },
+  "long_distance": {
+   "label": "Long distance",
+   "emoji": "✈️",
+   "blurb": "For couples living in two places."
+  },
+  "future": {
+   "label": "Future plans",
+   "emoji": "🧭",
+   "blurb": "Dreams, logistics and what comes next."
+  },
+  "repair": {
+   "label": "Communication and repair",
+   "emoji": "🪢",
+   "blurb": "Gentle prompts for after a hard moment. Not therapy."
+  },
+  "fun": {
+   "label": "Fun and playful",
+   "emoji": "🎈",
+   "blurb": "Silly, quick and low stakes."
+  }
+ },
+ "questions": [
+  {
+   "id": "gk1",
+   "type": "daily_question",
+   "category": "getting_to_know",
+   "text": "What is a small thing that instantly puts you in a good mood?"
+  },
+  {
+   "id": "gk2",
+   "type": "daily_question",
+   "category": "getting_to_know",
+   "text": "Which childhood habit do you still secretly have?"
+  },
+  {
+   "id": "gk3",
+   "type": "daily_question",
+   "category": "getting_to_know",
+   "text": "What is a song you could listen to on repeat right now?"
+  },
+  {
+   "id": "gk4",
+   "type": "daily_question",
+   "category": "getting_to_know",
+   "text": "If you had a free Saturday with no plans, how would it go?"
+  },
+  {
+   "id": "gk5",
+   "type": "daily_question",
+   "category": "getting_to_know",
+   "text": "What is something you are weirdly good at?"
+  },
+  {
+   "id": "gk6",
+   "type": "daily_question",
+   "category": "getting_to_know",
+   "text": "What was your favorite meal growing up?"
+  },
+  {
+   "id": "gk7",
+   "type": "daily_question",
+   "category": "getting_to_know",
+   "text": "Which place makes you feel most like yourself?"
+  },
+  {
+   "id": "gk8",
+   "type": "daily_question",
+   "category": "getting_to_know",
+   "text": "What is a skill you would love to learn this year?"
+  },
+  {
+   "id": "ev1",
+   "type": "daily_question",
+   "category": "everyday",
+   "text": "What was the best part of your day so far?"
+  },
+  {
+   "id": "ev2",
+   "type": "daily_question",
+   "category": "everyday",
+   "text": "What is one thing on your mind that you have not said out loud yet?"
+  },
+  {
+   "id": "ev3",
+   "type": "daily_question",
+   "category": "everyday",
+   "text": "What did you eat today that you would recommend?"
+  },
+  {
+   "id": "ev4",
+   "type": "daily_question",
+   "category": "everyday",
+   "text": "Who made you smile today?"
+  },
+  {
+   "id": "ev5",
+   "type": "daily_question",
+   "category": "everyday",
+   "text": "What is something small I could do to make tomorrow easier for you?"
+  },
+  {
+   "id": "ev6",
+   "type": "daily_question",
+   "category": "everyday",
+   "text": "What are you looking forward to this week?"
+  },
+  {
+   "id": "ev7",
+   "type": "daily_question",
+   "category": "everyday",
+   "text": "What did you see today that reminded you of me?"
+  },
+  {
+   "id": "ev8",
+   "type": "daily_question",
+   "category": "everyday",
+   "text": "How is your energy right now, from 1 to 10, and why?"
+  },
+  {
+   "id": "dp1",
+   "type": "daily_question",
+   "category": "deeper",
+   "text": "What is something you are proud of that you rarely mention?"
+  },
+  {
+   "id": "dp2",
+   "type": "daily_question",
+   "category": "deeper",
+   "text": "When do you feel most understood by me?"
+  },
+  {
+   "id": "dp3",
+   "type": "daily_question",
+   "category": "deeper",
+   "text": "What is a belief you have changed your mind about?"
+  },
+  {
+   "id": "dp4",
+   "type": "daily_question",
+   "category": "deeper",
+   "text": "What does rest actually look like for you?"
+  },
+  {
+   "id": "dp5",
+   "type": "daily_question",
+   "category": "deeper",
+   "text": "What is a fear you have about us that you would like to say gently?"
+  },
+  {
+   "id": "dp6",
+   "type": "daily_question",
+   "category": "deeper",
+   "text": "What is one thing your younger self would be surprised about in your life now?"
+  },
+  {
+   "id": "dp7",
+   "type": "daily_question",
+   "category": "deeper",
+   "text": "Which friendship has shaped you the most?"
+  },
+  {
+   "id": "dp8",
+   "type": "daily_question",
+   "category": "deeper",
+   "text": "What helps you when you feel overwhelmed?"
+  },
+  {
+   "id": "lv1",
+   "type": "daily_question",
+   "category": "love",
+   "text": "What is something I did recently that you appreciated more than I probably realized?"
+  },
+  {
+   "id": "lv2",
+   "type": "daily_question",
+   "category": "love",
+   "text": "How do you most like to receive affection: words, time, touch, help, or gifts?"
+  },
+  {
+   "id": "lv3",
+   "type": "daily_question",
+   "category": "love",
+   "text": "What is your favorite memory of us from this year?"
+  },
+  {
+   "id": "lv4",
+   "type": "daily_question",
+   "category": "love",
+   "text": "What is a quality of mine you hope never changes?"
+  },
+  {
+   "id": "lv5",
+   "type": "daily_question",
+   "category": "love",
+   "text": "When did you first feel at home with me?"
+  },
+  {
+   "id": "lv6",
+   "type": "daily_question",
+   "category": "love",
+   "text": "What is a compliment you wish you heard more often?"
+  },
+  {
+   "id": "lv7",
+   "type": "daily_question",
+   "category": "love",
+   "text": "What makes you feel chosen?"
+  },
+  {
+   "id": "lv8",
+   "type": "daily_question",
+   "category": "love",
+   "text": "What is one small ritual of ours that you love?"
+  },
+  {
+   "id": "ld1",
+   "type": "daily_question",
+   "category": "long_distance",
+   "text": "What is the hardest hour of the day to be apart?"
+  },
+  {
+   "id": "ld2",
+   "type": "daily_question",
+   "category": "long_distance",
+   "text": "What is something you want to do together in the first hour we see each other next?"
+  },
+  {
+   "id": "ld3",
+   "type": "daily_question",
+   "category": "long_distance",
+   "text": "How do you like to be supported after a long day when we cannot be in the same room?"
+  },
+  {
+   "id": "ld4",
+   "type": "daily_question",
+   "category": "long_distance",
+   "text": "What small object of mine do you wish you had with you?"
+  },
+  {
+   "id": "ld5",
+   "type": "daily_question",
+   "category": "long_distance",
+   "text": "What is a time-zone trick that would make calls easier for you?"
+  },
+  {
+   "id": "ld6",
+   "type": "daily_question",
+   "category": "long_distance",
+   "text": "What is one thing that is actually easier about distance right now?"
+  },
+  {
+   "id": "ld7",
+   "type": "daily_question",
+   "category": "long_distance",
+   "text": "What do you want our next visit to feel like?"
+  },
+  {
+   "id": "ld8",
+   "type": "daily_question",
+   "category": "long_distance",
+   "text": "Which message of mine do you reread when you miss me?"
+  },
+  {
+   "id": "ft1",
+   "type": "daily_question",
+   "category": "future",
+   "text": "If we could live anywhere for one year, where would you pick?"
+  },
+  {
+   "id": "ft2",
+   "type": "daily_question",
+   "category": "future",
+   "text": "What is one trip you want us to take before anything else?"
+  },
+  {
+   "id": "ft3",
+   "type": "daily_question",
+   "category": "future",
+   "text": "What does a good Sunday look like for us in five years?"
+  },
+  {
+   "id": "ft4",
+   "type": "daily_question",
+   "category": "future",
+   "text": "What is a tradition you would like us to start?"
+  },
+  {
+   "id": "ft5",
+   "type": "daily_question",
+   "category": "future",
+   "text": "What are you saving up for, big or small?"
+  },
+  {
+   "id": "ft6",
+   "type": "daily_question",
+   "category": "future",
+   "text": "What would you want our home to feel like when someone walks in?"
+  },
+  {
+   "id": "ft7",
+   "type": "daily_question",
+   "category": "future",
+   "text": "What is a goal you would like us to work on together this year?"
+  },
+  {
+   "id": "ft8",
+   "type": "daily_question",
+   "category": "future",
+   "text": "What is something you want to be true about us next anniversary?"
+  },
+  {
+   "id": "rp1",
+   "type": "daily_question",
+   "category": "repair",
+   "text": "When we disagree, what helps you feel heard?"
+  },
+  {
+   "id": "rp2",
+   "type": "daily_question",
+   "category": "repair",
+   "text": "What is a sign that you need a break during a tough conversation?"
+  },
+  {
+   "id": "rp3",
+   "type": "daily_question",
+   "category": "repair",
+   "text": "What is something you wish I understood about how you argue?"
+  },
+  {
+   "id": "rp4",
+   "type": "daily_question",
+   "category": "repair",
+   "text": "How do you like to be approached after a misunderstanding?"
+  },
+  {
+   "id": "rp5",
+   "type": "daily_question",
+   "category": "repair",
+   "text": "What is one thing I could say that would make repair easier for you?"
+  },
+  {
+   "id": "rp6",
+   "type": "daily_question",
+   "category": "repair",
+   "text": "What is a small misunderstanding we can laugh about now?"
+  },
+  {
+   "id": "rp7",
+   "type": "daily_question",
+   "category": "repair",
+   "text": "What does a good apology sound like to you?"
+  },
+  {
+   "id": "rp8",
+   "type": "daily_question",
+   "category": "repair",
+   "text": "What is something you would like to ask for more often without feeling needy?"
+  },
+  {
+   "id": "fn1",
+   "type": "daily_question",
+   "category": "fun",
+   "text": "If we were a duo in a movie, what genre would it be?"
+  },
+  {
+   "id": "fn2",
+   "type": "daily_question",
+   "category": "fun",
+   "text": "What is your most unreasonable food opinion?"
+  },
+  {
+   "id": "fn3",
+   "type": "daily_question",
+   "category": "fun",
+   "text": "Which fictional couple are we most like?"
+  },
+  {
+   "id": "fn4",
+   "type": "daily_question",
+   "category": "fun",
+   "text": "What would your walk-on music be?"
+  },
+  {
+   "id": "fn5",
+   "type": "daily_question",
+   "category": "fun",
+   "text": "What is a tiny luxury you refuse to give up?"
+  },
+  {
+   "id": "fn6",
+   "type": "daily_question",
+   "category": "fun",
+   "text": "If you had to teach a class on anything, what would it be?"
+  },
+  {
+   "id": "fn7",
+   "type": "daily_question",
+   "category": "fun",
+   "text": "What is the best bad movie you have ever loved?"
+  },
+  {
+   "id": "fn8",
+   "type": "daily_question",
+   "category": "fun",
+   "text": "What animal would you be in a team of two?"
+  },
+  {
+   "id": "qz1",
+   "type": "quiz",
+   "category": "fun",
+   "text": "What is your partner's go-to comfort food?",
+   "aboutPartner": true
+  },
+  {
+   "id": "qz2",
+   "type": "quiz",
+   "category": "fun",
+   "text": "How does your partner take their coffee or tea?",
+   "aboutPartner": true,
+   "options": [
+    "Black / plain",
+    "With milk",
+    "With sugar",
+    "Milk and sugar",
+    "Neither, something else"
+   ]
+  },
+  {
+   "id": "qz3",
+   "type": "quiz",
+   "category": "fun",
+   "text": "Which would your partner pick for a free evening?",
+   "aboutPartner": true,
+   "options": [
+    "A long walk",
+    "A movie at home",
+    "Dinner out",
+    "Early night"
+   ]
+  },
+  {
+   "id": "qz4",
+   "type": "quiz",
+   "category": "fun",
+   "text": "What is your partner's biggest small annoyance?",
+   "aboutPartner": true
+  },
+  {
+   "id": "qz5",
+   "type": "quiz",
+   "category": "fun",
+   "text": "What is your partner most likely to do on a rainy Sunday?",
+   "aboutPartner": true,
+   "options": [
+    "Cook something",
+    "Read or scroll",
+    "Nap",
+    "Call someone"
+   ]
+  },
+  {
+   "id": "qz6",
+   "type": "quiz",
+   "category": "fun",
+   "text": "Which season is your partner happiest in?",
+   "aboutPartner": true,
+   "options": [
+    "Spring",
+    "Summer",
+    "Autumn",
+    "Winter"
+   ]
+  },
+  {
+   "id": "wr1",
+   "type": "would_you_rather",
+   "category": "fun",
+   "text": "Would you rather",
+   "options": [
+    "Cook together every night",
+    "Eat out together every night"
+   ]
+  },
+  {
+   "id": "wr2",
+   "type": "would_you_rather",
+   "category": "fun",
+   "text": "Would you rather",
+   "options": [
+    "A surprise weekend trip",
+    "A planned two-week holiday"
+   ]
+  },
+  {
+   "id": "wr3",
+   "type": "would_you_rather",
+   "category": "fun",
+   "text": "Would you rather",
+   "options": [
+    "Morning calls",
+    "Late-night calls"
+   ]
+  },
+  {
+   "id": "wr4",
+   "type": "would_you_rather",
+   "category": "fun",
+   "text": "Would you rather",
+   "options": [
+    "Handwritten letters",
+    "Voice notes"
+   ]
+  },
+  {
+   "id": "wr5",
+   "type": "would_you_rather",
+   "category": "fun",
+   "text": "Would you rather",
+   "options": [
+    "Live near the sea",
+    "Live near the mountains"
+   ]
+  },
+  {
+   "id": "wr6",
+   "type": "would_you_rather",
+   "category": "fun",
+   "text": "Would you rather",
+   "options": [
+    "Relive our first date",
+    "Fast-forward to our next trip"
+   ]
+  },
+  {
+   "id": "gs1",
+   "type": "guess",
+   "category": "love",
+   "text": "What would your partner say is their favorite thing about you?",
+   "aboutPartner": true
+  },
+  {
+   "id": "gs2",
+   "type": "guess",
+   "category": "future",
+   "text": "Where would your partner want to travel next?",
+   "aboutPartner": true
+  },
+  {
+   "id": "gs3",
+   "type": "guess",
+   "category": "everyday",
+   "text": "What did your partner have for breakfast today?",
+   "aboutPartner": true
+  },
+  {
+   "id": "gs4",
+   "type": "guess",
+   "category": "fun",
+   "text": "What song is your partner playing on repeat this week?",
+   "aboutPartner": true
+  },
+  {
+   "id": "pc1",
+   "type": "photo_challenge",
+   "category": "everyday",
+   "text": "Show me your view right now."
+  },
+  {
+   "id": "pc2",
+   "type": "photo_challenge",
+   "category": "everyday",
+   "text": "Something that made you smile today."
+  },
+  {
+   "id": "pc3",
+   "type": "photo_challenge",
+   "category": "fun",
+   "text": "Your most chaotic corner."
+  },
+  {
+   "id": "pc4",
+   "type": "photo_challenge",
+   "category": "love",
+   "text": "Something that reminds you of me."
+  },
+  {
+   "id": "pc5",
+   "type": "photo_challenge",
+   "category": "long_distance",
+   "text": "The sky where you are."
+  },
+  {
+   "id": "pc6",
+   "type": "photo_challenge",
+   "category": "fun",
+   "text": "Your outfit of the day, with commentary."
+  }
+ ],
+ "decks": [
+  {
+   "id": "deck_daily",
+   "title": "Daily question",
+   "category": "everyday",
+   "type": "daily_question",
+   "description": "One question a day, answered separately and revealed together.",
+   "questionIds": [
+    "gk1",
+    "gk2",
+    "gk3",
+    "gk4",
+    "gk5",
+    "gk6",
+    "gk7",
+    "gk8",
+    "ev1",
+    "ev2",
+    "ev3",
+    "ev4",
+    "ev5",
+    "ev6",
+    "ev7",
+    "ev8",
+    "dp1",
+    "dp2",
+    "dp3",
+    "dp4",
+    "dp5",
+    "dp6",
+    "dp7",
+    "dp8",
+    "lv1",
+    "lv2",
+    "lv3",
+    "lv4",
+    "lv5",
+    "lv6",
+    "lv7",
+    "lv8",
+    "ld1",
+    "ld2",
+    "ld3",
+    "ld4",
+    "ld5",
+    "ld6",
+    "ld7",
+    "ld8",
+    "ft1",
+    "ft2",
+    "ft3",
+    "ft4",
+    "ft5",
+    "ft6",
+    "ft7",
+    "ft8",
+    "rp1",
+    "rp2",
+    "rp3",
+    "rp4",
+    "rp5",
+    "rp6",
+    "rp7",
+    "rp8",
+    "fn1",
+    "fn2",
+    "fn3",
+    "fn4",
+    "fn5",
+    "fn6",
+    "fn7",
+    "fn8"
+   ],
+   "premium": false,
+   "emoji": "💬"
+  },
+  {
+   "id": "deck_quiz",
+   "title": "Who knows the other best?",
+   "category": "fun",
+   "type": "quiz",
+   "description": "Guess facts about each other. Scores are for fun, not a verdict.",
+   "questionIds": [
+    "qz1",
+    "qz2",
+    "qz3",
+    "qz4",
+    "qz5",
+    "qz6"
+   ],
+   "premium": false,
+   "emoji": "🧠"
+  },
+  {
+   "id": "deck_wyr",
+   "title": "Would you rather? Couples edition",
+   "category": "fun",
+   "type": "would_you_rather",
+   "description": "Pick a side, then see if you agree.",
+   "questionIds": [
+    "wr1",
+    "wr2",
+    "wr3",
+    "wr4",
+    "wr5",
+    "wr6"
+   ],
+   "premium": false,
+   "emoji": "⚖️"
+  },
+  {
+   "id": "deck_guess",
+   "title": "Guess your partner's answer",
+   "category": "love",
+   "type": "guess",
+   "description": "Predict what they will say. Reveal side by side.",
+   "questionIds": [
+    "gs1",
+    "gs2",
+    "gs3",
+    "gs4"
+   ],
+   "premium": false,
+   "emoji": "🔮"
+  },
+  {
+   "id": "deck_photo",
+   "title": "Daily photo challenge",
+   "category": "everyday",
+   "type": "photo_challenge",
+   "description": "A small photo prompt for both of you.",
+   "questionIds": [
+    "pc1",
+    "pc2",
+    "pc3",
+    "pc4",
+    "pc5",
+    "pc6"
+   ],
+   "premium": false,
+   "emoji": "📸"
+  },
+  {
+   "id": "deck_gk",
+   "title": "Getting to know each other",
+   "category": "getting_to_know",
+   "type": "deck",
+   "description": "Light questions for the early days (or a fresh look).",
+   "questionIds": [
+    "gk1",
+    "gk2",
+    "gk3",
+    "gk4",
+    "gk5",
+    "gk6",
+    "gk7",
+    "gk8"
+   ],
+   "premium": false,
+   "emoji": "🌱"
+  },
+  {
+   "id": "deck_ev",
+   "title": "Everyday connection",
+   "category": "everyday",
+   "type": "deck",
+   "description": "Small check-ins that keep daily life shared.",
+   "questionIds": [
+    "ev1",
+    "ev2",
+    "ev3",
+    "ev4",
+    "ev5",
+    "ev6",
+    "ev7",
+    "ev8"
+   ],
+   "premium": false,
+   "emoji": "☕"
+  },
+  {
+   "id": "deck_dp",
+   "title": "Deeper conversations",
+   "category": "deeper",
+   "type": "deck",
+   "description": "Slower questions for when you have time.",
+   "questionIds": [
+    "dp1",
+    "dp2",
+    "dp3",
+    "dp4",
+    "dp5",
+    "dp6",
+    "dp7",
+    "dp8"
+   ],
+   "premium": false,
+   "emoji": "🌙"
+  },
+  {
+   "id": "deck_lv",
+   "title": "Love and appreciation",
+   "category": "love",
+   "type": "deck",
+   "description": "Say the things you think but rarely say.",
+   "questionIds": [
+    "lv1",
+    "lv2",
+    "lv3",
+    "lv4",
+    "lv5",
+    "lv6",
+    "lv7",
+    "lv8"
+   ],
+   "premium": false,
+   "emoji": "💗"
+  },
+  {
+   "id": "deck_ld",
+   "title": "Long distance",
+   "category": "long_distance",
+   "type": "deck",
+   "description": "For couples living in two places.",
+   "questionIds": [
+    "ld1",
+    "ld2",
+    "ld3",
+    "ld4",
+    "ld5",
+    "ld6",
+    "ld7",
+    "ld8"
+   ],
+   "premium": false,
+   "emoji": "✈️"
+  },
+  {
+   "id": "deck_ft",
+   "title": "Future plans",
+   "category": "future",
+   "type": "deck",
+   "description": "Dreams, logistics and what comes next.",
+   "questionIds": [
+    "ft1",
+    "ft2",
+    "ft3",
+    "ft4",
+    "ft5",
+    "ft6",
+    "ft7",
+    "ft8"
+   ],
+   "premium": true,
+   "emoji": "🧭"
+  },
+  {
+   "id": "deck_rp",
+   "title": "Communication and repair",
+   "category": "repair",
+   "type": "deck",
+   "description": "Gentle prompts for after a hard moment. Not therapy.",
+   "questionIds": [
+    "rp1",
+    "rp2",
+    "rp3",
+    "rp4",
+    "rp5",
+    "rp6",
+    "rp7",
+    "rp8"
+   ],
+   "premium": true,
+   "emoji": "🪢"
+  },
+  {
+   "id": "deck_fn",
+   "title": "Fun and playful",
+   "category": "fun",
+   "type": "deck",
+   "description": "Silly, quick and low stakes.",
+   "questionIds": [
+    "fn1",
+    "fn2",
+    "fn3",
+    "fn4",
+    "fn5",
+    "fn6",
+    "fn7",
+    "fn8"
+   ],
+   "premium": false,
+   "emoji": "🎈"
+  }
+ ],
+ "simulatedAnswers": {
+  "default": "Honestly? Thinking about our next trip. I keep planning it in my head.",
+  "gk1": "Sun on the kitchen table in the morning.",
+  "ev1": "A long walk after work, finally no rain.",
+  "ev4": "A kid on the bus wearing a dinosaur backpack.",
+  "lv1": "When you called just to say good night even though you were exhausted.",
+  "ld2": "Just hold hands and get coffee. Nothing fancy.",
+  "ft1": "Lisbon. Hills, light, pastries.",
+  "rp1": "When you repeat back what I said before replying.",
+  "fn3": "The one from that cooking show, obviously.",
+  "qz2": "With milk",
+  "qz3": "A long walk",
+  "qz5": "Cook something",
+  "qz6": "Autumn",
+  "wr1": "Cook together every night",
+  "wr2": "A surprise weekend trip",
+  "wr3": "Late-night calls",
+  "wr4": "Voice notes",
+  "wr5": "Live near the sea",
+  "wr6": "Fast-forward to our next trip",
+  "gs1": "That you notice small things.",
+  "gs2": "Japan in spring.",
+  "gs3": "Toast with too much butter.",
+  "gs4": "That old Sade album again."
+ },
+ "connectionOnboarding": {
+  "version": 1,
+  "title": "Make it yours",
+  "intro": "A few quick choices. Your own pace.",
+  "privacy": "Private. Always optional.",
+  "summaryTitle": "Your pace. Your space.",
+  "summaryBody": "Start with one small moment.",
+  "questions": [
+   {
+    "id": "focus",
+    "title": "What would feel good?",
+    "subtitle": "Choose what matters today.",
+    "options": [
+     {
+      "id": "daily_connection",
+      "label": "Everyday closeness",
+      "response": "Small moments can bring you closer.",
+      "deckId": "deck_ev"
+     },
+     {
+      "id": "deeper_conversations",
+      "label": "Deeper conversations",
+      "response": "There’s room for meaningful talks.",
+      "deckId": "deck_dp"
+     },
+     {
+      "id": "playful_moments",
+      "label": "More fun together",
+      "response": "A little laughter counts too.",
+      "deckId": "deck_fn"
+     },
+     {
+      "id": "appreciation",
+      "label": "Feeling appreciated",
+      "response": "Little words can mean a lot.",
+      "deckId": "deck_lv"
+     }
+    ]
+   },
+   {
+    "id": "challenge",
+    "title": "What gets in the way?",
+    "subtitle": "No blame. Just your day-to-day.",
+    "options": [
+     {
+      "id": "busy_days",
+      "label": "Busy days",
+      "response": "Let’s keep it short and easy.",
+      "deckId": "deck_ev"
+     },
+     {
+      "id": "time_zones",
+      "label": "Different schedules",
+      "response": "Connect when it works for you.",
+      "deckId": "deck_ld"
+     },
+     {
+      "id": "same_conversations",
+      "label": "The same conversations",
+      "response": "Try a fresh question together.",
+      "deckId": "deck_gk"
+     },
+     {
+      "id": "finding_words",
+      "label": "Finding the right words",
+      "response": "A gentle prompt can help.",
+      "deckId": "deck_lv"
+     }
+    ]
+   },
+   {
+    "id": "affection",
+    "title": "What feels like care?",
+    "subtitle": "Pick what means most to you.",
+    "options": [
+     {
+      "id": "words",
+      "label": "Kind words",
+      "response": "A thoughtful note goes a long way.",
+      "deckId": "deck_lv"
+     },
+     {
+      "id": "photos",
+      "label": "Little photos",
+      "response": "Share a glimpse of your day.",
+      "deckId": "deck_photo"
+     },
+     {
+      "id": "quality_time",
+      "label": "Time to talk",
+      "response": "Make a little room to listen.",
+      "deckId": "deck_dp"
+     },
+     {
+      "id": "play",
+      "label": "Laughing together",
+      "response": "Let’s make space for fun.",
+      "deckId": "deck_wyr"
+     }
+    ]
+   },
+   {
+    "id": "daily_time",
+    "title": "What fits your day?",
+    "subtitle": "Small moments count.",
+    "options": [
+     {
+      "id": "two_minutes",
+      "label": "2 minutes",
+      "response": "A little moment is enough."
+     },
+     {
+      "id": "five_minutes",
+      "label": "5 minutes",
+      "response": "A little room to connect."
+     },
+     {
+      "id": "ten_minutes",
+      "label": "10+ minutes",
+      "response": "Take your time together."
+     },
+     {
+      "id": "flexible",
+      "label": "It depends",
+      "response": "Your rhythm can change."
+     }
+    ]
+   },
+   {
+    "id": "pace",
+    "title": "Where should we start?",
+    "subtitle": "You can change this later.",
+    "options": [
+     {
+      "id": "gentle",
+      "label": "Keep it gentle",
+      "response": "An easy start, with no pressure.",
+      "deckId": "deck_ev"
+     },
+     {
+      "id": "playful",
+      "label": "Make it playful",
+      "response": "Start with a little fun.",
+      "deckId": "deck_fn"
+     },
+     {
+      "id": "thoughtful",
+      "label": "Go a little deeper",
+      "response": "A thoughtful place to begin.",
+      "deckId": "deck_dp"
+     }
+    ]
+   }
+  ],
+  "storageNotice": "Saved after account verification. Demo stays on this device."
+ },
+ "games": [
+  {
+   "id": "our_little_one",
+   "title": "Our Little One",
+   "tagline": "Raise a whole life together",
+   "description": "Decide together to have a baby, then feed, bathe, play and vote on the big choices as they grow up, go to school, find a job, marry and grow old. A whole life, within one year.",
+   "tags": [
+    "Co-op",
+    "Daily",
+    "Life sim"
+   ],
+   "players": "2 parents",
+   "pace": "A life in one year",
+   "emoji": "👶",
+   "colors": [
+    "#7FB8FF",
+    "#4C6FE0"
+   ],
+   "status": "available"
+  },
+  {
+   "id": "marriage_checkup",
+   "title": "Marriage Check-up",
+   "tagline": "Rate your marriage, then compare",
+   "description": "Once a month, each of you rates 25 parts of your marriage in secret and guesses your spouse's score. Then reveal together: where you're in tune, what's going great and what to talk about.",
+   "tags": [
+    "Married",
+    "Monthly",
+    "Honest"
+   ],
+   "players": "2 spouses",
+   "pace": "10 minutes a month",
+   "emoji": "💍",
+   "colors": [
+    "#F7A8C4",
+    "#C2477A"
+   ],
+   "status": "available"
+  },
+  {
+   "id": "five_truths",
+   "title": "Five Truths",
+   "tagline": "5 questions for life",
+   "description": "Five honest questions about your relationship. Answer each one in secret, guess what your partner said, then reveal together and talk about where you differ.",
+   "players": "2 partners",
+   "pace": "5 minutes a month",
+   "emoji": "🗝️",
+   "status": "available",
+   "tags": [
+    "Deep talk",
+    "Couples"
+   ],
+   "colors": [
+    "#B9A4FF",
+    "#7C5CFF"
+   ]
+  },
+  {
+   "id": "draw_guess",
+   "title": "Draw & Guess",
+   "tagline": "Sketch it, they guess it",
+   "description": "Draw a secret word with your finger. Your partner guesses it when they are free, and every drawing is kept in your Memories.",
+   "tags": [
+    "Drawing",
+    "Turn-based"
+   ],
+   "players": "2 players",
+   "pace": "2 min a turn",
+   "emoji": "🎨",
+   "colors": [
+    "#FF7A9C",
+    "#E0306A"
+   ],
+   "status": "available"
+  },
+  {
+   "id": "two_halves",
+   "title": "Two Halves",
+   "tagline": "Half the clues each",
+   "description": "A small daily puzzle split in two. Each of you sees half the clues, so the only way to solve it is to talk.",
+   "tags": [
+    "Puzzle",
+    "Co-op",
+    "Daily"
+   ],
+   "players": "2 players",
+   "pace": "5 min a day",
+   "emoji": "🧩",
+   "colors": [
+    "#FFC43D",
+    "#F08A00"
+   ],
+   "status": "available"
+  },
+  {
+   "id": "our_garden",
+   "title": "Our Garden",
+   "tagline": "Grow something together",
+   "description": "A shared garden that grows with every moment, answer and voice note, and wilts a little when the flame goes quiet.",
+   "tags": [
+    "Co-op",
+    "Daily"
+   ],
+   "players": "2 players",
+   "pace": "Every day",
+   "emoji": "🌱",
+   "colors": [
+    "#5FD49B",
+    "#14946A"
+   ],
+   "status": "available"
+  },
+  {
+   "id": "love_duels",
+   "title": "Love Duels",
+   "tagline": "Board games, one move at a time",
+   "description": "Four in a row, dots and boxes and more. Play a move, your partner gets a nudge, and a match can last all week.",
+   "tags": [
+    "Duel",
+    "Turn-based"
+   ],
+   "players": "2 players",
+   "pace": "1 move at a time",
+   "emoji": "⚔️",
+   "colors": [
+    "#8A7BFF",
+    "#4A39D6"
+   ],
+   "status": "available"
+  }
+ ],
+ "lifeGame": {
+  "maxDays": 365,
+  "careThreshold": 40,
+  "coinFlipRound": 2,
+  "needs": [
+   {
+    "id": "hunger",
+    "label": "Food",
+    "emoji": "🍼",
+    "decayPerHour": 4
+   },
+   {
+    "id": "energy",
+    "label": "Sleep",
+    "emoji": "💤",
+    "decayPerHour": 3
+   },
+   {
+    "id": "hygiene",
+    "label": "Clean",
+    "emoji": "🫧",
+    "decayPerHour": 2.5
+   },
+   {
+    "id": "fun",
+    "label": "Fun",
+    "emoji": "🎈",
+    "decayPerHour": 3.5
+   },
+   {
+    "id": "love",
+    "label": "Love",
+    "emoji": "💗",
+    "decayPerHour": 2
+   }
+  ],
+  "skills": [
+   {
+    "id": "smart",
+    "label": "Smart",
+    "emoji": "📚"
+   },
+   {
+    "id": "kind",
+    "label": "Kind",
+    "emoji": "🤝"
+   },
+   {
+    "id": "creative",
+    "label": "Creative",
+    "emoji": "🎨"
+   },
+   {
+    "id": "sporty",
+    "label": "Sporty",
+    "emoji": "⚽"
+   }
+  ],
+  "actions": [
+   {
+    "id": "feed",
+    "label": "Feed",
+    "emoji": "🍼",
+    "verb": "fed",
+    "effects": {
+     "hunger": 40,
+     "love": 5
+    },
+    "care": 15,
+    "skills": {}
+   },
+   {
+    "id": "bathe",
+    "label": "Bath",
+    "emoji": "🛁",
+    "verb": "bathed",
+    "effects": {
+     "hygiene": 50,
+     "fun": 5
+    },
+    "care": 15,
+    "skills": {}
+   },
+   {
+    "id": "sleep",
+    "label": "Sleep",
+    "emoji": "🌙",
+    "verb": "put to bed",
+    "effects": {
+     "energy": 60
+    },
+    "care": 15,
+    "skills": {}
+   },
+   {
+    "id": "cuddle",
+    "label": "Cuddle",
+    "emoji": "🤗",
+    "verb": "cuddled",
+    "effects": {
+     "love": 35,
+     "fun": 10
+    },
+    "care": 15,
+    "skills": {
+     "kind": 1
+    }
+   },
+   {
+    "id": "play",
+    "label": "Play",
+    "emoji": "🧸",
+    "verb": "played with",
+    "effects": {
+     "fun": 40,
+     "energy": -10,
+     "hunger": -5
+    },
+    "care": 20,
+    "skills": {
+     "creative": 2,
+     "sporty": 1
+    }
+   },
+   {
+    "id": "talk",
+    "label": "Talk",
+    "emoji": "🗣️",
+    "verb": "talked with",
+    "effects": {
+     "love": 20,
+     "fun": 15
+    },
+    "care": 20,
+    "skills": {
+     "smart": 1,
+     "kind": 1
+    }
+   },
+   {
+    "id": "homework",
+    "label": "Homework",
+    "emoji": "✏️",
+    "verb": "did homework with",
+    "effects": {
+     "fun": -10,
+     "energy": -10,
+     "love": 10
+    },
+    "care": 25,
+    "skills": {
+     "smart": 3
+    }
+   },
+   {
+    "id": "hobby",
+    "label": "Hobby",
+    "emoji": "🎸",
+    "verb": "did a hobby with",
+    "effects": {
+     "fun": 35,
+     "energy": -15
+    },
+    "care": 25,
+    "skills": {
+     "creative": 2,
+     "sporty": 2
+    }
+   },
+   {
+    "id": "chat",
+    "label": "Deep talk",
+    "emoji": "💬",
+    "verb": "had a deep talk with",
+    "effects": {
+     "love": 30
+    },
+    "care": 25,
+    "skills": {
+     "kind": 2,
+     "smart": 1
+    }
+   },
+   {
+    "id": "work",
+    "label": "Support",
+    "emoji": "💼",
+    "verb": "cheered on",
+    "effects": {
+     "love": 20,
+     "energy": 10,
+     "fun": 10
+    },
+    "care": 25,
+    "skills": {
+     "smart": 1,
+     "kind": 1
+    }
+   },
+   {
+    "id": "date",
+    "label": "Advice",
+    "emoji": "💌",
+    "verb": "gave love advice to",
+    "effects": {
+     "love": 30,
+     "fun": 15
+    },
+    "care": 25,
+    "skills": {
+     "kind": 2
+    }
+   },
+   {
+    "id": "stories",
+    "label": "Stories",
+    "emoji": "📖",
+    "verb": "shared stories with",
+    "effects": {
+     "love": 30,
+     "fun": 20,
+     "energy": 10
+    },
+    "care": 25,
+    "skills": {
+     "kind": 1,
+     "creative": 1
+    }
+   }
+  ],
+  "stages": [
+   {
+    "id": "newborn",
+    "label": "Newborn",
+    "minDays": 7,
+    "careToGrow": 300,
+    "actions": [
+     "feed",
+     "bathe",
+     "sleep",
+     "cuddle"
+    ],
+    "choice": null,
+    "look": {
+     "scale": 0.62,
+     "hair": "none",
+     "accessory": "pacifier",
+     "outfit": "#FFD6E5"
+    }
+   },
+   {
+    "id": "toddler",
+    "label": "Toddler",
+    "minDays": 21,
+    "careToGrow": 600,
+    "actions": [
+     "feed",
+     "bathe",
+     "sleep",
+     "cuddle",
+     "play",
+     "talk"
+    ],
+    "choice": null,
+    "look": {
+     "scale": 0.72,
+     "hair": "tuft",
+     "accessory": "none",
+     "outfit": "#FFE08A"
+    }
+   },
+   {
+    "id": "child",
+    "label": "Child",
+    "minDays": 45,
+    "careToGrow": 900,
+    "actions": [
+     "feed",
+     "bathe",
+     "sleep",
+     "play",
+     "talk",
+     "homework"
+    ],
+    "choice": "school",
+    "look": {
+     "scale": 0.82,
+     "hair": "short",
+     "accessory": "backpack",
+     "outfit": "#9FD8FF"
+    }
+   },
+   {
+    "id": "teen",
+    "label": "Teen",
+    "minDays": 45,
+    "careToGrow": 900,
+    "actions": [
+     "feed",
+     "bathe",
+     "sleep",
+     "homework",
+     "hobby",
+     "chat"
+    ],
+    "choice": "hobby",
+    "look": {
+     "scale": 0.92,
+     "hair": "long",
+     "accessory": "headphones",
+     "outfit": "#B8A6FF"
+    }
+   },
+   {
+    "id": "adult",
+    "label": "Adult",
+    "minDays": 45,
+    "careToGrow": 900,
+    "actions": [
+     "feed",
+     "sleep",
+     "hobby",
+     "chat",
+     "work"
+    ],
+    "choice": "job",
+    "look": {
+     "scale": 1,
+     "hair": "short",
+     "accessory": "tie",
+     "outfit": "#7ED6B0"
+    }
+   },
+   {
+    "id": "partnered",
+    "label": "Married",
+    "minDays": 30,
+    "careToGrow": 600,
+    "actions": [
+     "feed",
+     "sleep",
+     "chat",
+     "work",
+     "date"
+    ],
+    "choice": "partner",
+    "look": {
+     "scale": 1,
+     "hair": "short",
+     "accessory": "ring",
+     "outfit": "#FFB27A"
+    }
+   },
+   {
+    "id": "elder",
+    "label": "Elder",
+    "minDays": 30,
+    "careToGrow": 600,
+    "actions": [
+     "feed",
+     "sleep",
+     "chat",
+     "cuddle",
+     "stories"
+    ],
+    "choice": null,
+    "look": {
+     "scale": 0.95,
+     "hair": "grey",
+     "accessory": "glasses",
+     "outfit": "#D9CBB8"
+    }
+   }
+  ],
+  "choices": {
+   "name": {
+    "title": "Name your baby",
+    "prompt": "Pick a name in secret. If you both choose the same one, it’s decided.",
+    "options": [
+     {
+      "id": "mia",
+      "label": "Mia",
+      "emoji": "🌸"
+     },
+     {
+      "id": "noah",
+      "label": "Noah",
+      "emoji": "🌊"
+     },
+     {
+      "id": "ava",
+      "label": "Ava",
+      "emoji": "🕊️"
+     },
+     {
+      "id": "leo",
+      "label": "Leo",
+      "emoji": "🦁"
+     },
+     {
+      "id": "zoe",
+      "label": "Zoé",
+      "emoji": "🌿"
+     },
+     {
+      "id": "kai",
+      "label": "Kai",
+      "emoji": "🌅"
+     },
+     {
+      "id": "amara",
+      "label": "Amara",
+      "emoji": "✨"
+     },
+     {
+      "id": "eli",
+      "label": "Eli",
+      "emoji": "⭐"
+     }
+    ]
+   },
+   "school": {
+    "title": "Choose a school",
+    "prompt": "Where should {name} go to school?",
+    "options": [
+     {
+      "id": "northstar",
+      "label": "Northstar Science Academy",
+      "emoji": "🔭",
+      "skills": {
+       "smart": 15
+      }
+     },
+     {
+      "id": "maple",
+      "label": "Maple Street Community School",
+      "emoji": "🍁",
+      "skills": {
+       "kind": 15
+      }
+     },
+     {
+      "id": "explorers",
+      "label": "Little Explorers Arts School",
+      "emoji": "🎨",
+      "skills": {
+       "creative": 15
+      }
+     },
+     {
+      "id": "riverside",
+      "label": "Riverside Sports School",
+      "emoji": "🏃",
+      "skills": {
+       "sporty": 15
+      }
+     }
+    ]
+   },
+   "hobby": {
+    "title": "Pick a path",
+    "prompt": "{name} is a teenager now. What should they dive into?",
+    "options": [
+     {
+      "id": "robotics",
+      "label": "Robotics club",
+      "emoji": "🤖",
+      "skills": {
+       "smart": 15
+      }
+     },
+     {
+      "id": "volunteer",
+      "label": "Volunteering",
+      "emoji": "🤲",
+      "skills": {
+       "kind": 15
+      }
+     },
+     {
+      "id": "band",
+      "label": "Starting a band",
+      "emoji": "🎸",
+      "skills": {
+       "creative": 15
+      }
+     },
+     {
+      "id": "football",
+      "label": "Football team",
+      "emoji": "⚽",
+      "skills": {
+       "sporty": 15
+      }
+     }
+    ]
+   },
+   "job": {
+    "title": "First job",
+    "prompt": "These fit {name} best. Which job should they take?",
+    "pick": 3,
+    "options": [
+     {
+      "id": "scientist",
+      "label": "Scientist",
+      "emoji": "🧪",
+      "skill": "smart"
+     },
+     {
+      "id": "engineer",
+      "label": "Engineer",
+      "emoji": "🛠️",
+      "skill": "smart"
+     },
+     {
+      "id": "teacher",
+      "label": "Teacher",
+      "emoji": "🍎",
+      "skill": "kind"
+     },
+     {
+      "id": "nurse",
+      "label": "Nurse",
+      "emoji": "🩺",
+      "skill": "kind"
+     },
+     {
+      "id": "designer",
+      "label": "Designer",
+      "emoji": "🖌️",
+      "skill": "creative"
+     },
+     {
+      "id": "chef",
+      "label": "Chef",
+      "emoji": "👩‍🍳",
+      "skill": "creative"
+     },
+     {
+      "id": "coach",
+      "label": "Sports coach",
+      "emoji": "🏅",
+      "skill": "sporty"
+     },
+     {
+      "id": "firefighter",
+      "label": "Firefighter",
+      "emoji": "🚒",
+      "skill": "sporty"
+     }
+    ]
+   },
+   "partner": {
+    "title": "Who will they marry?",
+    "prompt": "{name} has met someone special. Who gets your blessing?",
+    "options": [
+     {
+      "id": "sam",
+      "label": "Sam, a warm-hearted baker",
+      "emoji": "🥐"
+     },
+     {
+      "id": "robin",
+      "label": "Robin, an adventurous pilot",
+      "emoji": "✈️"
+     },
+     {
+      "id": "noor",
+      "label": "Noor, a witty librarian",
+      "emoji": "📚"
+     },
+     {
+      "id": "jules",
+      "label": "Jules, a calm gardener",
+      "emoji": "🌻"
+     }
+    ]
+   }
+  },
+  "endings": {
+   "complete": "{name} lived a full life and grew old surrounded by love. Thank you for raising them together.",
+   "early": "A year has passed. {name}’s story ends here, as a {stage}. Every moment you shared with them still counts.",
+   "traits": {
+    "smart": "They never stopped being curious.",
+    "kind": "Everyone remembers how kind they were.",
+    "creative": "They filled the world with things they made.",
+    "sporty": "They never stopped moving."
+   }
+  },
+  "rooms": [
+   {
+    "id": "living",
+    "label": "Living room",
+    "emoji": "🛋️",
+    "need": "fun",
+    "actions": [
+     "play",
+     "cuddle",
+     "talk",
+     "homework",
+     "hobby",
+     "chat",
+     "work",
+     "date",
+     "stories"
+    ]
+   },
+   {
+    "id": "kitchen",
+    "label": "Kitchen",
+    "emoji": "🍽️",
+    "need": "hunger",
+    "actions": [
+     "feed"
+    ]
+   },
+   {
+    "id": "bathroom",
+    "label": "Bathroom",
+    "emoji": "🛁",
+    "need": "hygiene",
+    "actions": [
+     "bathe"
+    ]
+   },
+   {
+    "id": "bedroom",
+    "label": "Bedroom",
+    "emoji": "🌙",
+    "need": "energy",
+    "actions": [
+     "sleep"
+    ]
+   },
+   {
+    "id": "wardrobe",
+    "label": "Wardrobe",
+    "emoji": "👕",
+    "need": "love",
+    "actions": []
+   }
+  ]
+ },
+ "motion": {
+  "pressScale": 0.98,
+  "pressedOpacity": 0.88,
+  "pressInMs": 80,
+  "releaseMs": 180,
+  "transitionMs": 160
+ },
+ "onboardingTransition": {
+  "title": "A little more about you",
+  "message": "Next: 5 quick questions to make this space feel like yours.",
+  "durationMs": 2400
+ },
+ "accountCreation": {
+  "title": "Create your account",
+  "subtitle": "Keep your moments, your way.",
+  "emailPlaceholder": "Enter your email address",
+  "emailAction": "Sign up with Email",
+  "existingAccount": "Already have an account?",
+  "privacyNote": "We email you a 6-digit code to sign you in. No password needed."
+ },
+ "signIn": {
+  "title": "Welcome to Corasis",
+  "subtitle": "Enter your email. New here? We’ll set you up. Already have an account? We’ll sign you in.",
+  "emailPlaceholder": "Enter your email address",
+  "action": "Continue with Email",
+  "noAccount": "New to Corasis?",
+  "createAction": "Create an account",
+  "restoreNote": "Your session is restored automatically next time you open the app."
+ },
+ "emailCode": {
+  "title": "Check your email",
+  "subtitle": "We sent a 6-digit code to {email}.",
+  "placeholder": "6-digit code",
+  "action": "Verify",
+  "resend": "Resend code",
+  "resent": "New code sent",
+  "change": "Use a different email",
+  "demo": "No email service in this build. Your code is {code}."
+ },
+ "checkup": {
+  "scale": [
+   "Not happy",
+   "A little happy",
+   "Happy",
+   "Quite happy",
+   "Very happy"
+  ],
+  "items": [
+   {
+    "id": "trust",
+    "emoji": "🤝",
+    "text": "Our trust and respect for each other"
+   },
+   {
+    "id": "space",
+    "emoji": "🏡",
+    "text": "How my space and habits are respected"
+   },
+   {
+    "id": "admire",
+    "emoji": "✨",
+    "text": "How much I admire my spouse"
+   },
+   {
+    "id": "admired",
+    "emoji": "🌟",
+    "text": "Feeling admired by my spouse"
+   },
+   {
+    "id": "team",
+    "emoji": "👯",
+    "text": "Feeling like a team, in it together"
+   },
+   {
+    "id": "plans",
+    "emoji": "🗺️",
+    "text": "Agreeing on our plans, now and for the years ahead"
+   },
+   {
+    "id": "talk",
+    "emoji": "💬",
+    "text": "Talking openly about our feelings"
+   },
+   {
+    "id": "intimacy_often",
+    "emoji": "🔥",
+    "text": "How often we're intimate"
+   },
+   {
+    "id": "intimacy_quality",
+    "emoji": "💞",
+    "text": "The quality of our intimacy"
+   },
+   {
+    "id": "tenderness",
+    "emoji": "🫶",
+    "text": "Tender moments outside the bedroom"
+   },
+   {
+    "id": "children",
+    "emoji": "🧸",
+    "text": "How we raise (or plan to raise) our children"
+   },
+   {
+    "id": "money",
+    "emoji": "💰",
+    "text": "How we handle money together"
+   },
+   {
+    "id": "chores",
+    "emoji": "🧺",
+    "text": "How we share the housework"
+   },
+   {
+    "id": "inlaws",
+    "emoji": "👵",
+    "text": "My relationship with my in-laws"
+   },
+   {
+    "id": "leisure",
+    "emoji": "🎨",
+    "text": "Our hobbies and free time"
+   },
+   {
+    "id": "everyday",
+    "emoji": "☕",
+    "text": "Everyday life together"
+   },
+   {
+    "id": "decisions",
+    "emoji": "⚖️",
+    "text": "How we make decisions"
+   },
+   {
+    "id": "conflicts",
+    "emoji": "🕊️",
+    "text": "How we work through disagreements"
+   },
+   {
+    "id": "time_amount",
+    "emoji": "⏳",
+    "text": "How much time we spend together"
+   },
+   {
+    "id": "time_quality",
+    "emoji": "🌅",
+    "text": "The quality of our time together"
+   },
+   {
+    "id": "support",
+    "emoji": "🛟",
+    "text": "The support I get in hard times"
+   },
+   {
+    "id": "friends",
+    "emoji": "🥂",
+    "text": "Our friendships with other couples"
+   },
+   {
+    "id": "getaways",
+    "emoji": "✈️",
+    "text": "Getaways just for the two of us"
+   },
+   {
+    "id": "commitment",
+    "emoji": "💍",
+    "text": "Our commitment and how we share decisions and power"
+   },
+   {
+    "id": "freedom",
+    "emoji": "🦋",
+    "text": "Feeling free within our marriage"
+   }
+  ],
+  "bands": [
+   {
+    "min": 76,
+    "title": "Thriving",
+    "text": "You're both deeply happy together. Keep doing what works, and celebrate it."
+   },
+   {
+    "min": 51,
+    "title": "Strong, with ups and downs",
+    "text": "A good marriage with a few soft spots. Pick one topic below and talk about it this week."
+   },
+   {
+    "min": 26,
+    "title": "Going through a rough patch",
+    "text": "Some important things feel off right now. Talk calmly about the biggest gaps, one at a time."
+   },
+   {
+    "min": 0,
+    "title": "Needs care now",
+    "text": "Things feel hard right now. Be gentle with each other, and consider talking with a couples counsellor."
+   }
+  ],
+  "disclaimer": "Just for fun and conversation. This isn't a clinical test."
+ },
+ "truths": {
+  "intro": "Five questions that get to the heart of a relationship. Be honest: your partner only sees your answers once you've both finished.",
+  "items": [
+   {
+    "id": "compliment",
+    "emoji": "🪞",
+    "text": "If someone said you were just like your partner, would you take it as a compliment?",
+    "options": [
+     "Yes, I'd be proud",
+     "Partly",
+     "Not really"
+    ]
+   },
+   {
+    "id": "fulfilled",
+    "emoji": "🌕",
+    "text": "Does your partner make you feel truly fulfilled, or just less alone?",
+    "options": [
+     "Truly fulfilled",
+     "A bit of both",
+     "Mostly less alone"
+    ]
+   },
+   {
+    "id": "now",
+    "emoji": "🌱",
+    "text": "Are you in love with who your partner is today, or with who they could become?",
+    "options": [
+     "Who they are today",
+     "Both",
+     "Who they could become"
+    ]
+   },
+   {
+    "id": "yourself",
+    "emoji": "🦋",
+    "text": "Can you fully be yourself, or do you hide parts of you to keep your partner comfortable?",
+    "options": [
+     "I'm fully myself",
+     "I hold back a little",
+     "I hide a lot"
+    ]
+   },
+   {
+    "id": "child",
+    "emoji": "👧",
+    "text": "If your child brought home someone just like your partner, would you be happy for them or tell them to run?",
+    "options": [
+     "Happy for them",
+     "I'd have doubts",
+     "Tell them to run"
+    ]
+   }
+  ],
+  "talk": "Where your answers differ, ask each other “what makes you feel that way?” and just listen."
+ }
 }

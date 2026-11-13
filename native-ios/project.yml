@@ -57,7 +57,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.ebenezer.corasis
         MARKETING_VERSION: '1.0.0'
-        CURRENT_PROJECT_VERSION: 2
+        CURRENT_PROJECT_VERSION: 3
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
   TogetherWidgetExtension:
     type: app-extension
@@ -80,7 +80,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.ebenezer.corasis.widgets
         MARKETING_VERSION: '1.0.0'
-        CURRENT_PROJECT_VERSION: 2
+        CURRENT_PROJECT_VERSION: 3
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_CFBundleDisplayName: Together Widgets
         INFOPLIST_KEY_NSHumanReadableCopyright: ''

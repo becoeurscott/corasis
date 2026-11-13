@@ -17,6 +17,8 @@ struct AppError: LocalizedError {
     @Published var pendingInvite = ""
     /// Set when a Mend the Heart invitation notification is tapped.
     @Published var openRepairs = false
+    /// A rematch to open from a finished Love Duels board.
+    @Published var pendingDuel: String?
     let file: URL
     private var generation = UUID()
     init(file: URL? = nil) {

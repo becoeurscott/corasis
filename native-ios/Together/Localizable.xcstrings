@@ -108,6 +108,22 @@
         }
       }
     },
+    "%@ · %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ · %2$lld"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ · %2$lld"
+          }
+        }
+      }
+    },
     "%@ · Day %lld of %lld": {
       "localizations": {
         "en": {
@@ -230,6 +246,16 @@
         }
       }
     },
+    "%@ drew something for you": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ a dessiné quelque chose pour toi"
+          }
+        }
+      }
+    },
     "%@ fell in love with %@%@.": {
       "localizations": {
         "en": {
@@ -298,6 +324,22 @@
         }
       }
     },
+    "%@ guessed “%@” 🎉": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ guessed “%2$@” 🎉"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ a deviné « %2$@ » 🎉"
+          }
+        }
+      }
+    },
     "%@ guessed %lld%%, you gave %lld%%.": {
       "localizations": {
         "en": {
@@ -320,6 +362,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "L’invitation a été envoyée à %@. Vous continuerez ensemble dès qu’elle sera acceptée."
+          }
+        }
+      }
+    },
+    "%@ has the other half. Message or call them to compare.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ a l'autre moitié. Écris-lui ou appelle-le/la pour comparer."
           }
         }
       }
@@ -360,6 +412,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ arrive bientôt"
+          }
+        }
+      }
+    },
+    "%@ is drawing next. We'll nudge you when it's ready.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C'est à %@ de dessiner ensuite. On te préviendra quand ce sera prêt."
           }
         }
       }
@@ -518,6 +580,26 @@
         }
       }
     },
+    "%@ won": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ a gagné"
+          }
+        }
+      }
+    },
+    "%@ won this one 💜": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ a gagné cette manche 💜"
+          }
+        }
+      }
+    },
     "%@ would like a precision: %@": {
       "localizations": {
         "en": {
@@ -634,6 +716,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Chez %@"
+          }
+        }
+      }
+    },
+    "%@'s move — we'll nudge them": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À %@ de jouer — on le/la préviendra"
           }
         }
       }
@@ -896,6 +988,16 @@
         }
       }
     },
+    "%lld tries left": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld essais restants"
+          }
+        }
+      }
+    },
     "%lld waiting for you": {
       "localizations": {
         "fr": {
@@ -976,6 +1078,46 @@
         }
       }
     },
+    "♥︎": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "♥︎"
+          }
+        }
+      }
+    },
+    "♦︎": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "♦︎"
+          }
+        }
+      }
+    },
+    "✓": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "✓"
+          }
+        }
+      }
+    },
+    "✗": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "✗"
+          }
+        }
+      }
+    },
     "✦": {
       "localizations": {
         "fr": {
@@ -1002,6 +1144,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "🌙"
+          }
+        }
+      }
+    },
+    "🌧️": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🌧️"
+          }
+        }
+      }
+    },
+    "🌱": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🌱"
           }
         }
       }
@@ -1206,6 +1368,16 @@
         }
       }
     },
+    "🦋": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🦋"
+          }
+        }
+      }
+    },
     "🧪 Demo: skip time as if you both cared well": {
       "localizations": {
         "fr": {
@@ -1292,6 +1464,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "Un bébé a été proposé. 💞"
+          }
+        }
+      }
+    },
+    "a balloon?": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "un ballon ?"
+          }
+        }
+      }
+    },
+    "A flame day": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un jour de flamme"
+          }
+        }
+      }
+    },
+    "A game played together": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une partie jouée à deux"
           }
         }
       }
@@ -1426,6 +1628,16 @@
         }
       }
     },
+    "A new puzzle arrives tomorrow.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un nouveau puzzle arrive demain."
+          }
+        }
+      }
+    },
     "A note for your shared space": {
       "localizations": {
         "fr": {
@@ -1442,6 +1654,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Une photo. Un petit moment."
+          }
+        }
+      }
+    },
+    "A question you both answered": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une question à laquelle vous avez tous les deux répondu"
           }
         }
       }
@@ -1472,6 +1694,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "UN POINT DE DÉPART POUR TOI"
+          }
+        }
+      }
+    },
+    "A voice note": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un message vocal"
           }
         }
       }
@@ -2173,6 +2405,16 @@
         }
       }
     },
+    "Both halves of the clues:": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les deux moitiés des indices :"
+          }
+        }
+      }
+    },
     "Both of you send a photo or video for the day to count. Your couple day follows %@.": {
       "localizations": {
         "fr": {
@@ -2373,6 +2615,16 @@
         }
       }
     },
+    "Choose a card": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisis une carte"
+          }
+        }
+      }
+    },
     "Choose a name together": {
       "localizations": {
         "fr": {
@@ -2459,6 +2711,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Choisis tes couleurs"
+          }
+        }
+      }
+    },
+    "Clear": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Effacer"
           }
         }
       }
@@ -2833,6 +3095,17 @@
         }
       }
     },
+    "Daily connection": {
+      "extractionState": "stale",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connexion quotidienne"
+          }
+        }
+      }
+    },
     "Daily flame": {
       "localizations": {
         "fr": {
@@ -2991,6 +3264,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Décidé : %1$@%2$@"
+          }
+        }
+      }
+    },
+    "Deeper conversations": {
+      "extractionState": "stale",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conversations plus profondes"
           }
         }
       }
@@ -3205,12 +3489,62 @@
         }
       }
     },
+    "Dots & Boxes": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jeu des petits carrés"
+          }
+        }
+      }
+    },
     "Drag an item onto %@, or tap it. Scrub with the soap to make bubbles.": {
       "localizations": {
         "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Fais glisser un objet sur %@, ou touche-le. Frotte avec le savon pour faire des bulles."
+          }
+        }
+      }
+    },
+    "Draw & Guess": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dessine & Devine"
+          }
+        }
+      }
+    },
+    "Draw lines between dots. Close a box to score it and play again.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trace des lignes entre les points. Ferme un carré pour marquer et rejouer."
+          }
+        }
+      }
+    },
+    "Draw something first.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dessine d'abord quelque chose."
+          }
+        }
+      }
+    },
+    "Draw:": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dessine :"
           }
         }
       }
@@ -3615,6 +3949,16 @@
         }
       }
     },
+    "Flame days": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jours de flamme"
+          }
+        }
+      }
+    },
     "Flame details & history": {
       "localizations": {
         "fr": {
@@ -3651,6 +3995,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pour les couples mariés"
+          }
+        }
+      }
+    },
+    "Four in a Row": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Puissance 4"
           }
         }
       }
@@ -3735,6 +4089,16 @@
         }
       }
     },
+    "Games played together": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parties jouées à deux"
+          }
+        }
+      }
+    },
     "Generate a new code": {
       "localizations": {
         "fr": {
@@ -3814,6 +4178,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "En train de devenir : %1$@ · %2$lld/%3$lld soins"
+          }
+        }
+      }
+    },
+    "Guess": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Devine"
           }
         }
       }
@@ -4318,6 +4692,106 @@
         }
       }
     },
+    "It isn't %@.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce n'est pas %@."
+          }
+        }
+      }
+    },
+    "It isn't a flower or plant.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce n'est pas une fleur ni une plante."
+          }
+        }
+      }
+    },
+    "It isn't a fruit.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce n'est pas un fruit."
+          }
+        }
+      }
+    },
+    "It isn't an animal.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce n'est pas un animal."
+          }
+        }
+      }
+    },
+    "It isn't an object.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce n'est pas un objet."
+          }
+        }
+      }
+    },
+    "It isn't the %@.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce n'est pas la carte %@."
+          }
+        }
+      }
+    },
+    "It's a draw": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Égalité"
+          }
+        }
+      }
+    },
+    "It's a draw 🤝": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Égalité 🤝"
+          }
+        }
+      }
+    },
+    "It's been quiet. One moment each brings it back to life.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C'est calme par ici. Un moment chacun, et tout reprend vie."
+          }
+        }
+      }
+    },
+    "It's your partner's turn to draw.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C'est au tour de ton/ta partenaire de dessiner."
+          }
+        }
+      }
+    },
     "Just your first name.": {
       "localizations": {
         "fr": {
@@ -4360,6 +4834,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Garde-le rien que pour toi"
+          }
+        }
+      }
+    },
+    "Keep the flame alive and it keeps growing.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garde la flamme vivante et elle continue de grandir."
           }
         }
       }
@@ -4504,6 +4988,16 @@
         }
       }
     },
+    "Line up four of your hearts, across, down or diagonally.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aligne quatre de tes cœurs, à l'horizontale, à la verticale ou en diagonale."
+          }
+        }
+      }
+    },
     "Listen to my heart": {
       "localizations": {
         "fr": {
@@ -4624,6 +5118,16 @@
         }
       }
     },
+    "Lock in %@": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Valider %@"
+          }
+        }
+      }
+    },
     "Lock in my answers": {
       "localizations": {
         "fr": {
@@ -4670,6 +5174,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Plus longue flamme : %lld jours"
+          }
+        }
+      }
+    },
+    "Love Duels": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Love Duels"
           }
         }
       }
@@ -5044,6 +5558,17 @@
         }
       }
     },
+    "NEW": {
+      "extractionState": "stale",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "NOUVEAU"
+          }
+        }
+      }
+    },
     "New event": {
       "localizations": {
         "fr": {
@@ -5194,6 +5719,16 @@
         }
       }
     },
+    "Nobody got “%@” this time": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personne n'a trouvé « %@ » cette fois"
+          }
+        }
+      }
+    },
     "Not now": {
       "localizations": {
         "fr": {
@@ -5210,6 +5745,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pas tout à fait — que voudrais-tu ajouter ?"
+          }
+        }
+      }
+    },
+    "Not quite this time": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas tout à fait cette fois"
           }
         }
       }
@@ -5444,12 +5989,32 @@
         }
       }
     },
+    "Other words": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autres mots"
+          }
+        }
+      }
+    },
     "Our agreement": {
       "localizations": {
         "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Notre accord"
+          }
+        }
+      }
+    },
+    "Our Garden": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notre Jardin"
           }
         }
       }
@@ -5664,6 +6229,16 @@
         }
       }
     },
+    "Pick a word. Only you can see it.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisis un mot. Toi seul(e) peux le voir."
+          }
+        }
+      }
+    },
     "Pick what's closest to what you feel.": {
       "localizations": {
         "fr": {
@@ -5754,6 +6329,27 @@
         }
       }
     },
+    "Planning visits": {
+      "extractionState": "stale",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Organiser les visites"
+          }
+        }
+      }
+    },
+    "Play a move, your partner gets a nudge. A match can last all week.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Joue un coup, ton/ta partenaire reçoit un petit signal. Une partie peut durer toute la semaine."
+          }
+        }
+      }
+    },
     "Play together": {
       "localizations": {
         "fr": {
@@ -5770,6 +6366,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Écouter le message vocal"
+          }
+        }
+      }
+    },
+    "Playful moments": {
+      "extractionState": "stale",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moments de jeu"
           }
         }
       }
@@ -5914,6 +6521,40 @@
         }
       }
     },
+    "PUSH_REPAIR_BODY": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not looking for a fight, just to understand each other. Open Mend the Heart to answer."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas pour se disputer, juste pour se comprendre. Ouvre Réparons le Cœur pour répondre."
+          }
+        }
+      }
+    },
+    "PUSH_REPAIR_TITLE": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "❤️ %@ would like to mend something with you"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "❤️ %@ aimerait réparer quelque chose avec toi"
+          }
+        }
+      }
+    },
     "Question": {
       "localizations": {
         "fr": {
@@ -5946,6 +6587,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "QUESTION DU JOUR"
+          }
+        }
+      }
+    },
+    "Questions you both answered": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Questions auxquelles vous avez tous les deux répondu"
           }
         }
       }
@@ -6666,6 +7317,16 @@
         }
       }
     },
+    "Sent ✓": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyé ✓"
+          }
+        }
+      }
+    },
     "Sent to your partner only": {
       "localizations": {
         "fr": {
@@ -6772,6 +7433,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Partager ma compréhension"
+          }
+        }
+      }
+    },
+    "Share today's moment, both of you, to water it.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partagez tous les deux le moment du jour pour l'arroser."
           }
         }
       }
@@ -6976,6 +7647,16 @@
         }
       }
     },
+    "Sketch a secret word. Your partner guesses it when they're free.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dessine un mot secret. Ton/ta partenaire le devine quand il/elle a un moment."
+          }
+        }
+      }
+    },
     "Skip": {
       "localizations": {
         "fr": {
@@ -7022,6 +7703,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "La connexion via un compte social nécessite le serveur en ligne."
+          }
+        }
+      }
+    },
+    "Solved together: %lld 🧩": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Résolus ensemble : %lld 🧩"
+          }
+        }
+      }
+    },
+    "Solved together! 🎉": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Résolu ensemble ! 🎉"
           }
         }
       }
@@ -7348,6 +8049,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "En parler"
+          }
+        }
+      }
+    },
+    "Talk in Messages": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parler dans Messages"
+          }
+        }
+      }
+    },
+    "Tap a card to cross it out. Long-press to choose it.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touche une carte pour la barrer. Appui long pour la choisir."
           }
         }
       }
@@ -7893,12 +8614,22 @@
         }
       }
     },
+    "Today's card was %@": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La carte du jour était %@"
+          }
+        }
+      }
+    },
     "Together": {
       "localizations": {
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ensemble"
+            "value": "Together"
           }
         }
       }
@@ -8023,6 +8754,16 @@
         }
       }
     },
+    "Two Halves": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deux Moitiés"
+          }
+        }
+      }
+    },
     "Two perspectives, one conversation 💕": {
       "localizations": {
         "fr": {
@@ -8039,6 +8780,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Deux endroits, un seul lien."
+          }
+        }
+      }
+    },
+    "Undo": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annuler"
           }
         }
       }
@@ -8183,12 +8934,33 @@
         }
       }
     },
+    "Video": {
+      "extractionState": "stale",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vidéo"
+          }
+        }
+      }
+    },
     "Voice": {
       "localizations": {
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vocal"
+            "value": "Voix"
+          }
+        }
+      }
+    },
+    "Voice notes": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Messages vocaux"
           }
         }
       }
@@ -8239,6 +9011,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "En attente que %@ termine. Le dévoilement s’ouvre dès que vous avez tous les deux répondu."
+          }
+        }
+      }
+    },
+    "Waiting for %@ to guess.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En attente de la réponse de %@."
           }
         }
       }
@@ -8353,6 +9135,16 @@
         }
       }
     },
+    "Waiting…": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En attente…"
+          }
+        }
+      }
+    },
     "Wallpaper": {
       "localizations": {
         "fr": {
@@ -8445,6 +9237,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ce dont j’ai besoin"
+          }
+        }
+      }
+    },
+    "What made it grow": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce qui l'a fait grandir"
           }
         }
       }
@@ -8639,6 +9441,16 @@
         }
       }
     },
+    "You · %lld": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toi · %lld"
+          }
+        }
+      }
+    },
     "You %@ %@ · +%lld care": {
       "localizations": {
         "en": {
@@ -8777,6 +9589,26 @@
         }
       }
     },
+    "You drew: %@": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu as dessiné : %@"
+          }
+        }
+      }
+    },
+    "You each hold half the clues. Talk it through, then both pick the same card.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous avez chacun la moitié des indices. Discutez-en, puis choisissez tous les deux la même carte."
+          }
+        }
+      }
+    },
     "You felt you weren't a priority today, and that hurt. · simulated": {
       "localizations": {
         "fr": {
@@ -8833,6 +9665,22 @@
         }
       }
     },
+    "You picked %@. Waiting for %@ to choose.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "You picked %1$@. Waiting for %2$@ to choose."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu as choisi %1$@. En attente du choix de %2$@."
+          }
+        }
+      }
+    },
     "You proposed having a baby. Once %@ says yes, you’ll both pick a name.": {
       "localizations": {
         "fr": {
@@ -8885,6 +9733,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tu as passé cette question"
+          }
+        }
+      }
+    },
+    "You won 🏆": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu as gagné 🏆"
+          }
+        }
+      }
+    },
+    "You won! 🏆": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu as gagné ! 🏆"
+          }
+        }
+      }
+    },
+    "You: %@": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toi : %@"
           }
         }
       }
@@ -9069,12 +9947,62 @@
         }
       }
     },
+    "Your garden is a little thirsty": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton jardin a un peu soif"
+          }
+        }
+      }
+    },
+    "Your garden is blooming": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton jardin est en pleine floraison"
+          }
+        }
+      }
+    },
+    "Your garden is wilting": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton jardin se fane"
+          }
+        }
+      }
+    },
+    "Your guess": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta proposition"
+          }
+        }
+      }
+    },
     "your guess pts": {
       "localizations": {
         "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "pts de ta supposition"
+          }
+        }
+      }
+    },
+    "Your half of the clues": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta moitié des indices"
           }
         }
       }
@@ -9155,6 +10083,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ton moment du jour est déjà enregistré."
+          }
+        }
+      }
+    },
+    "Your move": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À toi de jouer"
           }
         }
       }
@@ -9349,6 +10287,16 @@
         }
       }
     },
+    "Your turn to draw": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À toi de dessiner"
+          }
+        }
+      }
+    },
     "Your vote is needed%@": {
       "localizations": {
         "fr": {
@@ -9379,116 +10327,784 @@
         }
       }
     },
-    "Deeper conversations": {
+    "%1$@ guessed “%2$@” 🎉": {
+      "extractionState": "manual",
       "localizations": {
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Des conversations plus profondes"
+            "value": "%1$@ a deviné « %2$@ » 🎉"
           }
         }
       }
     },
-    "Daily connection": {
+    "%1$@ · %2$lld": {
+      "extractionState": "manual",
       "localizations": {
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Un lien au quotidien"
+            "value": "%1$@ · %2$lld"
           }
         }
       }
     },
-    "Playful moments": {
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Des moments ludiques"
-          }
-        }
-      }
-    },
-    "Planning visits": {
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Organiser nos retrouvailles"
-          }
-        }
-      }
-    },
-    "Video": {
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vidéo"
-          }
-        }
-      }
-    },
-    "Sent ✓": {
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Envoyé ✓"
-          }
-        }
-      }
-    },
-    "Waiting…": {
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "En attente…"
-          }
-        }
-      }
-    },
-    "NEW": {
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "NOUVEAU"
-          }
-        }
-      }
-    },
-    "PUSH_REPAIR_TITLE": {
+    "PUSH_TURN_BODY": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "❤️ %@ would like to mend something with you"
+            "value": "%@ just played. It's your turn!"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "❤️ %@ aimerait réparer quelque chose avec toi"
+            "value": "%@ vient de jouer. C'est ton tour !"
           }
         }
       }
     },
-    "PUSH_REPAIR_BODY": {
+    "PUSH_TURN_TITLE": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Not looking for a fight, just to understand each other. Open Mend the Heart to answer."
+            "value": "🎲 Your move in %@"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pas pour se disputer, juste pour se comprendre. Ouvre Réparons le Cœur pour répondre."
+            "value": "🎲 À toi de jouer à %@"
+          }
+        }
+      }
+    },
+    "You picked %1$@. Waiting for %2$@ to choose.": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu as choisi %1$@. En attente du choix de %2$@."
+          }
+        }
+      }
+    },
+    "airplane ticket": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "billet d'avion"
+          }
+        }
+      }
+    },
+    "apple": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "pomme"
+          }
+        }
+      }
+    },
+    "balloon": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ballon"
+          }
+        }
+      }
+    },
+    "basketball": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "basket"
+          }
+        }
+      }
+    },
+    "beach": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "plage"
+          }
+        }
+      }
+    },
+    "bed": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "lit"
+          }
+        }
+      }
+    },
+    "bicycle": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "vélo"
+          }
+        }
+      }
+    },
+    "bird": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "oiseau"
+          }
+        }
+      }
+    },
+    "blue": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "bleu"
+          }
+        }
+      }
+    },
+    "blueberries": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "myrtilles"
+          }
+        }
+      }
+    },
+    "boat": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "bateau"
+          }
+        }
+      }
+    },
+    "book": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "livre"
+          }
+        }
+      }
+    },
+    "butterfly": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "papillon"
+          }
+        }
+      }
+    },
+    "cactus": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "cactus"
+          }
+        }
+      }
+    },
+    "cake": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "gâteau"
+          }
+        }
+      }
+    },
+    "candle": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "bougie"
+          }
+        }
+      }
+    },
+    "car": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "voiture"
+          }
+        }
+      }
+    },
+    "cat": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "chat"
+          }
+        }
+      }
+    },
+    "chick": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "poussin"
+          }
+        }
+      }
+    },
+    "cloud": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "nuage"
+          }
+        }
+      }
+    },
+    "clover": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "trèfle"
+          }
+        }
+      }
+    },
+    "coffee": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "café"
+          }
+        }
+      }
+    },
+    "crystal ball": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "boule de cristal"
+          }
+        }
+      }
+    },
+    "diamond": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "diamant"
+          }
+        }
+      }
+    },
+    "dog": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "chien"
+          }
+        }
+      }
+    },
+    "fish": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "poisson"
+          }
+        }
+      }
+    },
+    "flower": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "fleur"
+          }
+        }
+      }
+    },
+    "fox": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "renard"
+          }
+        }
+      }
+    },
+    "frog": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "grenouille"
+          }
+        }
+      }
+    },
+    "gift": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "cadeau"
+          }
+        }
+      }
+    },
+    "glasses": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "lunettes"
+          }
+        }
+      }
+    },
+    "grapes": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "raisin"
+          }
+        }
+      }
+    },
+    "green": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "vert"
+          }
+        }
+      }
+    },
+    "guitar": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "guitare"
+          }
+        }
+      }
+    },
+    "hat": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "chapeau"
+          }
+        }
+      }
+    },
+    "heart": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "cœur"
+          }
+        }
+      }
+    },
+    "house": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "maison"
+          }
+        }
+      }
+    },
+    "hyacinth": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "jacinthe"
+          }
+        }
+      }
+    },
+    "key": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "clé"
+          }
+        }
+      }
+    },
+    "kiss": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "baiser"
+          }
+        }
+      }
+    },
+    "kiwi": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "kiwi"
+          }
+        }
+      }
+    },
+    "ladybug": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "coccinelle"
+          }
+        }
+      }
+    },
+    "lemon": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "citron"
+          }
+        }
+      }
+    },
+    "moon": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "lune"
+          }
+        }
+      }
+    },
+    "mountain": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "montagne"
+          }
+        }
+      }
+    },
+    "octopus": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "pieuvre"
+          }
+        }
+      }
+    },
+    "orange": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "orange"
+          }
+        }
+      }
+    },
+    "phone": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "téléphone"
+          }
+        }
+      }
+    },
+    "pizza": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "pizza"
+          }
+        }
+      }
+    },
+    "plane": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "avion"
+          }
+        }
+      }
+    },
+    "purple": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "violet"
+          }
+        }
+      }
+    },
+    "rainbow": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "arc-en-ciel"
+          }
+        }
+      }
+    },
+    "red": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "rouge"
+          }
+        }
+      }
+    },
+    "ring": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "bague"
+          }
+        }
+      }
+    },
+    "rose": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "rose"
+          }
+        }
+      }
+    },
+    "snowman": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "bonhomme de neige"
+          }
+        }
+      }
+    },
+    "star": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "étoile"
+          }
+        }
+      }
+    },
+    "strawberry": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "fraise"
+          }
+        }
+      }
+    },
+    "sun": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "soleil"
+          }
+        }
+      }
+    },
+    "sunflower": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tournesol"
+          }
+        }
+      }
+    },
+    "train": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "train"
+          }
+        }
+      }
+    },
+    "tree": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "arbre"
+          }
+        }
+      }
+    },
+    "umbrella": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "parapluie"
+          }
+        }
+      }
+    },
+    "whale": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "baleine"
+          }
+        }
+      }
+    },
+    "yellow": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "jaune"
           }
         }
       }

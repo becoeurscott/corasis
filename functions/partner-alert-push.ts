@@ -73,7 +73,14 @@ export default async function (req: Request): Promise<Response> {
           'title-loc-key': 'PUSH_REPAIR_TITLE', 'title-loc-args': [t.sender_name],
           'loc-key': 'PUSH_REPAIR_BODY',
         }
-      : message(self);
+      : t.kind === 'turn'
+        ? {
+            title: `🎲 Your move in ${t.place ?? 'your game'}`,
+            body: `${t.sender_name} just played. It's your turn!`,
+            'title-loc-key': 'PUSH_TURN_TITLE', 'title-loc-args': [t.place ?? ''],
+            'loc-key': 'PUSH_TURN_BODY', 'loc-args': [t.sender_name],
+          }
+        : message(self);
 
   let sent = 0;
   const failures: string[] = [];

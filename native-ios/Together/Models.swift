@@ -102,6 +102,7 @@ struct Database: Codable {
     var truths: [TruthsEntry]?
     var places: [Place]?
     var repairs: [RepairEntry]?
+    var plays: [PlayEntry]?
 }
 enum Day {
     static func formatter(_ zone: String) -> DateFormatter { let f = DateFormatter(); f.locale = Locale(identifier: "en_US_POSIX"); f.calendar = Calendar(identifier: .gregorian); f.timeZone = TimeZone(identifier: zone) ?? .gmt; f.dateFormat = "yyyy-MM-dd"; return f }

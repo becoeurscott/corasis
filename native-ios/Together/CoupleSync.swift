@@ -132,6 +132,9 @@ import Foundation
         for e in db.repairs ?? [] where e.coupleID == couple.id {
             if let data = try? Self.coder.encode(e), let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any] { add(item("repair", e.id, dict)) }
         }
+        for e in db.plays ?? [] where e.coupleID == couple.id {
+            if let data = try? Self.coder.encode(e), let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any] { add(item("play", e.id, dict)) }
+        }
         add(item("couple", "settings", ["start": opt(couple.start), "stage": couple.stage, "distance": couple.distance, "goals": couple.goals, "timezone": couple.timezone]))
         if let note = db.widgetMessages[couple.id], !note.isEmpty { add(item("widget", "note", ["text": note, "by": "", "at": iso(nil)])) }
         return out
@@ -181,6 +184,7 @@ import Foundation
             case "checkup": store.db.checkups?.removeAll { $0.id == id }
             case "truths": store.db.truths?.removeAll { $0.id == id }
             case "repair": store.db.repairs?.removeAll { $0.id == id }
+            case "play": store.db.plays?.removeAll { $0.id == id }
             default: break
             }
             state.hashes[key] = nil
@@ -239,6 +243,10 @@ import Foundation
             e.coupleID = couple.id
             guard e.user != store.me?.id || !(store.db.repairs ?? []).contains(where: { $0.id == e.id }) else { break }   // my own entry is mine
             var all = store.db.repairs ?? []; all.removeAll { $0.id == e.id }; all.append(e); store.db.repairs = all
+        case "play":
+            guard let data = try? JSONSerialization.data(withJSONObject: d), var e = try? Self.decoder.decode(PlayEntry.self, from: data) else { return true }
+            e.coupleID = couple.id
+            var all = store.db.plays ?? []; all.removeAll { $0.id == e.id }; all.append(e); store.db.plays = all
         case "couple":
             if let i = store.db.couples.firstIndex(where: { $0.id == couple.id }) {
                 store.db.couples[i].start = str(d["start"]); store.db.couples[i].stage = str(d["stage"]) ?? store.db.couples[i].stage

@@ -46,7 +46,10 @@ struct RootView: View {
     /// DEBUG only: `-checkup` opens the Marriage Check-up with a married demo couple.
     @State private var debugCheckup = ProcessInfo.processInfo.arguments.contains("-checkup")
     @State private var debugTruths = ProcessInfo.processInfo.arguments.contains("-truths")
+    /// DEBUG only: `-game draw_guess|two_halves|our_garden|love_duels` opens that game with the demo partner.
+    private let debugGame: String? = ProcessInfo.processInfo.arguments.firstIndex(of: "-game").flatMap { i in ProcessInfo.processInfo.arguments.dropFirst(i + 1).first }
     #else
+    private let debugGame: String? = nil
     private let debugBabyGame = false
     private let debugCheckup = false
     private let debugTruths = false
@@ -60,13 +63,17 @@ struct RootView: View {
             else if debugBabyGame { NavigationStack { LifeGameView() } }
             else if debugCheckup { NavigationStack { CheckupGameView() } }
             else if debugTruths { NavigationStack { TruthsGameView() } }
+            else if let debugGame { NavigationStack { switch debugGame { case "draw_guess": DrawGuessView(); case "two_halves": TwoHalvesView(); case "our_garden": GardenView(); default: DuelsView() } } }
             else { MainTabs() }
             AffectionRain()
             if store.me != nil { FlameCelebration() }
             if store.locked { LockView() }
         }
         .onAppear {
-            if (debugBabyGame || debugCheckup || debugTruths) && (store.me == nil || store.couple == nil) { store.demo() }
+            #if DEBUG
+            if ProcessInfo.processInfo.arguments.contains("-gamesSelfTest") { GamesSelfTest.run() }
+            #endif
+            if (debugBabyGame || debugCheckup || debugTruths || debugGame != nil) && (store.me == nil || store.couple == nil) { store.demo() }
             if debugCheckup, var c = store.couple { c.stage = "married"; store.saveCouple(c) }
         }
         .scrollDismissesKeyboard(.interactively)

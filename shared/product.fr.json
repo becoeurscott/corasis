@@ -1434,7 +1434,7 @@
     "#FF7A9C",
     "#E0306A"
    ],
-   "status": "coming_soon"
+   "status": "available"
   },
   {
    "id": "two_halves",
@@ -1453,7 +1453,7 @@
     "#FFC43D",
     "#F08A00"
    ],
-   "status": "coming_soon"
+   "status": "available"
   },
   {
    "id": "our_garden",
@@ -1471,7 +1471,7 @@
     "#5FD49B",
     "#14946A"
    ],
-   "status": "coming_soon"
+   "status": "available"
   },
   {
    "id": "love_duels",
@@ -1489,7 +1489,7 @@
     "#8A7BFF",
     "#4A39D6"
    ],
-   "status": "coming_soon"
+   "status": "available"
   }
  ],
  "lifeGame": {
